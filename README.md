@@ -13,7 +13,7 @@ Our vision extends beyond just entertainment; we aim to revolutionize how puzzle
 - **Release Manager** - Loren Pontiff - [@Delikatessen](https://github.com/Delikatessen) - [Digital Portfolio](https://codermerlin.academy/users/loren-pontiff/Digital%20Portfolio/index.html) - @delikatessen
 - **QA Analyst** - Berkley Voss - [@BerkleyVoss](https://github.com/BerkleyVoss) - [Digital Portfolio](https://codermerlin.academy/users/berkley-voss/Digital%20Portfolio/index.html) - @berkleyvoss
 - **UI/UX Designer** - Luke Lento - [@lukelento06](https://github.com/lukelento06) - [Digital Portfolio](https://codermerlin.academy/users/luke-lento/Digital%20Portfolio/index.html) - @l_egs
-- **Engineer Frontend (Lead)** - Rohan Natarajan - [@rohan-natarajan](https://github.com/rohan-natarajan) - [Digital Portfolio](https://codermerlin.academy/users/rohan-natarajan/Digital%20Portfolio/index.html) - @rorothegoat
+- **Engineer Frontend (Lead)** - Rohan Natarajan - [@rohan-natarajan](https://github.com/rohan-natarajan) - [Digital Portfolio](https://codermerlin.academy/users/rohan-natarajan/Digital%20Portfolio/index.html) - @rorothegoat 
 - **Engineer Frontend (FE2)** - Peyton Boudreaux -  [@peytonboudreaux](https://github.com/peytonboudreaux)  - [Digital Portfolio](https://codermerlin.academy/users/peyton-boudreaux/Digital%20Portfolio/index.html) - @16.5.25.20.15.14
 - **Engineer Backend (Lead)** - Soohan Cho - [@BurntWaffleCake](https://www.codermerlin.academy/users/soohan-cho/Digital%20Portfolio/index.html) - [Digital Portfolio](https://www.codermerlin.academy/users/soohan-cho/Digital%20Portfolio/index.html) - @_wafflecake
 
