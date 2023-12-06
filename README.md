@@ -9,7 +9,7 @@ Our vision extends beyond just entertainment; we aim to revolutionize how puzzle
 # Roles
 ### Role - Name - GitHub - Digital Portfolio - Discord
 - **Product Manager** - Austin Dlugosch - [@ItsAustinDlugosch](https://github.com/ItsAustinDlugosch) - [Digital Portfolio](https://codermerlin.academy/users/austin-dlugosch/Digital%20Portfolio/index.html) - @ultra9711
-- **Project Managers** - Zachary Allen - [@zachary-allen823](https://github.com/zachary-allen823) - [Digital Portfolio](https://codermerlin.academy/users/zachary-allen/Digital%20Portfolio/index.html) - @decheleron
+- **Project Managers** - Zachary Allen - [@zachary-allen823](https://github.com/zachary-allen823) - [Digital Portfolio](https://codermerlin.academy/users/zachary-allen/Digital%20Portfolio/index.html) - @dechelarson
 - **Release Manager** - Loren Pontiff - [@Delikatessen](https://github.com/Delikatessen) - [Digital Portfolio](https://codermerlin.academy/users/loren-pontiff/Digital%20Portfolio/index.html) - @delikatessen
 - **QA Analyst** - Berkley Voss - [@BerkleyVoss](https://github.com/BerkleyVoss) - [Digital Portfolio](https://codermerlin.academy/users/berkley-voss/Digital%20Portfolio/index.html) - @berkleyvoss
 - **UI/UX Designer** - Luke Lento - [@lukelento06](https://github.com/lukelento06) - [Digital Portfolio](https://codermerlin.academy/users/luke-lento/Digital%20Portfolio/index.html) - @l_egs
