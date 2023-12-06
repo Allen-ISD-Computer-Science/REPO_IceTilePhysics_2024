@@ -41,12 +41,12 @@ struct Level {
     }
 
     mutating func setBoundaryWalls() {
-        for boundY in stride(from: 0, through: size.height - 1, by: size.height - 1) {
+        for boundY in [0, size.height - 1] {
             for x in 0 ..< size.width {
                 tile(Point(x: x, y: boundY)).tileState = .wall
             }
         }
-        for boundX in stride(from: 0, through: size.width - 1, by: size.width - 1) {
+        for boundX in [0, size.width - 1] {
             for y in 0 ..< size.height {
                 tile(Point(x: boundX, y: y)).tileState = .wall
             }
