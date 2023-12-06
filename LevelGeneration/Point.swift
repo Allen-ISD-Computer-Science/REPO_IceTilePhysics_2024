@@ -1,4 +1,4 @@
-struct Point {
+struct Point { // Defines a point with an x and y value
     let x: Int
     let y: Int
 }

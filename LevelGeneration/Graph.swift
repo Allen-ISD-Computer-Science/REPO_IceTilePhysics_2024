@@ -1,4 +1,4 @@
-struct Graph {
+struct Graph { // Represents the relationship between slides on a level grid
     var slides = Set<Slide>()
 
     func breadthFirstSearch(origin: Point, destination: Point) -> [Slide]? {
