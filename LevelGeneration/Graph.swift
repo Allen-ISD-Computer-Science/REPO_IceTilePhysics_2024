@@ -1,18 +1,18 @@
 struct Graph { // Represents the relationship between slides on a level grid
     var slides = Set<Slide>()
 
-    func breadthFirstSearch(origin: Point, destination: Point) -> [Slide]? {
-        var stack: [Point] = [origin]
+    func breadthFirstSearch(origin: GridPoint, destination: GridPoint) -> [Slide]? {
+        var stack: [GridPoint] = [origin]
 
         enum Visit {
             case origin
             case slide(Slide)
         }
 
-        var visits: Dictionary<Point, Visit> = [origin: .origin]
+        var visits: Dictionary<GridPoint, Visit> = [origin: .origin]
 
-        while let currentPoint = stack.popLast() { // Gather a point and remove it from the stack
-            if currentPoint == destination { // If we have made it to the destination
+        while let currentGridPoint = stack.popLast() { // Gather a point and remove it from the stack
+            if currentGridPoint == destination { // If we have made it to the destination
                 var point = destination // Used to traverse visits dictionary
                 var route: [Slide] = [] // route taken to get from origin to destination
 
@@ -23,7 +23,7 @@ struct Graph { // Represents the relationship between slides on a level grid
                 return route
             }
             // If we haven't made it to the destination, continue to explore slides from current point breadth first
-            let slidesFromOrigin = slides.filter { $0.origin == currentPoint }
+            let slidesFromOrigin = slides.filter { $0.origin == currentGridPoint }
             for slide in slidesFromOrigin {
                 if visits[slide.destination] == nil { // Only add points to explore if we haven't already visited them
                     stack.append(slide.destination) // Add the destination as a place to be explored
