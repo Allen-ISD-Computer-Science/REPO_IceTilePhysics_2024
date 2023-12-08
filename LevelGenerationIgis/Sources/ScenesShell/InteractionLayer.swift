@@ -22,6 +22,10 @@ class InteractionLayer : Layer {
           let decrementLevelButton = Button(name: "DecrementLevel", labelString: "Decrement Level Index", topLeft: Point(x: 25, y: 60))
           decrementLevelButton.clickHandler = onDecrementLevelButtonClickHandler
           insert(entity: decrementLevelButton, at: .front)
+
+          let resetLevelsButton = Button(name: "ResetLevels", labelString: "Reset Levels", topLeft: Point(x: 25, y: 95))
+          resetLevelsButton.clickHandler = onResetLevelsButtonClickHandler
+          insert(entity: resetLevelsButton, at: .front)
       }
 
       func background() -> Background {
@@ -38,5 +42,8 @@ class InteractionLayer : Layer {
       }
       func onDecrementLevelButtonClickHandler(control: Control, localLocation: Point) {
           background().decrementLevelIndex()
+      }
+      func onResetLevelsButtonClickHandler(control: Control, localLocation: Point) {
+          background().resetLevels()
       }
   }

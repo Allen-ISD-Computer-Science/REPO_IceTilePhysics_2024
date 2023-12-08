@@ -12,7 +12,8 @@ class Background : RenderableEntity {
     static let gridRectStartingPoint = Point(x: 100, y: 100)
 
     let levelRandomizer: LevelRandomizer
-    let levels: [Level]
+    let levelSeed: Level
+    var levels: [Level]
     let rectGrids: [[[Rect]]]
     let colorGrids: [[[Color.Name]]]
 
@@ -33,6 +34,7 @@ class Background : RenderableEntity {
         self.levelRandomizer = levelRandomizer
 
         let levelSeed = Level(size: GridSize(sideLength: 11), startingPosition: GridPoint(x: 1, y: 1))
+        self.levelSeed = levelSeed
         let complexLevels = levelRandomizer.createComplexLevels(seed: levelSeed)
         self.levels = complexLevels
 
@@ -77,6 +79,10 @@ class Background : RenderableEntity {
             levelIndex -= 1
         }
     }
+    func resetLevels() {
+        levelIndex = 0
+        levels = levelRandomizer.createComplexLevels(seed: levelSeed)
+    }
 
     override func setup(canvasSize: Size, canvas: Canvas) {
         precondition(levels.count > 0, "There must be levels to generate.")
@@ -89,20 +95,26 @@ class Background : RenderableEntity {
     }
 
     override func render(canvas: Canvas) {
-        
-        func renderLevel(levelIndex: Int) {
-            let rectGrid = rectGrids[levelIndex]
-            let colorGrid = colorGrids[levelIndex]
 
-            for x in 0 ..< rectGrid.count {
-                for y in 0 ..< rectGrid[x].count {
-                    let fillStyle = FillStyle(color: Color(colorGrid[x][y]))
-                    let rectangle = Rectangle(rect: rectGrid[x][y], fillMode: .fillAndStroke)
-                    canvas.render(fillStyle, rectangle)
+        if let canvasSize = canvas.canvasSize {
+            let clearRectangle = Rectangle(rect: Rect(size: canvasSize), fillMode: .clear)
+            canvas.render(clearRectangle)
+            let levelText = Text(location: Point(x: 300, y: 25), text: "Level \(levelIndex + 1) of \(levels.count)", fillMode: .stroke)
+            canvas.render(levelText)
+            func renderLevel(levelIndex: Int) {
+                let rectGrid = rectGrids[levelIndex]
+                let colorGrid = colorGrids[levelIndex]
+
+                for x in 0 ..< rectGrid.count {
+                    for y in 0 ..< rectGrid[x].count {
+                        let fillStyle = FillStyle(color: Color(colorGrid[x][y]))
+                        let rectangle = Rectangle(rect: rectGrid[x][y], fillMode: .fillAndStroke)
+                        canvas.render(fillStyle, rectangle)
+                    }
                 }
             }
-        }
 
-        renderLevel(levelIndex: levelIndex)
-    }   
+            renderLevel(levelIndex: levelIndex)
+        }
+    }
 }
