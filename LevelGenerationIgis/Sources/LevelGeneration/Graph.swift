@@ -1,6 +1,4 @@
-import Igis
-
-struct Graph { // Represents the relationship between slides on a level grid
+public struct Graph { // Represents the relationship between slides on a level grid
     var slides = Set<Slide>()
 
     func breadthFirstSearch(origin: GridPoint, destination: GridPoint) -> [Slide]? {

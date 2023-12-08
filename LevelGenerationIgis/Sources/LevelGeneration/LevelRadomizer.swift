@@ -1,4 +1,4 @@
-class LevelRandomizer {
+public class LevelRandomizer {
     static var shared: LevelRandomizer? = nil
 
     private init() {

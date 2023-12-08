@@ -1,4 +1,4 @@
-struct GridSize { // Defines a size with a width and height
+public struct GridSize { // Defines a size with a width and height
     let width: Int
     let height: Int
 

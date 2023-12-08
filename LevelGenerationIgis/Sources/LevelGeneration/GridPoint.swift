@@ -1,4 +1,4 @@
-struct GridPoint { // Defines a point with an x and y value
+public struct GridPoint { // Defines a point with an x and y value
     let x: Int
     let y: Int
 }

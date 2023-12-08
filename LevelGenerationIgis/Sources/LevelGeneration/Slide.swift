@@ -1,4 +1,4 @@
-struct Slide { // Represents a "slide" that connects two critical points
+public struct Slide { // Represents a "slide" that connects two critical points
     let origin: GridPoint // Where the slide begins
     let destination: GridPoint // Where the slide ends
 

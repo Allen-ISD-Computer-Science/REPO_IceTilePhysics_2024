@@ -1,3 +1,3 @@
-enum Direction {
+public enum Direction {
     case up, down, left, right
 }

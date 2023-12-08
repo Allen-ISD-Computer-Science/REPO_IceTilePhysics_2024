@@ -1,6 +1,6 @@
 import Foundation
 
-struct Level { // Represents a Level of our Ice Tile Physics game
+public struct Level { // Represents a Level of our Ice Tile Physics game
     let startingPosition: GridPoint // Where the player would start    
     let size: GridSize // The size of the level grid
     
@@ -30,18 +30,6 @@ struct Level { // Represents a Level of our Ice Tile Physics game
         setBoundaryWalls()
         setTileState(point: startingPosition, tileState: .critical)
         createCriticalTiles()        
-    }
-
-    func tile(_ point: GridPoint) -> Tile {
-        precondition(size.width > point.x || size.height > point.y, "GridPoint must be within the bounds of the grid.")
-        return gridTiles[point.x][point.y]
-    }
-    func tiles(_ points: [GridPoint]) -> [Tile] {
-        var tiles = [Tile]()
-        for point in points {
-            tiles.append(tile(point))
-        }
-        return tiles
     }
 
     // Sets boundary walls on the grid, all perimeter tile states are set to wall
