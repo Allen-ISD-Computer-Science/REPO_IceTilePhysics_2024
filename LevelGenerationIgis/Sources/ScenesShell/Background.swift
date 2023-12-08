@@ -1,6 +1,5 @@
 import Scenes
 import Igis
-import LevelGeneration
 
   /*
      This class is responsible for rendering the background.

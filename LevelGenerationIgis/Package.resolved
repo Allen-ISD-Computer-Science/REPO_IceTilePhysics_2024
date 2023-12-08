@@ -1,15 +1,6 @@
 {
   "pins" : [
     {
-      "identity" : "icephysicslevelgeneration",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ItsAustinDlugosch/IcePhysicsLevelGeneration.git",
-      "state" : {
-        "revision" : "f9c059f72bc41de00c8ce15cb4798ae245e21421",
-        "version" : "1.0.2"
-      }
-    },
-    {
       "identity" : "swift-atomics",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-atomics.git",
