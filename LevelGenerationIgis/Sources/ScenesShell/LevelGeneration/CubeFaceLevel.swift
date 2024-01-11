@@ -1,13 +1,14 @@
 import Foundation
 
-public struct Level { // Represents a Level of our Ice Tile Physics game
+public struct CubeFaceLevel { // Represents a CubeFaceLevel of our Ice Tile Physics game
     public let startingPosition: GridPoint // Where the player would start    
     public let size: GridSize // The size of the level grid
+    public let cubeFace: CubeFace
     
     public var gridTiles: [[Tile]] // The tiles that make up the level grid
     public var graph = Graph() // How the tiles on the graph are connected through slides
 
-    public init(size: GridSize, startingPosition: GridPoint) {
+    public init(size: GridSize, startingPosition: GridPoint, cubeFace: CubeFace) {
         precondition(startingPosition.x > 0 &&
                        startingPosition.x < size.width &&
                        startingPosition.y > 0 &&
@@ -16,6 +17,7 @@ public struct Level { // Represents a Level of our Ice Tile Physics game
         
         self.size = size
         self.startingPosition = startingPosition
+        self.cubeFace = cubeFace
 
         // Create the grid tiles and set their state as inactive by default
         var gridTiles = [[Tile]]()
@@ -156,7 +158,7 @@ public struct Level { // Represents a Level of our Ice Tile Physics game
     }
 }
 
-extension Level {
+extension CubeFaceLevel {
     // Functions used for randomizing levels
     
     // Returns an array of active points that have an adjacent critical point
@@ -178,7 +180,7 @@ extension Level {
     }
 
     // Resets the level to be revalidated
-    mutating func resetLevel() {
+    mutating func resetCubeFaceLevel() {
         tileGridPointsOfState(tileState: .active).forEach { gridTiles[$0.x][$0.y].tileState = .inactive }
         tileGridPointsOfState(tileState: .critical).forEach { gridTiles[$0.x][$0.y].tileState = .inactive }
         graph.slides = []

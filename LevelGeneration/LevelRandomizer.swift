@@ -1,5 +1,6 @@
 public class LevelRandomizer {
     public static var shared: LevelRandomizer? = nil
+    static let randomizerIterationCap: Int = 100
 
     private init() {
         
@@ -9,20 +10,29 @@ public class LevelRandomizer {
         shared = LevelRandomizer()
     }
 
-    public func createComplexLevels(seed: Level) -> [Level] {
-        var levels = [seed]        
+    public func createComplexCubeFaceLevels(seed: CubeFaceLevel) -> [CubeFaceLevel] {
+        var levels = [seed]
+        var randomizeIterationCount = 0
+        
         // Interupt slide with a wall
-        repeat {
+        repeat {            
+            precondition(levels.count > 0, "Must be a level seed to randomize")
             var complexLevel = levels[levels.count - 1]
             let viableActiveGridPoints = Set(complexLevel.tileGridPointsOfState(tileState: .active)).subtracting(complexLevel.activesAdjacentToCriticals())
+            guard randomizeIterationCount < LevelRandomizer.randomizerIterationCap else {
+                return levels
+            }
             guard let randomViableActiveGridPoint = viableActiveGridPoints.randomElement() else {
                 return levels
             }
             complexLevel.setTileState(point: randomViableActiveGridPoint, tileState: .wall)
-            complexLevel.resetLevel()
+            complexLevel.resetCubeFaceLevel()
             if complexLevel.solvable() {                
                 levels.append(complexLevel)
-            }
+                randomizeIterationCount = 0
+            } else {
+                randomizeIterationCount += 1
+            }            
         } while true
     }    
 }

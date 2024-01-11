@@ -15,17 +15,21 @@ class InteractionLayer : Layer {
           super.init(name:"Interaction")
 
           // We insert our RenderableEntities in the constructor
-          let incrementLevelButton = Button(name: "IncrementLevel", labelString: "Increment Level Index", topLeft: Point(x: 25, y: 25))
-          incrementLevelButton.clickHandler = onIncrementLevelButtonClickHandler
-          insert(entity: incrementLevelButton, at: .front)
+          let incrementTopCubeFaceLevelButton = Button(name: "IncrementLevel", labelString: "Increment Index", topLeft: Point(x: 25, y: 25))
+          incrementTopCubeFaceLevelButton.clickHandler = onIncrementTopCubeFaceLevelButtonClickHandler
+          insert(entity: incrementTopCubeFaceLevelButton, at: .front)
 
-          let decrementLevelButton = Button(name: "DecrementLevel", labelString: "Decrement Level Index", topLeft: Point(x: 25, y: 60))
-          decrementLevelButton.clickHandler = onDecrementLevelButtonClickHandler
-          insert(entity: decrementLevelButton, at: .front)
+          let decrementTopCubeFaceLevelButton = Button(name: "DecrementLevel", labelString: "Decrement Index", topLeft: Point(x: 25, y: 60))
+          decrementTopCubeFaceLevelButton.clickHandler = onDecrementTopCubeFaceLevelButtonClickHandler
+          insert(entity: decrementTopCubeFaceLevelButton, at: .front)
 
-          let resetLevelsButton = Button(name: "ResetLevels", labelString: "Reset Levels", topLeft: Point(x: 25, y: 95))
-          resetLevelsButton.clickHandler = onResetLevelsButtonClickHandler
-          insert(entity: resetLevelsButton, at: .front)
+          let resetTopCubeFaceLevelsButton = Button(name: "ResetLevels", labelString: "Reset Levels", topLeft: Point(x: 25, y: 95))
+          resetTopCubeFaceLevelsButton.clickHandler = onResetTopCubeFaceLevelsButtonClickHandler
+          insert(entity: resetTopCubeFaceLevelsButton, at: .front)
+
+          let maxTopCubeFaceLevelButton = Button(name: "LastLevel", labelString: "Last Level", topLeft: Point(x: 25, y: 130))
+          maxTopCubeFaceLevelButton.clickHandler = onMaxTopCubeFaceLevelButtonClickHandler
+          insert(entity: maxTopCubeFaceLevelButton, at: .front)
       }
 
       func background() -> Background {
@@ -37,13 +41,16 @@ class InteractionLayer : Layer {
           return background
       }
 
-      func onIncrementLevelButtonClickHandler(control: Control, localLocation: Point) {
-          background().incrementLevelIndex()          
+      func onIncrementTopCubeFaceLevelButtonClickHandler(control: Control, localLocation: Point) {
+          background().incrementTopCubeFaceLevelIndex()          
       }
-      func onDecrementLevelButtonClickHandler(control: Control, localLocation: Point) {
-          background().decrementLevelIndex()
+      func onDecrementTopCubeFaceLevelButtonClickHandler(control: Control, localLocation: Point) {
+          background().decrementTopCubeFaceLevelIndex()
       }
-      func onResetLevelsButtonClickHandler(control: Control, localLocation: Point) {
-          background().resetLevels()
+      func onResetTopCubeFaceLevelsButtonClickHandler(control: Control, localLocation: Point) {
+          background().resetTopCubeFaceLevels()
+      }
+      func onMaxTopCubeFaceLevelButtonClickHandler(control: Control, localLocation: Point) {
+          background().maxTopLevelIndex()
       }
   }

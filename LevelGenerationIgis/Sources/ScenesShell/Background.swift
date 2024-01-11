@@ -7,15 +7,15 @@ import Igis
 
 
 class Background : RenderableEntity {
+    typealias RenderableGrid = (rectGrid: [[Rect]], colorGrid: [[Color.Name]])
 
     static let gridRectSize = Size(width: 30, height: 30)
     static let gridRectStartingPoint = Point(x: 100, y: 100)
 
     let levelRandomizer: LevelRandomizer
-    let levelSeed: Level
-    var levels: [Level]
-    let rectGrids: [[[Rect]]]
-    let colorGrids: [[[Color.Name]]]
+    let topTopLevelseed: CubeFaceLevel
+    var topLevels: [CubeFaceLevel]
+    var renderableGrids = [RenderableGrid]()
 
     private var levelIndex = 0
 
@@ -33,12 +33,16 @@ class Background : RenderableEntity {
         }
         self.levelRandomizer = levelRandomizer
 
-        let levelSeed = Level(size: GridSize(sideLength: 11), startingPosition: GridPoint(x: 1, y: 1))
-        self.levelSeed = levelSeed
-        let complexLevels = levelRandomizer.createComplexLevels(seed: levelSeed)
-        self.levels = complexLevels
+        let topLevelseed = CubeFaceLevel(size: GridSize(sideLength: 11), startingPosition: GridPoint(x: 1, y: 1), cubeFace: .top)
+        self.topTopLevelseed = topLevelseed
+        let complexCubeFaceTopLevels = levelRandomizer.createComplexCubeFaceLevels(seed: topLevelseed)
+        self.topLevels = complexCubeFaceTopLevels
+        
+        // Using a meaningful name can be helpful for debugging
+        super.init(name:"Background")
+    }
 
-        func levelToRenderGrids(level: Level) -> (rectGrid: [[Rect]], colorGrid: [[Color.Name]]) {
+    func levelToRenderGrid(level: CubeFaceLevel) -> RenderableGrid {
             var rectGrid = [[Rect]]()
             var colorGrid = [[Color.Name]]()
             for tileColumnIndex in 0 ..< level.size.width {
@@ -59,39 +63,37 @@ class Background : RenderableEntity {
                 rectGrid.append(rectColumn)
                 colorGrid.append(colorColumn)
             }
-            return (rectGrid, colorGrid)
+            return RenderableGrid(rectGrid: rectGrid, colorGrid: colorGrid)
         }
-        let renderGrids = complexLevels.map { levelToRenderGrids(level: $0) }
-        self.rectGrids = renderGrids.map { $0.rectGrid }
-        self.colorGrids = renderGrids.map { $0.colorGrid }
-        
-        // Using a meaningful name can be helpful for debugging
-        super.init(name:"Background")
-    }
 
-    func incrementLevelIndex() {
-        if levelIndex + 1 < levels.count {
+    func incrementTopCubeFaceLevelIndex() {
+        if levelIndex + 1 < topLevels.count {
             levelIndex += 1
         }
     }
-    func decrementLevelIndex() {
+    func decrementTopCubeFaceLevelIndex() {
         if levelIndex - 1 >= 0 {
             levelIndex -= 1
         }
     }
-    func resetLevels() {
-        levelIndex = 0
-        levels = levelRandomizer.createComplexLevels(seed: levelSeed)
+    func maxTopLevelIndex() {
+        levelIndex = topLevels.count - 1
+        print(topLevels.count, levelIndex)
     }
+    func resetTopCubeFaceLevels() {
+        levelIndex = 0
+        topLevels = levelRandomizer.createComplexCubeFaceLevels(seed: topTopLevelseed)
+        renderableGrids = topLevels.map { levelToRenderGrid(level: $0) }
+        maxTopLevelIndex()
+    }    
 
     override func setup(canvasSize: Size, canvas: Canvas) {
-        precondition(levels.count > 0, "There must be levels to generate.")
-        precondition(levels.count == rectGrids.count &&
-                       levels.count == colorGrids.count, "The amount of levels, amount of rect grids, and amount of colors, must all be equal.")
-        
+        precondition(topLevels.count > 0, "There must be topLevels to generate.")
+        renderableGrids = topLevels.map { levelToRenderGrid(level: $0) }
+        precondition(topLevels.count == renderableGrids.count, "The amount of topLevels, amount of rect grids, and amount of colors, must all be equal.")
         let strokeStyle = StrokeStyle(color: Color(.black))
         canvas.render(strokeStyle)
-        levelIndex = levels.count - 1
+        levelIndex = topLevels.count - 1
     }
 
     override func render(canvas: Canvas) {
@@ -99,11 +101,13 @@ class Background : RenderableEntity {
         if let canvasSize = canvas.canvasSize {
             let clearRectangle = Rectangle(rect: Rect(size: canvasSize), fillMode: .clear)
             canvas.render(clearRectangle)
-            let levelText = Text(location: Point(x: 300, y: 25), text: "Level \(levelIndex + 1) of \(levels.count)", fillMode: .stroke)
+            let levelText = Text(location: Point(x: 300, y: 25), text: "CubeFaceLevel \(levelIndex + 1) of \(topLevels.count)", fillMode: .stroke)
             canvas.render(levelText)
-            func renderLevel(levelIndex: Int) {
-                let rectGrid = rectGrids[levelIndex]
-                let colorGrid = colorGrids[levelIndex]
+            func renderCubeFaceLevel(levelIndex: Int) {
+                let renderableGrid = renderableGrids[levelIndex]
+                let rectGrid = renderableGrid.rectGrid
+                let colorGrid = renderableGrid.colorGrid
+
 
                 for x in 0 ..< rectGrid.count {
                     for y in 0 ..< rectGrid[x].count {
@@ -114,7 +118,7 @@ class Background : RenderableEntity {
                 }
             }
 
-            renderLevel(levelIndex: levelIndex)
+            renderCubeFaceLevel(levelIndex: levelIndex)
         }
     }
 }

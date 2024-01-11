@@ -1,6 +1,6 @@
 public struct Tile { // Represents a tile on the level grid
-    let point: GridPoint // Each tile has a point, x values increase as tiles continue to the right, y values increase as tile continue down
-    var tileState: TileState // The state of each tile
+    public let point: LevelPoint // Each tile has a point
+    public var tileState: TileState // The state of each tile
 }
 
 extension Tile: Equatable, Hashable {
