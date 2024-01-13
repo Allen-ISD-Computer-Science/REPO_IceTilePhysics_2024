@@ -1,47 +1,9 @@
-public enum CubeFace {
-    case top
-    case bottom
-    case front
-    case back
-    case left
-    case right
+public enum CubeFace: Int, Hashable { // Represents a face on the cube, associated values correspond to the order in which faces appear in an array    
 
-    static let cubeFacePointers: [CubeFace: [Direction: CubeFace]] = [
-      .top: [
-        .up: .back,
-        .down: .front,
-        .left: .left,
-        .right: .right    
-      ],
-      .bottom: [
-        .up: .front,
-        .down: .back,
-        .left: .left,
-        .right: .right
-      ],
-      .front: [
-        .up: .top,
-        .down: .bottom,
-        .left: .left,
-        .right: .right
-      ],
-      .back: [
-        .up: .top,
-        .down: .bottom,
-        .left: .right,
-        .right: .left
-      ],
-      .left: [
-        .up: .top,
-        .down: .bottom,
-        .left: .back,
-        .right: .front
-      ],
-      .right: [
-        .up: .top,
-        .down: .bottom,
-        .left: .front,
-        .right: .back
-      ]
-    ]
+    case back = 0
+    case left = 1
+    case top = 2
+    case right = 3
+    case front = 4
+    case bottom = 5
 }
