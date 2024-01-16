@@ -1,10 +1,10 @@
-public struct Level {
-    public let levelSize: LevelSize
-    public let startingPosition: LevelPoint
+struct Level {
+    let levelSize: LevelSize
+    let startingPosition: LevelPoint
 
-    public var faceLevels: [FaceLevel]
-    public var levelGraph = Graph()
-    public init(levelSize: LevelSize, startingPosition: LevelPoint) {
+    var faceLevels: [FaceLevel]
+    var levelGraph = Graph()
+    init(levelSize: LevelSize, startingPosition: LevelPoint) {
         self.levelSize = levelSize
         self.startingPosition = startingPosition
         
@@ -65,7 +65,7 @@ public struct Level {
       CubeEdge(.bottom, .left):(.left, .right, [.invertDeltaY, .minX]),
     ]
 
-    func adjacentPoint(from origin: LevelPoint, direction: Direction) -> (adjacentPoint: LevelPoint, newDirection: Direction) {        
+    func adjacentPoint(from origin: LevelPoint, direction: Direction) -> (adjacentPoint: LevelPoint, direction: Direction) {        
         func handleEdge() -> (LevelPoint, Direction) {
             guard let (cubeFace, direction, transformations) = crossCubeEdgeMap[CubeEdge(origin.cubeFace, direction)] else {
                 fatalError("Unexpected edge transformation.")
@@ -100,6 +100,10 @@ public struct Level {
         }
     }
 
+    func adjacentPoints(levelPoint: LevelPoint) -> [(adjacentPoint: LevelPoint, direction: Direction)] {
+        return [Direction]([.up, .down, .left, .right]).map { adjacentPoint(from: levelPoint, direction: $0) }
+    }
+
     func slideCriticalTile(origin: LevelPoint, direction: Direction) -> Slide {
         let originFaceLevel = faceLevels[origin.cubeFace.rawValue]
         precondition(originFaceLevel.tiles[origin.x][origin.y].tileState == .critical,
@@ -122,7 +126,7 @@ public struct Level {
             for direction in [Direction]([.up, .down, .left, .right]) {
                 let slide = slideCriticalTile(origin: criticalTilePoint, direction: direction)                
                 if slide.origin != slide.destination {
-                    levelGraph.slides.insert(slide)
+                    levelGraph.insertSlide(slide)
                     if !allCriticalTiles.contains(slide.destination) {
                         setTileState(levelPoint: slide.destination, tileState: .critical)
                         changeTileStateIfCurrent(levelPoints: slide.activatedTilePoints, current: .inactive, new: .active)
@@ -153,7 +157,7 @@ public struct Level {
     mutating func resetLevel() {
         tilePointsOfState(tileState: .active).forEach { setTileState(levelPoint: $0, tileState: .inactive) }
         tilePointsOfState(tileState: .critical).forEach { setTileState(levelPoint: $0, tileState: .inactive) }
-        levelGraph.slides = []
+        levelGraph.clearGraph()
         setTileState(levelPoint: startingPosition, tileState: .critical)
         initializeCriticalTiles()
     }
