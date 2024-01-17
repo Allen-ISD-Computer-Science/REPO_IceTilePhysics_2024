@@ -18,6 +18,9 @@
       height: 100%;
       touch-action: none;
     }
+    h1 {
+      text-align:center;
+    }
   </style>
 
   <script src="https://cdn.babylonjs.com/babylon.js"></script>
@@ -27,7 +30,9 @@
 <body>
 
   <canvas id="renderCanvas"></canvas>
-
+  <h1>Babylon Test Site</h1>
+  
+  <!-- everything below is the code for Babylon, can be edited at will -->
   <script>
     const canvas = document.getElementById("renderCanvas"); // Get the canvas element
     const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
