@@ -83,8 +83,17 @@
 	button.width = '200px';
 	button.height = '40px';
 	button.color = 'white';
-	button.background = 'deepskyblue';
-	advancedTexture.addControl(button);
+    button.background = 'deepskyblue';
+    advancedTexture.addControl(button);
+    button.onPointerUpObversable.add(function(){
+    var r = (Math.random() * 255).toString();
+    var g = (Math.random() * 255).toString();
+    var b = (Math.random() * 255).toString();
+
+    var randomColor = "rgb(".concat(r,",",g,",",b,")");
+
+    button.background = randomColor;
+    }
     
     
       return scene;
