@@ -21,7 +21,9 @@
   </style>
 
   <script src="https://cdn.babylonjs.com/babylon.js"></script>
+  <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
 
+  
 </head>
 
 <body>
@@ -53,7 +55,18 @@
       sphere.position.y = 1;
       // Built-in 'ground' shape.
       const ground = BABYLON.MeshBuilder.CreateGround("ground",
-                                                 { width: 6, height: 6 }, scene);
+    { width: 6, height: 6 }, scene);
+
+      // GUI
+	const advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("myUI");
+	const button = BABYLON.GUI.Button.CreateSimpleButton('TestButton', 'Click!');
+	button.width = '200px';
+	button.height = '40px';
+	button.color = 'white';
+	button.background = 'deepskyblue';
+	advancedTexture.addControl(button);
+    
+    
       return scene;
     };
     const scene = createScene(); //Call the createScene function
