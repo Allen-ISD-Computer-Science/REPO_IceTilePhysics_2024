@@ -1,8 +1,8 @@
-public struct FaceSize {
-    public let maxX: Int
-    public let maxY: Int
+struct FaceSize {
+    let maxX: Int
+    let maxY: Int
 
-    public init(maxX: Int, maxY: Int) {
+    init(maxX: Int, maxY: Int) {
         self.maxX = maxX
         self.maxY = maxY
     }
