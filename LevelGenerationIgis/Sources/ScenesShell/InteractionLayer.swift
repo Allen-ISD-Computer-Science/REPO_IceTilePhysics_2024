@@ -15,17 +15,21 @@ class InteractionLayer : Layer {
           super.init(name:"Interaction")
 
           // We insert our RenderableEntities in the constructor
-          let incrementLevelButton = Button(name: "IncrementLevel", labelString: "Increment Level Index", topLeft: Point(x: 25, y: 25))
+          let incrementLevelButton = Button(name: "IncrementLevel", labelString: "Increment Index", topLeft: Point(x: 25, y: 25))
           incrementLevelButton.clickHandler = onIncrementLevelButtonClickHandler
           insert(entity: incrementLevelButton, at: .front)
 
-          let decrementLevelButton = Button(name: "DecrementLevel", labelString: "Decrement Level Index", topLeft: Point(x: 25, y: 60))
+          let decrementLevelButton = Button(name: "DecrementLevel", labelString: "Decrement Index", topLeft: Point(x: 25, y: 60))
           decrementLevelButton.clickHandler = onDecrementLevelButtonClickHandler
           insert(entity: decrementLevelButton, at: .front)
 
           let resetLevelsButton = Button(name: "ResetLevels", labelString: "Reset Levels", topLeft: Point(x: 25, y: 95))
           resetLevelsButton.clickHandler = onResetLevelsButtonClickHandler
           insert(entity: resetLevelsButton, at: .front)
+
+          let maxLevelButton = Button(name: "LastLevel", labelString: "Last Level", topLeft: Point(x: 25, y: 130))
+          maxLevelButton.clickHandler = onMaxLevelButtonClickHandler
+          insert(entity: maxLevelButton, at: .front)
       }
 
       func background() -> Background {
@@ -45,5 +49,8 @@ class InteractionLayer : Layer {
       }
       func onResetLevelsButtonClickHandler(control: Control, localLocation: Point) {
           background().resetLevels()
+      }
+      func onMaxLevelButtonClickHandler(control: Control, localLocation: Point) {
+          background().maxLevelIndex()
       }
   }

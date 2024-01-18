@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        <title>Babylon.js sample code</title>
+
+        <!-- Babylon.js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
+        <script src="https://assets.babylonjs.com/generated/Assets.js"></script>
+        <script src="https://cdn.babylonjs.com/recast.js"></script>
+        <script src="https://cdn.babylonjs.com/ammo.js"></script>
+        <script src="https://cdn.babylonjs.com/havok/HavokPhysics_umd.js"></script>
+        <script src="https://cdn.babylonjs.com/cannon.js"></script>
+        <script src="https://cdn.babylonjs.com/Oimo.js"></script>
+        <script src="https://cdn.babylonjs.com/earcut.min.js"></script>
+        <script src="https://cdn.babylonjs.com/babylon.js"></script>
+        <script src="https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+        <script src="https://cdn.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+        <script src="https://cdn.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
+        <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.js"></script>
+        <script src="https://cdn.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
+        <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
+        <script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+
+        <style>
+            html, body {
+                overflow: hidden;
+                width: 80%;
+                height: 90%;
+                margin: auto;
+                padding: 20;
+                text-align:center;
+            }
+
+            #renderCanvas {
+                width: 80%;
+                height: 80%;
+                touch-action: none;
+            }
+            
+            #canvasZone {
+                width: 100%;
+                height: 100%;
+            }
+            h1 {
+                text-align:center;
+            }
+        </style>
+    </head>
+<body>
+
+    <h1>Animation Test</h1>
+
+    <div id="canvasZone"><canvas id="renderCanvas"></canvas></div>
+    <script>
+        var canvas = document.getElementById("renderCanvas");
+
+        var startRenderLoop = function (engine, canvas) {
+            engine.runRenderLoop(function () {
+                if (sceneToRender && sceneToRender.activeCamera) {
+                    sceneToRender.render();
+                }
+            });
+        }
+
+        var engine = null;
+        var scene = null;
+        var sceneToRender = null;
+        var createDefaultEngine = function() { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true,  disableWebGL2Support: false}); };
+        var createScene = function () {
+            var scene = new BABYLON.Scene(engine);
+        
+            var light = new BABYLON.PointLight("Omni", new BABYLON.Vector3(0, 100, 100), scene);
+            var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0.8, 100, BABYLON.Vector3.Zero(), scene);
+            camera.attachControl(canvas, true);
+        
+            //Boxes
+            var box1 = BABYLON.Mesh.CreateBox("Box1", 10.0, scene);
+            box1.position.x = -20;
+            var box2 = BABYLON.Mesh.CreateBox("Box2", 10.0, scene);
+        
+            var materialBox = new BABYLON.StandardMaterial("texture1", scene);
+            materialBox.diffuseColor = new BABYLON.Color3(0, 1, 0);//Green
+            var materialBox2 = new BABYLON.StandardMaterial("texture2", scene);
+        
+            //Applying materials
+            box1.material = materialBox;
+            box2.material = materialBox2;
+        
+            //Positioning box
+            box2.position.x = 20;
+        
+        
+            //Create a scaling animation
+            var animation1 = new BABYLON.Animation("tutoAnimation", "scaling.z", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+                BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+        
+            // Animation keys
+            var keys = [];
+            //At the animation key 0, the value of scaling is "1"
+            keys.push({
+                frame: 0,
+                value: 1
+            });
+        
+            //At the animation key 20, the value of scaling is "0.2"
+            keys.push({
+                frame: 20,
+                value: 0.2
+            });
+        
+            //At the animation key 100, the value of scaling is "1"
+            keys.push({
+                frame: 100,
+                value: 1
+            });
+        
+            //Adding keys to the animation object
+            animation1.setKeys(keys);
+        
+            //Create a second rotation animation with different timeline
+            var animation2 = new BABYLON.Animation("tutoAnimation", "rotation.y", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+                BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+        
+            // Animation keys
+            keys = [];
+            keys.push({
+                frame: 0,
+                value: 0
+            });
+        
+            keys.push({
+                frame: 40,
+                value: Math.PI
+            });
+        
+            keys.push({
+                frame: 80,
+                value: 0
+            });
+        
+            //Adding keys to the animation object
+            animation2.setKeys(keys);
+        
+            // Create the animation group
+            var animationGroup = new BABYLON.AnimationGroup("my group");
+            animationGroup.addTargetedAnimation(animation1, box1);
+            animationGroup.addTargetedAnimation(animation2, box2);
+        
+            // Make sure to normalize animations to the same timeline
+            animationGroup.normalize(0, 100);
+        
+            // UI
+            var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+            var panel = new BABYLON.GUI.StackPanel();
+            panel.isVertical = false;
+            panel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+            advancedTexture.addControl(panel);
+        
+            var addButton = function (text, callback) {
+                var button = BABYLON.GUI.Button.CreateSimpleButton("button", text);
+                button.width = "140px";
+                button.height = "40px";
+                button.color = "white";
+                button.background = "green";
+                button.paddingLeft = "10px";
+                button.paddingRight = "10px";
+                button.onPointerUpObservable.add(function () {
+                    callback();
+                });
+                panel.addControl(button);
+            }
+        
+            addButton("Play", function () {
+                animationGroup.play(true);
+            });
+        
+            addButton("Pause", function () {
+                animationGroup.pause();
+            });
+        
+            addButton("Stop", function () {
+                animationGroup.reset();
+                animationGroup.stop();
+            });
+        
+            return scene;
+        }
+                window.initFunction = async function() {
+                    
+                    
+                    
+                    var asyncEngineCreation = async function() {
+                        try {
+                        return createDefaultEngine();
+                        } catch(e) {
+                        console.log("the available createEngine function failed. Creating the default engine instead");
+                        return createDefaultEngine();
+                        }
+                    }
+
+                    window.engine = await asyncEngineCreation();
+        if (!engine) throw 'engine should not be null.';
+        startRenderLoop(engine, canvas);
+        window.scene = createScene();};
+        initFunction().then(() => {sceneToRender = scene                    
+        });
+
+        // Resize
+        window.addEventListener("resize", function () {
+            engine.resize();
+        });
+    </script>
+</body>
+</html>
