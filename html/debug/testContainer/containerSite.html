@@ -91,12 +91,6 @@
 
     // GUI Functions
 
-    function loadMenu(){
-    var bg = new BABYLON.GUI.Image("bg", bg1);
-    bg.height = String(canvas.height);
-    bg.width = String(canvas.width);
-    advancedTexture.addControl(bg);
-    }
 
 	const button = BABYLON.GUI.Button.CreateSimpleButton('TestButton', 'Click!');
 	button.width = '200px';
@@ -113,8 +107,7 @@
 
     button.background = randomColor;
     }
- loadMenu();    
-    
+     
       return scene;
     };
     const scene = createScene(); //Call the createScene function
