@@ -10,7 +10,7 @@ public struct Level {
         
         // Create the face levels
         var faceLevels = [FaceLevel]()
-        for cubeFace in [CubeFace]([.back, .left, .top, .right, .front, .bottom]) {
+        for cubeFace in [CubeFace]([.back, .left, .top, .right, .front, .bottom]) { // Arbitrary order of cube faces
             faceLevels.append(FaceLevel(faceSize: levelSize.faceSize(cubeFace: cubeFace), cubeFace: cubeFace))
         }
         self.faceLevels = faceLevels
@@ -40,7 +40,7 @@ public struct Level {
 
     let crossCubeEdgeMap: [CubeEdge:(CubeFace, Direction, [CubeEdgeTransformation])] = [
       CubeEdge(.back, .up):(.bottom, .up, [.maxY]),
-      CubeEdge(.back, .right):(.right, .down, [.swap, .invertDeltaY, .invertDeltaX]),
+      CubeEdge(.back, .right):(.right, .down, [.swap, .invertDeltaX, .minY]),
       CubeEdge(.back, .down):(.top, .down, [.minY]),
       CubeEdge(.back, .left):(.left, .down, [.swap]),
       CubeEdge(.left, .up):(.back, .right, [.swap]),
@@ -58,14 +58,14 @@ public struct Level {
       CubeEdge(.front, .up):(.top, .up, [.maxY]),
       CubeEdge(.front, .right):(.right, .up, [.swap]),
       CubeEdge(.front, .down):(.bottom, .down, [.minY]),
-      CubeEdge(.front, .left):(.left, .up, [.swap, .invertDeltaY, .invertDeltaX]),
+      CubeEdge(.front, .left):(.left, .up, [.swap, .invertDeltaX, .maxY]),
       CubeEdge(.bottom, .up):(.front, .up, [.maxY]),
       CubeEdge(.bottom, .right):(.right, .left, [.invertDeltaY, .maxX]),
       CubeEdge(.bottom, .down):(.back, .down, [.minY]),
       CubeEdge(.bottom, .left):(.left, .right, [.invertDeltaY, .minX]),
     ]
 
-    func adjacentPoint(from origin: LevelPoint, direction: Direction) -> (adjacentPoint: LevelPoint, newDirection: Direction) {        
+    func adjacentPoint(from origin: LevelPoint, direction: Direction) -> (adjacentPoint: LevelPoint, direction: Direction) {        
         func handleEdge() -> (LevelPoint, Direction) {
             guard let (cubeFace, direction, transformations) = crossCubeEdgeMap[CubeEdge(origin.cubeFace, direction)] else {
                 fatalError("Unexpected edge transformation.")
@@ -98,6 +98,10 @@ public struct Level {
             }
             return (LevelPoint(x: origin.x + 1, y: origin.y, cubeFace: origin.cubeFace), direction)
         }
+    }
+
+    func adjacentPoints(levelPoint: LevelPoint) -> [(adjacentPoint: LevelPoint, direction: Direction)] {
+        return [Direction]([.up, .down, .left, .right]).map { adjacentPoint(from: levelPoint, direction: $0) }
     }
 
     func slideCriticalTile(origin: LevelPoint, direction: Direction) -> Slide {

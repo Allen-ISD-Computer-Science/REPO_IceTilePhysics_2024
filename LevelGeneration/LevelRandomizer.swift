@@ -61,8 +61,17 @@ class LevelRandomizer {
             }[0]
             complexLevel.faceLevels[adjacentWallPoint.cubeFace.rawValue].tiles[adjacentWallPoint.x][adjacentWallPoint.y].tileState = .inactive
             let secondAdjacentWallPoint = complexLevel.adjacentPoint(from: adjacentWallPoint, direction: direction).adjacentPoint
-            complexLevel.faceLevels[secondAdjacentWallPoint.cubeFace.rawValue].tiles[secondAdjacentWallPoint.x][secondAdjacentWallPoint.y].tileState = .inactive
+            complexLevel.faceLevels[secondAdjacentWallPoint.cubeFace.rawValue].tiles[secondAdjacentWallPoint.x][secondAdjacentWallPoint.y].tileState = .inactive            
             complexLevel.resetLevel()
+
+            func makeSolvableLevel() {
+                // An unsolvable level will have a slide within the graph that has a destination that only appears once
+                // Find this desitination and add walls that will create a slide(s) that integrate it into the graph
+                let isolatedSlides = complexLevel.levelGraph.isolatedSlides()
+                print("Isolated count: \(isolatedSlides.count)")
+                isolatedSlides.forEach { print($0.destination) }
+            }
+            makeSolvableLevel()
             levels.append(complexLevel)
         }        
         interruptSlides()

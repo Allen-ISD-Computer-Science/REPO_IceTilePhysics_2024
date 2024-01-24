@@ -41,4 +41,26 @@ struct Graph { // Represents the relationship between slides on a level grid
         }
         return nil // Will return nil once all points have been explored and the destination has not been reached
     }
+
+    func slides(origin: LevelPoint) -> Set<Slide> {
+        return slides.filter { $0.origin == origin }
+    }
+
+    func slides(origins: [LevelPoint]) -> Set<Slide> {
+        return slides.filter { origins.contains($0.origin) }
+    }
+
+    func slides(destination: LevelPoint) -> Set<Slide> {
+        return slides.filter { $0.destination == destination }
+    }
+
+    func slides(destinations: [LevelPoint]) -> Set<Slide> {
+        return slides.filter { destinations.contains($0.destination) }
+    }
+
+
+    func isolatedSlides() -> Set<Slide> {
+        let destinationHistogram: [LevelPoint:Int] = slides.map { $0.destination }.histogram()
+        return slides(destinations: destinationHistogram.allKeysForValue(value: 1))
+    }
 }
