@@ -51,6 +51,9 @@
   <canvas id="renderCanvas"></canvas>
 
   <script>
+
+    
+    
     const canvas = document.getElementById("renderCanvas"); // Get the canvas element
     const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
     const createScene = function () {
@@ -80,8 +83,21 @@
       const ground = BABYLON.MeshBuilder.CreateGround("ground",
     { width: 6, height: 6 }, scene);
 
-      // GUI
-	const advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("myUI");
+	// GUI
+	const assets = "../../../assets";
+	const ui = assets.concat("textures/ui");
+	const bg1 = ui.concat("/titleScreen.bg_1.png");
+    const advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("myUI");
+
+    // GUI Functions
+
+    function loadMenu(){
+    var bg = new BABYLON.GUI.Image("bg", bg1);
+    bg.height = String(canvas.height);
+    bg.width = String(canvas.width);
+    advancedTexture.addControl(bg);
+    }
+
 	const button = BABYLON.GUI.Button.CreateSimpleButton('TestButton', 'Click!');
 	button.width = '200px';
 	button.height = '40px';
@@ -97,7 +113,7 @@
 
     button.background = randomColor;
     }
-    
+ loadMenu();    
     
       return scene;
     };
