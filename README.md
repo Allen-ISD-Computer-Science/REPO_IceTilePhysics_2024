@@ -6,6 +6,7 @@ We aspire to create a vibrant, thriving community where puzzle enthusiasts can c
 
 Our vision extends beyond just entertainment; we aim to revolutionize how puzzle games are perceived and played. By nurturing a robust community and continuously evolving our game to meet player needs and feedback, we anticipate setting new standards in puzzle gaming.
 
+
 # Roles
 ### Role - Name - GitHub - Digital Portfolio - Discord
 - **Product Manager** - Austin Dlugosch - [@ItsAustinDlugosch](https://github.com/ItsAustinDlugosch) - [Digital Portfolio](https://codermerlin.academy/users/austin-dlugosch/Digital%20Portfolio/index.html) - @ultra9711
