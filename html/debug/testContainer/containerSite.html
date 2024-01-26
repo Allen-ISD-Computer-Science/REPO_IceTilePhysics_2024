@@ -90,8 +90,8 @@
     // Initialize menu
     function createMenu(){
       var bg = new BABYLON.GUI.Image("bg", "../../../assets/textures/ui/titleScreen/bg_1.png");
-      bg.width = toString(canvas.width);
-      bg.height = toString(canvas.height);
+      bg.width = String(canvas.width);
+      bg.height = String(canvas.height);
       advancedTexture.addControl(bg);
     }
 
