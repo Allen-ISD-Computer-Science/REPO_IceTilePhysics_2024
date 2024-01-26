@@ -1,16 +1,16 @@
-public struct Level {
-    public let levelSize: LevelSize
-    public let startingPosition: LevelPoint
+struct Level {
+    let levelSize: LevelSize
+    let startingPosition: LevelPoint
 
-    public var faceLevels: [FaceLevel]
-    public var levelGraph = Graph()
-    public init(levelSize: LevelSize, startingPosition: LevelPoint) {
+    var faceLevels: [FaceLevel]
+    var levelGraph = Graph()
+    init(levelSize: LevelSize, startingPosition: LevelPoint) {
         self.levelSize = levelSize
         self.startingPosition = startingPosition
         
         // Create the face levels
         var faceLevels = [FaceLevel]()
-        for cubeFace in [CubeFace]([.back, .left, .top, .right, .front, .bottom]) { // Arbitrary order of cube faces
+        for cubeFace in [CubeFace]([.back, .left, .top, .right, .front, .bottom]) {
             faceLevels.append(FaceLevel(faceSize: levelSize.faceSize(cubeFace: cubeFace), cubeFace: cubeFace))
         }
         self.faceLevels = faceLevels
@@ -40,7 +40,7 @@ public struct Level {
 
     let crossCubeEdgeMap: [CubeEdge:(CubeFace, Direction, [CubeEdgeTransformation])] = [
       CubeEdge(.back, .up):(.bottom, .up, [.maxY]),
-      CubeEdge(.back, .right):(.right, .down, [.swap, .invertDeltaX, .minY]),
+      CubeEdge(.back, .right):(.right, .down, [.swap, .invertDeltaY, .invertDeltaX]),
       CubeEdge(.back, .down):(.top, .down, [.minY]),
       CubeEdge(.back, .left):(.left, .down, [.swap]),
       CubeEdge(.left, .up):(.back, .right, [.swap]),
@@ -58,7 +58,7 @@ public struct Level {
       CubeEdge(.front, .up):(.top, .up, [.maxY]),
       CubeEdge(.front, .right):(.right, .up, [.swap]),
       CubeEdge(.front, .down):(.bottom, .down, [.minY]),
-      CubeEdge(.front, .left):(.left, .up, [.swap, .invertDeltaX, .maxY]),
+      CubeEdge(.front, .left):(.left, .up, [.swap, .invertDeltaY, .invertDeltaX]),
       CubeEdge(.bottom, .up):(.front, .up, [.maxY]),
       CubeEdge(.bottom, .right):(.right, .left, [.invertDeltaY, .maxX]),
       CubeEdge(.bottom, .down):(.back, .down, [.minY]),
@@ -126,7 +126,7 @@ public struct Level {
             for direction in [Direction]([.up, .down, .left, .right]) {
                 let slide = slideCriticalTile(origin: criticalTilePoint, direction: direction)                
                 if slide.origin != slide.destination {
-                    levelGraph.slides.insert(slide)
+                    levelGraph.insertSlide(slide)
                     if !allCriticalTiles.contains(slide.destination) {
                         setTileState(levelPoint: slide.destination, tileState: .critical)
                         changeTileStateIfCurrent(levelPoints: slide.activatedTilePoints, current: .inactive, new: .active)
@@ -157,7 +157,7 @@ public struct Level {
     mutating func resetLevel() {
         tilePointsOfState(tileState: .active).forEach { setTileState(levelPoint: $0, tileState: .inactive) }
         tilePointsOfState(tileState: .critical).forEach { setTileState(levelPoint: $0, tileState: .inactive) }
-        levelGraph.slides = []
+        levelGraph.clearGraph()
         setTileState(levelPoint: startingPosition, tileState: .critical)
         initializeCriticalTiles()
     }

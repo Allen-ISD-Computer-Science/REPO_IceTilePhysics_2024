@@ -1,7 +1,15 @@
-public struct Graph { // Represents the relationship between slides on a level grid
-    public var slides = Set<Slide>()
+struct Graph { // Represents the relationship between slides on a level grid
+    private var slides = Set<Slide>()
 
-    public func breadthFirstSearch(origin: LevelPoint, destination: LevelPoint) -> [Slide]? {
+    mutating func insertSlide(_ slide: Slide) {
+        slides.insert(slide)
+    }
+
+    mutating func clearGraph() {
+        slides = []
+    }
+    
+    func breadthFirstSearch(origin: LevelPoint, destination: LevelPoint) -> [Slide]? {
         var stack: [LevelPoint] = [origin]
 
         enum Visit {
@@ -32,5 +40,27 @@ public struct Graph { // Represents the relationship between slides on a level g
             }
         }
         return nil // Will return nil once all points have been explored and the destination has not been reached
+    }
+
+    func slides(origin: LevelPoint) -> Set<Slide> {
+        return slides.filter { $0.origin == origin }
+    }
+
+    func slides(origins: [LevelPoint]) -> Set<Slide> {
+        return slides.filter { origins.contains($0.origin) }
+    }
+
+    func slides(destination: LevelPoint) -> Set<Slide> {
+        return slides.filter { $0.destination == destination }
+    }
+
+    func slides(destinations: [LevelPoint]) -> Set<Slide> {
+        return slides.filter { destinations.contains($0.destination) }
+    }
+
+
+    func isolatedSlides() -> Set<Slide> {
+        let destinationHistogram: [LevelPoint:Int] = slides.map { $0.destination }.histogram()
+        return slides(destinations: destinationHistogram.allKeysForValue(value: 1))
     }
 }

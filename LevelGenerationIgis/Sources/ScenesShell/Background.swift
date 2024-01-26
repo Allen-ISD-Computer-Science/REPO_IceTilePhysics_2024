@@ -9,8 +9,8 @@ import Igis
 class Background : RenderableEntity {
     typealias RenderableGrid = (rectGrid: [[Rect]], colorGrid: [[Color.Name]])
 
-    static let gridRectSize = Size(width: 30, height: 30)
-    static let gridRectStartingPoint = Point(x: 100, y: 100)
+    private var gridUpdated = true
+    static let gridRectSize = Size(width: 15, height: 15)
 
     let levelRandomizer: LevelRandomizer
     let levelSeed: Level
@@ -27,6 +27,8 @@ class Background : RenderableEntity {
     ]
 
     init() {
+        
+        
         LevelRandomizer.initialize()
         guard let levelRandomizer = LevelRandomizer.shared else {
             fatalError("Level Radomizer must be initialized prior to being used.")
@@ -42,7 +44,7 @@ class Background : RenderableEntity {
         super.init(name:"Background")
     }
 
-    func levelToRenderGrid(level: Level) -> RenderableGrid {
+    func levelToRenderGrid(gridRectStartingPoint: Point, level: Level) -> RenderableGrid {
         let cubeFace = level.startingPosition.cubeFace
         var rectGrid = [[Rect]]()
         var colorGrid = [[Color.Name]]()
@@ -50,10 +52,9 @@ class Background : RenderableEntity {
             var rectColumn = [Rect]()
             var colorColumn = [Color.Name]()
             for tileIndex in 0 ..< level.levelSize.faceSize(cubeFace: cubeFace).maxY {
-                let rect = Rect(topLeft: Point(x: Background.gridRectStartingPoint.x + Background.gridRectSize.width * tileColumnIndex,
-                                               y: Background.gridRectStartingPoint.y + Background.gridRectSize.height * tileIndex),
+                let rect = Rect(topLeft: Point(x: gridRectStartingPoint.x + Background.gridRectSize.width * tileColumnIndex,
+                                               y: gridRectStartingPoint.y + Background.gridRectSize.height * tileIndex),
                                 size: Background.gridRectSize)
-
                 let tileState = level.faceLevels[level.startingPosition.cubeFace.rawValue].tiles[tileColumnIndex][tileIndex].tileState
                 guard let colorName = Background.tileStateToColorNameMap[tileState] else {
                     fatalError("Unrecognized tile state of \(tileState).")
@@ -84,22 +85,34 @@ class Background : RenderableEntity {
     func resetLevels() {
         levelIndex = 0
         levels = levelRandomizer.createComplexLevels(seed: levelSeed)
-        renderableGrids = levels.map { levelToRenderGrid(level: $0) }
+        gridUpdated = true
         maxLevelIndex()
-    }    
-
+    }
+    
     override func setup(canvasSize: Size, canvas: Canvas) {
         precondition(levels.count > 0, "There must be levels to generate.")
-        renderableGrids = levels.map { levelToRenderGrid(level: $0) }
         precondition(levels.count == renderableGrids.count, "The amount of levels, amount of rect grids, and amount of colors, must all be equal.")
+
+        // set StrokeStyle to Black
         let strokeStyle = StrokeStyle(color: Color(.black))
         canvas.render(strokeStyle)
+
+        // Set levelIndex to Max        
         levelIndex = levels.count - 1
+    }
+
+    override func calculate(canvasSize: Size) {
+        if gridUpdated {
+            let gridRectStartingPoint = Point(x: canvasSize.width / 2, y: 100)
+            renderableGrids = levels.map { levelToRenderGrid(gridRectStartingPoint: gridRectStartingPoint, level: $0) }
+            gridUpdated = false
+        }
     }
 
     override func render(canvas: Canvas) {
 
         if let canvasSize = canvas.canvasSize {
+
             let clearRectangle = Rectangle(rect: Rect(size: canvasSize), fillMode: .clear)
             canvas.render(clearRectangle)
             let levelText = Text(location: Point(x: 300, y: 25), text: "CubeFaceLevel \(levelIndex + 1) of \(levels.count)", fillMode: .stroke)

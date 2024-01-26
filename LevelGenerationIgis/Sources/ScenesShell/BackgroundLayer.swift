@@ -1,4 +1,6 @@
+import Igis
 import Scenes
+import ScenesControls
 
   /*
      This class is responsible for the background Layer.
@@ -6,8 +8,9 @@ import Scenes
    */
 
 
-class BackgroundLayer : Layer {
-      let background = Background()
+class BackgroundLayer : Layer, MouseDownHandler {
+    let background = Background()
+    
 
       init() {
           // Using a meaningful name can be helpful for debugging
@@ -15,5 +18,16 @@ class BackgroundLayer : Layer {
 
           // We insert our RenderableEntities in the constructor
           insert(entity:background, at:.back)
+      }
+
+      func onMouseDown(globalLocation: Point) {
+          
+      }
+
+      func setup(canvas: Canvas, canvasSize: Size) {
+          dispatcher.registerMouseDownHandler(handler: self)
+      }
+      func teardown() {
+          dispatcher.unregisterMouseDownHandler(handler: self)
       }
   }

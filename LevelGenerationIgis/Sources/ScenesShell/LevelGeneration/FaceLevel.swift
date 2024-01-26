@@ -1,11 +1,11 @@
 import Foundation
 
-public struct FaceLevel { // Represents one side of a level within our game
-    public let faceSize: FaceSize
-    public let cubeFace: CubeFace    
+struct FaceLevel { // Represents one side of a level within our game
+    let faceSize: FaceSize
+    let cubeFace: CubeFace    
 
     public var tiles: [[Tile]]
-    public init(faceSize: FaceSize, cubeFace: CubeFace) {
+    init(faceSize: FaceSize, cubeFace: CubeFace) {
         self.faceSize = faceSize
         self.cubeFace = cubeFace
 
