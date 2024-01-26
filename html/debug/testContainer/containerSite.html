@@ -87,13 +87,20 @@
 
     // GUI Functions
 
+    // Initialize menu
+    function createMenu(){
+      var bg = new BABYLON.GUI.Image("bg", "../../../assets/textures/ui/bg_1.png");
+      bg.width = toString(canvas.width);
+      bg.height = toString(canvas.height);
+      advancedTexture.addControl(bg);
+    }
 
-	const button = BABYLON.GUI.Button.CreateSimpleButton('TestButton', 'Click!');
-	button.width = '200px';
-	button.height = '40px';
-	button.color = 'white';
+    const button = BABYLON.GUI.Button.CreateSimpleButton('TestButton', 'Click!');
+    button.width = '200px';
+    button.height = '40px';
+    button.color = 'white';
     button.background = 'deepskyblue';
-	advancedTexture.addControl(button);
+    advancedTexture.addControl(button);
      
       return scene;
     };
