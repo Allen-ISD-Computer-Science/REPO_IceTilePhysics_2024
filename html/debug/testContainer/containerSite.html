@@ -51,8 +51,6 @@
   <canvas id="renderCanvas"></canvas>
 
   <script>
-
-    
     
     const canvas = document.getElementById("renderCanvas"); // Get the canvas element
     const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
@@ -89,22 +87,22 @@
 
     // GUI Functions
 
+    // Initialize menu
+    function createMenu(){
+      var bg = new BABYLON.GUI.Image("bg", "../../../assets/textures/ui/titleScreen/bg_1.png");
+      bg.width = toString(canvas.width);
+      bg.height = toString(canvas.height);
+      advancedTexture.addControl(bg);
+    }
 
-	const button = BABYLON.GUI.Button.CreateSimpleButton('TestButton', 'Click!');
-	button.width = '200px';
-	button.height = '40px';
-	button.color = 'white';
+    const button = BABYLON.GUI.Button.CreateSimpleButton('TestButton', 'Click!');
+    button.width = '200px';
+    button.height = '40px';
+    button.color = 'white';
     button.background = 'deepskyblue';
     advancedTexture.addControl(button);
-    button.onPointerUpObversable.add (() => {
-    var r = (Math.random() * 255).toString();
-    var g = (Math.random() * 255).toString();
-    var b = (Math.random() * 255).toString();
 
-    var randomColor = "rgb(".concat(r,",",g,",",b,")");
-
-    button.background = randomColor;
-    });
+    createMenu();
      
       return scene;
     };
@@ -119,44 +117,7 @@
     });
   </script>
 
-    <script>
-      const canvas = document.getElementById("renderCanvas"); // Get the canvas element
-      const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
-      const createScene = function () {
-        // Creates a basic Babylon Scene object
-        const scene = new BABYLON.Scene(engine);
-        // Creates and positions a free camera
-        const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 3, new BABYLON.Vector3(0, 0, 0), scene);
-        // Targets the camera to scene origin
-        camera.setTarget(BABYLON.Vector3.Zero());
-        // This attaches the camera to the canvas
-        camera.attachControl(canvas, true);
-        // Creates a light, aiming 0,1,0 - to the sky
-        const light = new BABYLON.HemisphericLight("light",
-                                             new BABYLON.Vector3(0, 1, 0), scene);
-        // Dim the light a small amount - 0 to 1
-        light.intensity = 0.7;
-        // Built-in 'sphere' shape.
-        const sphere = BABYLON.MeshBuilder.CreateSphere("sphere",
-                                                  { diameter: 2, segments: 32 }, scene);
-        // Move the sphere upward 1/2 its height
-        sphere.position.y = 1;
-        // Built-in 'ground' shape.
-        const ground = BABYLON.MeshBuilder.CreateGround("ground",
-                                                   { width: 6, height: 6 }, scene);
-        return scene;
-      };
-      const scene = createScene(); //Call the createScene function
-      // Register a render loop to repeatedly render the scene
-      engine.runRenderLoop(function () {
-        scene.render();
-      });
-      // Watch for browser/canvas resize events
-      window.addEventListener("resize", function () {
-        engine.resize();
-      });
-    </script>
-  </div>
+  
 </body>
 
 </html>
