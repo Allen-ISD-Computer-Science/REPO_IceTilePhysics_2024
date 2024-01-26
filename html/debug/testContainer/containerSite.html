@@ -92,15 +92,19 @@
       var bg = new BABYLON.GUI.Image("bg", "../../../assets/textures/ui/titleScreen/bg_1.png");
       bg.width = String(canvas.width);
       bg.height = String(canvas.height);
-      advancedTexture.addControl(bg);
-    }
+    advancedTexture.addControl(bg);
 
-    const button = BABYLON.GUI.Button.CreateSimpleButton('TestButton', 'Click!');
-    button.width = '200px';
-    button.height = '40px';
-    button.color = 'white';
-    button.background = 'deepskyblue';
-    advancedTexture.addControl(button);
+    var title = new BABYLON.GUI.Image("bg", "../../../assets/textures/ui/titleScreen/bg_1.png");
+    title.top = -400;
+    title.width = "200px";
+    title.height = "100px";
+    advancedTexture.addControl(title);
+
+    var playButton = BABYLON.GUI.Button.CreateImageButton("play", "", "../../../assets/textures/ui/titleScreen/bg_1.png");
+    playButton.width = "40px";
+    playButton.height = "20px";
+    advancedTexture.addControl(playButton);
+    }
 
     createMenu();
      
