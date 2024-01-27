@@ -2,37 +2,70 @@ import Igis
 import Scenes
 import LevelGeneration
 
-class RenderableLevel: RenderableEntity {
-    let level: Level
+class RenderableLevel: RenderableEntity, MouseDownHandler {
+    private var level: Level
     private var updatedLevel = true
 
     // Private variable that stores the size of a single square tile on a renderable level
     private var tileSize = Size(width: 20, height: 20)
-    private var faceLevelRects: [Rect] = []
-    
+    // Private variable to narrow a search on click to a single face level
+    private var faceLevelBoundingRects: [Rect] = []
+    // Private variable that stores all rects for every tile
+    private var faceLevelRectGrids: [[[Rect]]] = []
+      
     init(level: Level) {
         self.level = level
         super.init(name:"RenderableLevel")
     }
+
+    // Protocols
+    // MouseDownHandler - onMouseDown
+    func onMouseDown(globalLocation: Point) {
+        for face in Face.allCases {
+            // Detects if/which face was clicked
+            if faceLevelBoundingRects[face.rawValue].containment(target: globalLocation).contains(.containedFully) {
+                // !!! This algorithm could be improved but MVP !!!                
+                for x in 0 ..< faceLevelRectGrids[face.rawValue].count {
+                    for y in 0 ..< faceLevelRectGrids[face.rawValue][x].count {
+                        if faceLevelRectGrids[face.rawValue][x][y].containment(target: globalLocation).contains(.containedFully) {
+                            let tile = level.faceLevels[face.rawValue].tiles[x][y]
+                            guard tile.point != level.startingPosition else {
+                                return
+                            }
+                            if tile.tileState == .wall {
+                                level.faceLevels[face.rawValue].tiles[x][y].tileState = .inactive
+                            } else {                                
+                                level.faceLevels[face.rawValue].tiles[x][y].tileState = .wall
+                            }
+                            level.resetLevel()
+                            updatedLevel = true
+                            return
+                        }
+                    }
+                }
+            }            
+        }
+    }
     
-    // Setup
+    // RenderableEntity - Setup
     override func setup(canvasSize: Size, canvas: Canvas) {
+        dispatcher.registerMouseDownHandler(handler: self)
         let center = Point(x: canvasSize.width / 2, y: canvasSize.height / 2)
-        faceLevelRects = faceLevelRects(center: center)
+        faceLevelBoundingRects = faceLevelBoundingRects(center: center)
         canvas.render(StrokeStyle(color: Color(.black)))
     }
 
     // Setup Functions
     // Function that returns the size of a bounding box for a face on a level
-    func faceLevelSize(cubeFace: CubeFace) -> Size {
-        let faceSize = level.levelSize.faceSize(cubeFace: cubeFace)
+    func faceLevelSize(face: Face) -> Size {
+        let faceSize = level.levelSize.faceSize(face: face)
         return Size(width: tileSize.width * faceSize.maxX, height: tileSize.height * faceSize.maxY)
     }
 
     // Returns an array of Rect that contain the topLeft Point and Size of each FaceLevel
-    func faceLevelRects(center: Point) -> [Rect] {
-        // CubeFace.allCases = [.back, .left, .top, .right, .front, .bottom]
-        let faceSizes: [Size] = CubeFace.allCases.map { faceLevelSize(cubeFace: $0) }
+    func faceLevelBoundingRects(center: Point) -> [Rect] {
+        // Face.allCases = [.back, .left, .top, .right, .front, .bottom]
+        let faceSizes: [Size] = Face.allCases.map { faceLevelSize(face: $0) }
         let faceTopLefts = {
             // Center Point is located closest to the Front face topLeft, located half of the width of the top to the left
             let frontTopLeft = center - Point(x: faceSizes[4].width / 2, y: 0)
@@ -51,31 +84,41 @@ class RenderableLevel: RenderableEntity {
         return zip(faceTopLefts, faceSizes).map { Rect(topLeft: $0, size: $1) }
     }
 
-    // Calculate
+    // RenderableEntity - Calculate
     override func calculate(canvasSize: Size) {
         
     }
 
-    // Render
+    // RenderableEntity - Render
     override func render(canvas: Canvas) {
 
+        // Only if the level was updated do you recalculate/render the rect grids
         if updatedLevel {
-            for cubeFace in CubeFace.allCases {
-                let faceTopLeft = faceLevelRects[cubeFace.rawValue].topLeft
-                let faceLevelTiles = level.faceLevels[cubeFace.rawValue].tiles
-                let colorGrid = tilesToColorGrid(tiles: faceLevelTiles)
-                for tileColumnIndex in 0 ..< faceLevelTiles.count {
-                    for tileRowIndex in 0 ..< faceLevelTiles[tileColumnIndex].count {
-                        canvas.render(FillStyle(color: colorGrid[tileColumnIndex][tileRowIndex]))
-                        let tileTopLeft = faceTopLeft + Point(x: tileColumnIndex * tileSize.width, y: tileRowIndex * tileSize.height)
-                        let tileRect = Rect(topLeft: tileTopLeft, size: tileSize)
-                        canvas.render(Rectangle(rect: tileRect, fillMode: .fillAndStroke))
+            // update the rect grids with this closure
+            faceLevelRectGrids = {
+                // for each cubeface return a new rect grid
+                Face.allCases.map {
+                    let face = $0
+                    let faceTopLeft = faceLevelBoundingRects[face.rawValue].topLeft
+                    let faceLevelTiles = level.faceLevels[face.rawValue].tiles                    
+                    let colorGrid = tilesToColorGrid(tiles: faceLevelTiles)
+                    var faceLevelRectGrid = [[Rect]]()
+                    for tileColumnIndex in 0 ..< faceLevelTiles.count {
+                        var faceLevelRectColumn = [Rect]()
+                        for tileRowIndex in 0 ..< faceLevelTiles[tileColumnIndex].count {
+                            canvas.render(FillStyle(color: colorGrid[tileColumnIndex][tileRowIndex]))
+                            let tileTopLeft = faceTopLeft + Point(x: tileColumnIndex * tileSize.width, y: tileRowIndex * tileSize.height)
+                            let tileRect = Rect(topLeft: tileTopLeft, size: tileSize)
+                            faceLevelRectColumn.append(tileRect)
+                            canvas.render(Rectangle(rect: tileRect, fillMode: .fillAndStroke))
+                        }
+                        faceLevelRectGrid.append(faceLevelRectColumn)
                     }
-                }
-            }
+                    return faceLevelRectGrid
+                }        
+            }()
             updatedLevel = false
-        }
-
+        }   
     }
 
     // Render Functions
@@ -95,5 +138,10 @@ class RenderableLevel: RenderableEntity {
             }
         }
         return colorGrid
+    }
+
+    // RenderableEntity - Teardown
+    override func teardown() {
+        dispatcher.unregisterMouseDownHandler(handler: self)
     }
 }

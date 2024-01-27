@@ -2,29 +2,17 @@ import Scenes
 import Igis
 import LevelGeneration
 
-class LevelLayer: Layer, MouseDownHandler {
+class LevelLayer: Layer {
 
     let renderableLevel: RenderableLevel
 
     init() {        
-        let levelSize = LevelSize(edgeLength: 7)
-        let startingPosition = LevelPoint(x: 1, y: 1, cubeFace: .front)        
+        let levelSize = LevelSize(edgeLength: 8)
+        let startingPosition = LevelPoint(face: .back, x: 1, y: 1)        
         self.renderableLevel = RenderableLevel(level: Level(levelSize: levelSize, startingPosition: startingPosition))
 
         super.init(name:"Level")
         
-        insert(entity:renderableLevel, at: .front)
+        insert(entity:renderableLevel, at: .back)
     }
-
-    func onMouseDown(globalLocation: Point) {
-        print(globalLocation)
-    }
-
-    func setup(canvasSize: Size, canvas: Canvas) {
-        dispatcher.registerMouseDownHandler(handler: self)
-    }
-
-    func teardown() {
-        dispatcher.unregisterMouseDownHandler(handler: self)
-    }    
 }
