@@ -3,7 +3,7 @@ import Scenes
 import LevelGeneration
 
 class RenderableLevel: RenderableEntity, MouseDownHandler {
-    private var level: Level
+    public var level: Level
     private var updatedLevel = true
 
     // Private variable that stores the size of a single square tile on a renderable level
