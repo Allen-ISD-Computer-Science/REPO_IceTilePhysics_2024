@@ -1,7 +1,8 @@
 import Scenes
+import Igis
 import LevelGeneration
 
-class LevelLayer: Layer {
+class LevelLayer: Layer, MouseDownHandler {
 
     let renderableLevel: RenderableLevel
 
@@ -14,5 +15,16 @@ class LevelLayer: Layer {
         
         insert(entity:renderableLevel, at: .front)
     }
-    
+
+    func onMouseDown(globalLocation: Point) {
+        print(globalLocation)
+    }
+
+    func setup(canvasSize: Size, canvas: Canvas) {
+        dispatcher.registerMouseDownHandler(handler: self)
+    }
+
+    func teardown() {
+        dispatcher.unregisterMouseDownHandler(handler: self)
+    }    
 }
