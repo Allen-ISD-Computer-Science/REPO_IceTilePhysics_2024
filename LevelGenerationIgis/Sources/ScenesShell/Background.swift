@@ -91,7 +91,6 @@ class Background : RenderableEntity {
     
     override func setup(canvasSize: Size, canvas: Canvas) {
         precondition(levels.count > 0, "There must be levels to generate.")
-        precondition(levels.count == renderableGrids.count, "The amount of levels, amount of rect grids, and amount of colors, must all be equal.")
 
         // set StrokeStyle to Black
         let strokeStyle = StrokeStyle(color: Color(.black))
@@ -102,6 +101,7 @@ class Background : RenderableEntity {
     }
 
     override func calculate(canvasSize: Size) {
+        
         if gridUpdated {
             let gridRectStartingPoint = Point(x: canvasSize.width / 2, y: 100)
             renderableGrids = levels.map { levelToRenderGrid(gridRectStartingPoint: gridRectStartingPoint, level: $0) }
@@ -117,7 +117,7 @@ class Background : RenderableEntity {
             canvas.render(clearRectangle)
             let levelText = Text(location: Point(x: 300, y: 25), text: "CubeFaceLevel \(levelIndex + 1) of \(levels.count)", fillMode: .stroke)
             canvas.render(levelText)
-            func renderCubeFaceLevel(levelIndex: Int) {
+            func renderLevel(levelIndex: Int) {
                 let renderableGrid = renderableGrids[levelIndex]
                 let rectGrid = renderableGrid.rectGrid
                 let colorGrid = renderableGrid.colorGrid
@@ -132,7 +132,8 @@ class Background : RenderableEntity {
                 }
             }
 
-            renderCubeFaceLevel(levelIndex: levelIndex)
+            precondition(levels.count == renderableGrids.count, "The amount of levels, amount of rect grids, and amount of colors, must all be equal.")
+            renderLevel(levelIndex: levelIndex)
         }
     }
 }

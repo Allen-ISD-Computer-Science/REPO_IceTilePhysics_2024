@@ -21,7 +21,7 @@ class BackgroundLayer : Layer, MouseDownHandler {
       }
 
       func onMouseDown(globalLocation: Point) {
-          
+          print(globalLocation)
       }
 
       func setup(canvas: Canvas, canvasSize: Size) {
