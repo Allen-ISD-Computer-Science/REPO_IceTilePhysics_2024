@@ -1,0 +1,3 @@
+[submodule "IcePhysicsLevelGeneration"]
+	path = IcePhysicsLevelGeneration
+	url = https://github.com/ItsAustinDlugosch/IcePhysicsLevelGeneration
