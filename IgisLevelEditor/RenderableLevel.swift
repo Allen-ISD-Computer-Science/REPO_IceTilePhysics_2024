@@ -3,8 +3,14 @@ import Scenes
 import LevelGeneration
 
 class RenderableLevel: RenderableEntity, MouseDownHandler {
+    weak var delegate: RenderableLevelDelegate?
+    
     public var level: Level
     private var updatedLevel = true
+
+    public func updateLevel() {
+        updatedLevel = true
+    }
 
     // Private variable that stores the size of a single square tile on a renderable level
     private var tileSize = Size(width: 20, height: 20)
@@ -47,9 +53,9 @@ class RenderableLevel: RenderableEntity, MouseDownHandler {
         }
     }
     
-    // RenderableEntity - Setup
     override func setup(canvasSize: Size, canvas: Canvas) {
         dispatcher.registerMouseDownHandler(handler: self)
+        
         let center = Point(x: canvasSize.width / 2, y: canvasSize.height / 2)
         faceLevelBoundingRects = faceLevelBoundingRects(center: center)
         canvas.render(StrokeStyle(color: Color(.black)))
@@ -91,34 +97,39 @@ class RenderableLevel: RenderableEntity, MouseDownHandler {
 
     // RenderableEntity - Render
     override func render(canvas: Canvas) {
-
-        // Only if the level was updated do you recalculate/render the rect grids
-        if updatedLevel {
-            // update the rect grids with this closure
-            faceLevelRectGrids = {
-                // for each cubeface return a new rect grid
-                Face.allCases.map {
-                    let face = $0
-                    let faceTopLeft = faceLevelBoundingRects[face.rawValue].topLeft
-                    let faceLevelTiles = level.faceLevels[face.rawValue].tiles                    
-                    let colorGrid = tilesToColorGrid(tiles: faceLevelTiles)
-                    var faceLevelRectGrid = [[Rect]]()
-                    for tileColumnIndex in 0 ..< faceLevelTiles.count {
-                        var faceLevelRectColumn = [Rect]()
-                        for tileRowIndex in 0 ..< faceLevelTiles[tileColumnIndex].count {
-                            canvas.render(FillStyle(color: colorGrid[tileColumnIndex][tileRowIndex]))
-                            let tileTopLeft = faceTopLeft + Point(x: tileColumnIndex * tileSize.width, y: tileRowIndex * tileSize.height)
-                            let tileRect = Rect(topLeft: tileTopLeft, size: tileSize)
-                            faceLevelRectColumn.append(tileRect)
-                            canvas.render(Rectangle(rect: tileRect, fillMode: .fillAndStroke))
+        if let canvasSize = canvas.canvasSize {
+            
+            // Only if the level was updated do you recalculate/render the rect grids
+            if updatedLevel {
+                // Clear the canvas
+                canvas.render(Rectangle(rect: Rect(size: canvasSize), fillMode: .clear))
+                
+                // update the rect grids with this closure
+                faceLevelRectGrids = {
+                    // for each cubeface return a new rect grid
+                    Face.allCases.map {
+                        let face = $0
+                        let faceTopLeft = faceLevelBoundingRects[face.rawValue].topLeft
+                        let faceLevelTiles = level.faceLevels[face.rawValue].tiles                    
+                        let colorGrid = tilesToColorGrid(tiles: faceLevelTiles)
+                        var faceLevelRectGrid = [[Rect]]()
+                        for tileColumnIndex in 0 ..< faceLevelTiles.count {
+                            var faceLevelRectColumn = [Rect]()
+                            for tileRowIndex in 0 ..< faceLevelTiles[tileColumnIndex].count {
+                                canvas.render(FillStyle(color: colorGrid[tileColumnIndex][tileRowIndex]))
+                                let tileTopLeft = faceTopLeft + Point(x: tileColumnIndex * tileSize.width, y: tileRowIndex * tileSize.height)
+                                let tileRect = Rect(topLeft: tileTopLeft, size: tileSize)
+                                faceLevelRectColumn.append(tileRect)
+                                canvas.render(Rectangle(rect: tileRect, fillMode: .fillAndStroke))
+                            }
+                            faceLevelRectGrid.append(faceLevelRectColumn)
                         }
-                        faceLevelRectGrid.append(faceLevelRectColumn)
-                    }
-                    return faceLevelRectGrid
-                }        
-            }()
-            updatedLevel = false
-        }   
+                        return faceLevelRectGrid
+                    }        
+                }()
+                updatedLevel = false
+            }
+        }
     }
 
     // Render Functions
@@ -144,4 +155,8 @@ class RenderableLevel: RenderableEntity, MouseDownHandler {
     override func teardown() {
         dispatcher.unregisterMouseDownHandler(handler: self)
     }
+}
+
+protocol RenderableLevelDelegate: Layer {
+    func updateLevel() 
 }
