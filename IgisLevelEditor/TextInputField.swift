@@ -1,27 +1,21 @@
 import Igis
 import Scenes
 
-class TextInputField: RenderableEntity, MouseDownHandler, KeyDownHandler {
-    static let allowedKeys: [String] = {
-        let lowerCaseCharacters = (Character("a").asciiValue!...Character("z").asciiValue!).map { String(Character(UnicodeScalar($0))) }
-        let upperCaseCharacters = (Character("A").asciiValue!...Character("Z").asciiValue!).map { String(Character(UnicodeScalar($0))) }
-        let numberCharacters = (0...9).map { String($0) }
-        let specialCharacters = ["-", "_", "Backspace"]        
-        return lowerCaseCharacters + upperCaseCharacters + numberCharacters + specialCharacters
-    }()
+class TextInputField: RenderableEntity, MouseDownHandler, KeyDownHandler {    
+    let allowedKeys: [String] 
     public var text: String = ""
     
     private var editing = false
     
     static let boundingBoxMinWidth = 100
     static let characterHeight = 15
-    static let characterWidth = 12
-    static let boundingBoxTopLeft = Point(x: 10, y: 60)
+    static let characterWidth = 25
+    let boundingBoxTopLeft: Point
     private var boundingBoxRect = Rect()
 
-    var onUpdateLevelRequested: (() -> Void)?
-
-    init() {
+    init(boundingBoxTopLeft: Point, allowedKeys: [String]) {
+        self.boundingBoxTopLeft = boundingBoxTopLeft
+        self.allowedKeys = allowedKeys
         super.init(name: "TextField")        
     }
 
@@ -38,7 +32,7 @@ class TextInputField: RenderableEntity, MouseDownHandler, KeyDownHandler {
     // KeyDownHandler - onKeyDown
     func onKeyDown(key: String, code: String, ctrlKey: Bool, shiftKey: Bool, altKey: Bool, metaKey: Bool) {
         if editing {
-            if TextInputField.allowedKeys.contains(key) {
+            if allowedKeys.contains(key) {
                 if key == "Backspace" {
                     if text.count > 0 {
                         text.removeLast()
@@ -57,7 +51,7 @@ class TextInputField: RenderableEntity, MouseDownHandler, KeyDownHandler {
         canvas.render(StrokeStyle(color: Color(.black)))
         updateBoundingBoxRect()
     }
-
+    
     // RenderableEntity - render
     override func render(canvas: Canvas) {
         if editing {            
@@ -65,10 +59,12 @@ class TextInputField: RenderableEntity, MouseDownHandler, KeyDownHandler {
             updateBoundingBoxRect()
         } else {
             canvas.render(FillStyle(color: Color(.white)))
-        }
+        }        
         let rectangle = Rectangle(rect: boundingBoxRect, fillMode: .fillAndStroke)
         let text = Text(location: Point(x: boundingBoxRect.topLeft.x + 5, y: boundingBoxRect.center.y), text: text, fillMode: .fillAndStroke)
         text.alignment = .left
+        text.font = "30pt Arial"
+        text.baseline = .middle
         canvas.render(rectangle, FillStyle(color: Color(.black)), text)
     }
     // Render functions
@@ -80,10 +76,7 @@ class TextInputField: RenderableEntity, MouseDownHandler, KeyDownHandler {
             }
             return boundingBoxWidth
         }()
-        if newBoundingBoxWidth < boundingBoxRect.size.width {
-            onUpdateLevelRequested?()
-        }
-        boundingBoxRect = Rect(topLeft: TextInputField.boundingBoxTopLeft, size: Size(width: newBoundingBoxWidth, height: TextInputField.characterHeight * 3))
+        boundingBoxRect = Rect(topLeft: boundingBoxTopLeft, size: Size(width: newBoundingBoxWidth, height: TextInputField.characterHeight * 3))
     }
     
     // RenderableEntity - teardown
