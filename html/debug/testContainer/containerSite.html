@@ -96,13 +96,16 @@
 
     var title = new BABYLON.GUI.Image("bg", "../../../assets/textures/ui/titleScreen/slip.png");
     title.top = -(canvas.height/4);
-    title.width = "661px";
+    title.width = "561px";
     title.height = "271px";
     advancedTexture.addControl(title);
 
     var playButton = BABYLON.GUI.Button.CreateImageButton("play", "", "../../../assets/textures/ui/titleScreen/bg_1.png");
-    playButton.width = "40px";
-    playButton.height = "20px";
+    
+    playButton.width = "100px";
+    playButton.height = "50px";
+    playButton.image.scaleX = 10;
+    playButton.thickness = 0;
     advancedTexture.addControl(playButton);
     }
 
