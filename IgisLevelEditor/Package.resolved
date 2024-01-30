@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "LevelGeneration",
+        "repositoryURL": "https://github.com/ItsAustinDlugosch/IcePhysicsLevelGeneration.git",
+        "state": {
+          "branch": null,
+          "revision": "e0def10b129f43fb1c116b2573c6dfd17a6f4a02",
+          "version": "3.0.3"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
