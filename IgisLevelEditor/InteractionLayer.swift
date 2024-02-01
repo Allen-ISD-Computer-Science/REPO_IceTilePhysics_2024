@@ -12,7 +12,7 @@ class InteractionLayer: Layer {
 
     init() {
 
-        guard let level = levelFileManager.initializeLevel(from: "Levels/customLevel2.lvl") else {
+        guard let level = levelFileManager.initializeLevel(from: "Levels/rohanworld2-1.lvl") else {
             fatalError("failed to load level from file")
         }
         self.levelEditor = LevelEditor(level: level)
