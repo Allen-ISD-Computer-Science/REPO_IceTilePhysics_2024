@@ -1,0 +1,74 @@
+pre {
+    text-align: center;
+    margin: auto;
+}
+
+html {
+    border-style: dashed;
+    margin: auto;
+    text-align: center;
+    width: 1200px;
+    margin-top: 10px;
+}
+
+#babylonContainer {
+    margin: auto;
+    text-align: center;
+    height: 500px;
+    width: 800px;
+    background-color: black;
+}
+
+#menuSelector {
+    border: none;
+    background-color: transparent;
+    padding-left: 10px;
+    padding-right:10px;
+    border-color: transparent;
+    border-radius:15px;
+    border-style:dotted;
+}
+
+#menuSelector:hover {
+    background-color:yellow;
+    border-style: dashed;
+    border-radius: 15px;
+    color: blue;
+    border-color: blue;
+
+}
+
+body {
+    background-size: 20px 20px;
+    background-image:
+        linear-gradient(to right, rgb(240,240,240) 1px, transparent 1px),
+        linear-gradient(to bottom, rgb(240,240,240) 1px, transparent 1px);
+
+}
+
+
+br {
+    line-height: 20px;
+}
+
+#tape {
+    position:absolute;
+    top:310px;
+    left:360px;
+    width:300px;
+    transform: rotate(-30deg);
+}
+#tape2 {
+    position:absolute;
+    top:730px;
+    left:770px;
+    width:300px;
+    transform: rotate(-210deg);
+}
+#tape3 {
+    position: relative;
+    transform: rotate(-45deg);
+    top:70px;
+    left:0px;
+    height:180px;
+}
