@@ -1,0 +1,13 @@
+-lswiftSwiftOnoneSupport
+-lswiftCore
+-lswift_Concurrency
+-lswift_StringProcessing
+-lswiftGlibc
+-lBlocksRuntime
+-ldispatch
+-lswiftDispatch
+-lFoundation
+-lm
+-lpthread
+-lutil
+-ldl

@@ -1,0 +1,65 @@
+{
+  "": {
+    "swift-dependencies": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/master.swiftdeps"
+  },
+  "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/Background.swift": {
+    "dependencies": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/Background.d",
+    "object": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/Background.swift.o",
+    "swiftmodule": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/Background~partial.swiftmodule",
+    "swift-dependencies": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/Background.swiftdeps"
+  },
+  "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/BackgroundLayer.swift": {
+    "dependencies": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/BackgroundLayer.d",
+    "object": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/BackgroundLayer.swift.o",
+    "swiftmodule": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/BackgroundLayer~partial.swiftmodule",
+    "swift-dependencies": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/BackgroundLayer.swiftdeps"
+  },
+  "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/InteractionLayer.swift": {
+    "dependencies": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/InteractionLayer.d",
+    "object": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/InteractionLayer.swift.o",
+    "swiftmodule": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/InteractionLayer~partial.swiftmodule",
+    "swift-dependencies": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/InteractionLayer.swiftdeps"
+  },
+  "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/LevelEditor.swift": {
+    "dependencies": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/LevelEditor.d",
+    "object": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/LevelEditor.swift.o",
+    "swiftmodule": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/LevelEditor~partial.swiftmodule",
+    "swift-dependencies": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/LevelEditor.swiftdeps"
+  },
+  "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/LevelFileManager.swift": {
+    "dependencies": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/LevelFileManager.d",
+    "object": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/LevelFileManager.swift.o",
+    "swiftmodule": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/LevelFileManager~partial.swiftmodule",
+    "swift-dependencies": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/LevelFileManager.swiftdeps"
+  },
+  "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/MainScene.swift": {
+    "dependencies": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/MainScene.d",
+    "object": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/MainScene.swift.o",
+    "swiftmodule": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/MainScene~partial.swiftmodule",
+    "swift-dependencies": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/MainScene.swiftdeps"
+  },
+  "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/ShellDirector.swift": {
+    "dependencies": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/ShellDirector.d",
+    "object": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/ShellDirector.swift.o",
+    "swiftmodule": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/ShellDirector~partial.swiftmodule",
+    "swift-dependencies": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/ShellDirector.swiftdeps"
+  },
+  "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/TextInputField.swift": {
+    "dependencies": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/TextInputField.d",
+    "object": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/TextInputField.swift.o",
+    "swiftmodule": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/TextInputField~partial.swiftmodule",
+    "swift-dependencies": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/TextInputField.swiftdeps"
+  },
+  "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/Writable.swift": {
+    "dependencies": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/Writable.d",
+    "object": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/Writable.swift.o",
+    "swiftmodule": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/Writable~partial.swiftmodule",
+    "swift-dependencies": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/Writable.swiftdeps"
+  },
+  "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/main.swift": {
+    "dependencies": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/main.d",
+    "object": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/main.swift.o",
+    "swiftmodule": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/main~partial.swiftmodule",
+    "swift-dependencies": "/home/zachary-allen/projects/ISP-iceTiles/REPO_IceTilePhysics_2024/IgisLevelEditor/.build/x86_64-unknown-linux-gnu/debug/Simple.build/main.swiftdeps"
+  }
+}
