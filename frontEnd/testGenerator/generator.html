@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        <title>Babylon.js sample code</title>
+
+        <!-- Babylon.js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
+        <script src="https://assets.babylonjs.com/generated/Assets.js"></script>
+        <script src="https://cdn.babylonjs.com/recast.js"></script>
+        <script src="https://cdn.babylonjs.com/ammo.js"></script>
+        <script src="https://cdn.babylonjs.com/havok/HavokPhysics_umd.js"></script>
+        <script src="https://cdn.babylonjs.com/cannon.js"></script>
+        <script src="https://cdn.babylonjs.com/Oimo.js"></script>
+        <script src="https://cdn.babylonjs.com/earcut.min.js"></script>
+        <script src="https://cdn.babylonjs.com/babylon.js"></script>
+        <script src="https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+        <script src="https://cdn.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+        <script src="https://cdn.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
+        <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.js"></script>
+        <script src="https://cdn.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
+        <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
+        <script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+
+        <style>
+            html, body {
+                overflow: hidden;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            #renderCanvas {
+                width: 100%;
+                height: 100%;
+                touch-action: none;
+            }
+            
+            #canvasZone {
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+    </head>
+<body>
+    <div id="canvasZone"><canvas id="renderCanvas"></canvas></div>
+    <script>
+        var canvas = document.getElementById("renderCanvas");
+
+        var startRenderLoop = function (engine, canvas) {
+            engine.runRenderLoop(function () {
+                if (sceneToRender && sceneToRender.activeCamera) {
+                    sceneToRender.render();
+                }
+            });
+        }
+
+        var engine = null;
+        var scene = null;
+        var sceneToRender = null;
+        var createDefaultEngine = function() { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true,  disableWebGL2Support: false}); };
+        var createScene = function () {
+// This creates a basic Babylon Scene object (non-mesh)
+    var scene = new BABYLON.Scene(engine);
+
+    // This creates and positions a free camera (non-mesh)
+    var camera = new BABYLON.ArcRotateCamera("camera", BABYLON.Tools.ToRadians(50), BABYLON.Tools.ToRadians(65), 20, BABYLON.Vector3.Zero(), scene);
+    // This targets the camera to scene origin
+    camera.setTarget(BABYLON.Vector3.Zero());
+
+    // This attaches the camera to the canvas
+    camera.attachControl(canvas, true);
+
+    // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+    var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 5, 0), scene);
+    var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, -5, 0), scene);
+
+    // Default intensity is 1. Let's dim the light a small amount
+    light.intensity = 0.7;
+
+    var grass = new BABYLON.StandardMaterial("greenMaterial", scene);
+    grass.diffuseColor = new BABYLON.Color3(0, 1, 0); // RGB for green
+
+
+
+
+    function createCube(back, left, top, right, front, bottom) {
+        for (i = 0; i < top.length; i++) {
+            for (j = 0; j < top[i].length; j++) {
+                var tileValue = top[i][j]
+                var cube = BABYLON.MeshBuilder.CreateBox("backTile", { height: 1, width: 1, depth: 1 }, scene);
+                cube.position.x = i;
+                cube.position.y = 0;
+                cube.position.z = -j + top[i].length - 1;
+
+                if (tileValue == 0) {
+                    cube.position.y = cube.position.y + .2
+                    cube.material = grass;
+                }
+            }
+        }
+        for (i = 0; i < left.length; i++) {
+            for (j = 0; j < left[i].length; j++) {
+                var tileValue = left[i][j]
+                var cube = BABYLON.MeshBuilder.CreateBox("leftTile")
+                cube.position.x = 0;
+                cube.position.y = -(left.length - 1 - i);
+                cube.position.z = left[i].length - 1 - j;
+
+                if (tileValue == 0) {
+                    cube.position.x = cube.position.x - .2
+                    cube.material = grass;
+                }
+            }
+        }
+        for (i = 0; i < back.length; i++) {
+            for (j = 0; j < back[i].length; j++) {
+                var tileValue = back[i][j]
+                var cube = BABYLON.MeshBuilder.CreateBox("backTile")
+                cube.position.x = i;
+                cube.position.y = j - back[i].length + 1;
+                cube.position.z = back[i].length -1;
+                if (tileValue == 0) {
+                    cube.position.z = cube.position.z + .2
+                    cube.material = grass;
+                }
+            }
+        }
+        for (i = 0; i < right.length; i++) {
+            for (j = 0; j < right[i].length; j++) {
+                var tileValue = right[i][j]
+                var cube = BABYLON.MeshBuilder.CreateBox("rightTile")
+                cube.position.x = right[i].length - 1;
+                cube.position.y = -i;
+                cube.position.z = right[i].length - 1 - j;
+                if (tileValue == 0) {
+                    cube.position.x = cube.position.x + .2
+                    cube.material = grass;
+                }
+            }
+        }
+        for (i = 0; i < front.length; i++) {
+            for (j = 0; j < front[i].length; j++) {
+                var tileValue = front[i][j]
+                var cube = BABYLON.MeshBuilder.CreateBox("rightTile")
+                cube.position.x = i;
+                cube.position.y = -j;
+                cube.position.z = 0;
+                if (tileValue == 0) {
+                    cube.position.z = cube.position.z - .2
+                    cube.material = grass;
+                }
+            }
+        }
+        for (i = 0; i < bottom.length; i++) {
+            for (j = 0; j < bottom[i].length; j++) {
+                var tileValue = bottom[i][j]
+                var cube = BABYLON.MeshBuilder.CreateBox("rightTile")
+                cube.position.x = i;
+                cube.position.y = -bottom[i].length + 1;
+                cube.position.z = j;
+                if (tileValue == 0) {
+                    cube.position.y = cube.position.y - .2
+                    cube.material = grass
+                }
+            }
+        }
+    }
+
+
+    var importedBack = [
+        [1,1,1,1,1,1],
+        [1,0,0,0,0,1],
+        [1,0,1,0,0,1],
+        [1,0,0,0,0,0],
+        [1,0,0,0,1,1],
+        [1,1,1,1,1,1]
+    ]
+
+    var importedLeft = [
+        [1,0,1,1,1,1],
+        [1,0,1,0,0,1],
+        [1,0,0,0,0,1],
+        [1,0,0,0,0,1],
+        [1,1,0,0,0,1],
+        [1,1,0,1,1,1],
+    ]
+
+    var importedTop = [
+        [1,1,0,1,1,1],
+        [1,0,0,0,1,1],
+        [1,0,0,0,0,1],
+        [0,0,0,0,0,1],
+        [1,1,1,0,0,0],
+        [1,1,1,0,1,1]
+    ]
+
+    var importedRight = [
+        [1,1,1,0,1,1],
+        [1,0,0,0,1,1],
+        [1,0,0,0,0,1],
+        [1,0,0,0,0,1],
+        [1,0,0,1,0,1],
+        [1,1,1,1,1,1]
+    ]
+
+    var importedFront = [
+        [1,1,1,1,1,1],
+        [1,0,0,0,0,0],
+        [1,0,1,1,0,1],
+        [1,0,1,1,0,1],
+        [0,0,0,0,0,1],
+        [1,1,1,1,1,1]
+    ]
+
+    var importedBottom = [
+        [1,1,1,1,0,1],
+        [0,0,0,0,0,1],
+        [1,0,1,1,0,1],
+        [1,0,1,1,0,1],
+        [1,0,0,0,0,1],
+        [1,1,1,1,1,1]
+    ]
+
+
+    createCube(importedBack, importedLeft, importedTop, importedRight, importedFront, importedBottom)
+    return scene;
+};
+                window.initFunction = async function() {
+                    
+                    
+                    
+                    var asyncEngineCreation = async function() {
+                        try {
+                        return createDefaultEngine();
+                        } catch(e) {
+                        console.log("the available createEngine function failed. Creating the default engine instead");
+                        return createDefaultEngine();
+                        }
+                    }
+
+                    window.engine = await asyncEngineCreation();
+        if (!engine) throw 'engine should not be null.';
+        startRenderLoop(engine, canvas);
+        window.scene = createScene();};
+        initFunction().then(() => {sceneToRender = scene                    
+        });
+
+        // Resize
+        window.addEventListener("resize", function () {
+            engine.resize();
+        });
+    </script>
+</body>
+</html>
