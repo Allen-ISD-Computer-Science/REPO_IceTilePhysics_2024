@@ -62,7 +62,7 @@
         var sceneToRender = null;
         var createDefaultEngine = function() { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true,  disableWebGL2Support: false}); };
         var createScene = function () {
-    // This creates a basic Babylon Scene object (non-mesh)
+// This creates a basic Babylon Scene object (non-mesh)
     var scene = new BABYLON.Scene(engine);
 
     // This creates and positions a free camera (non-mesh)
@@ -121,7 +121,7 @@
                 var cube = BABYLON.MeshBuilder.CreateBox("backTile")
                 cube.position.x = i;
                 cube.position.y = j - back[i].length + 1;
-                cube.position.z = back[i].length - 1;
+                cube.position.z = back[i].length -1;
                 if (tileValue == 0) {
                     cube.position.z = cube.position.z + .2
                     cube.material = grass;
@@ -169,40 +169,60 @@
         }
     }
 
-    // Function to load and parse the level data
-    async function loadLevelData(url) {
-        try {
-            const response = await fetch(url);
-            const text = await response.text();
-            const levelData = JSON.parse(text);
-            return levelData;
-        } catch (error) {
-            console.error('Error loading level data:', error);
-            return null;
-        }
-    }
 
-    // Function to extract and save face tiles
-    async function extractAndSaveFaceTiles(url) {
-        const levelData = await loadLevelData(url);
-        if (!levelData) return;
+    var importedBack = [
+        [1,1,1,1,1,1],
+        [1,0,0,0,0,1],
+        [1,0,1,0,0,1],
+        [1,0,0,0,0,0],
+        [1,0,0,0,1,1],
+        [1,1,1,1,1,1]
+    ]
 
-        const faceTiles = levelData.face_tiles;
+    var importedLeft = [
+        [1,0,1,1,1,1],
+        [1,0,1,0,0,1],
+        [1,0,0,0,0,1],
+        [1,0,0,0,0,1],
+        [1,1,0,0,0,1],
+        [1,1,0,1,1,1],
+    ]
 
-        // Assuming faceTiles order is Back, Left, Top, Right, Front, Bottom
-        var importedBack = faceTiles[0];
-        var importedLeft = faceTiles[1];
-        var importedTop = faceTiles[2];
-        var importedRight = faceTiles[3];
-        var importedFront = faceTiles[4];
-        var importedBottom = faceTiles[5];
+    var importedTop = [
+        [1,1,0,1,1,1],
+        [1,0,0,0,1,1],
+        [1,0,0,0,0,1],
+        [0,0,0,0,0,1],
+        [1,1,1,0,0,0],
+        [1,1,1,0,1,1]
+    ]
 
-        // Use these arrays as needed in your Babylon.js project
-        // For example, to log them:
-    }
+    var importedRight = [
+        [1,1,1,0,1,1],
+        [1,0,0,0,1,1],
+        [1,0,0,0,0,1],
+        [1,0,0,0,0,1],
+        [1,0,0,1,0,1],
+        [1,1,1,1,1,1]
+    ]
 
-    // Call the function with the path to your level data file
-    extractAndSaveFaceTiles('../../IgisLevelEditor/Levels/babylonTest.txt');
+    var importedFront = [
+        [1,1,1,1,1,1],
+        [1,0,0,0,0,0],
+        [1,0,1,1,0,1],
+        [1,0,1,1,0,1],
+        [0,0,0,0,0,1],
+        [1,1,1,1,1,1]
+    ]
+
+    var importedBottom = [
+        [1,1,1,1,0,1],
+        [0,0,0,0,0,1],
+        [1,0,1,1,0,1],
+        [1,0,1,1,0,1],
+        [1,0,0,0,0,1],
+        [1,1,1,1,1,1]
+    ]
 
 
     createCube(importedBack, importedLeft, importedTop, importedRight, importedFront, importedBottom)
