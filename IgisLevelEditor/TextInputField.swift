@@ -6,16 +6,18 @@ class TextInputField: RenderableEntity, MouseDownHandler, KeyDownHandler {
     public var text: String = ""
     
     private var editing = false
+    private var restrictions: [(String) -> Bool]
     
-    static let boundingBoxMinWidth = 100
+    static let boundingBoxMinWidth = 250
     static let characterHeight = 15
     static let characterWidth = 25
     let boundingBoxTopLeft: Point
     private var boundingBoxRect = Rect()
 
-    init(boundingBoxTopLeft: Point, allowedKeys: [String]) {
+    init(boundingBoxTopLeft: Point, allowedKeys: [String], restrictions: [(String) -> Bool]) {
         self.boundingBoxTopLeft = boundingBoxTopLeft
         self.allowedKeys = allowedKeys
+        self.restrictions = restrictions
         super.init(name: "TextField")        
     }
 
@@ -38,7 +40,9 @@ class TextInputField: RenderableEntity, MouseDownHandler, KeyDownHandler {
                         text.removeLast()
                     }
                 } else {
-                    text.append(key)
+                    if restrictions.allSatisfy({ $0(text + key) }) {
+                        text.append(key)
+                    }
                 }
             } 
         }
@@ -65,14 +69,14 @@ class TextInputField: RenderableEntity, MouseDownHandler, KeyDownHandler {
         text.alignment = .left
         text.font = "30pt Arial"
         text.baseline = .middle
-        canvas.render(rectangle, FillStyle(color: Color(.black)), text)
+        canvas.render(LineWidth(width: 1), StrokeStyle(color: Color(.black)), rectangle, FillStyle(color: Color(.black)), text)
     }
     // Render functions
     func updateBoundingBoxRect() {
         let newBoundingBoxWidth = {
             let boundingBoxWidth = text.count * TextInputField.characterWidth
-            if boundingBoxWidth < 100 {
-                return 100
+            if boundingBoxWidth < TextInputField.boundingBoxMinWidth {
+                return TextInputField.boundingBoxMinWidth
             }
             return boundingBoxWidth
         }()
