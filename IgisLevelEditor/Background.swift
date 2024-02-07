@@ -13,12 +13,8 @@ class Background: RenderableEntity {
     override func setup(canvasSize: Size, canvas: Canvas) {
         controlPanelRect = Rect(size: Size(width: canvasSize.width / 4, height: canvasSize.height))
         levelEditorRect = Rect(topRight: Point(x: canvasSize.width, y: 0), size: Size(width: canvasSize.width * 3 / 4, height: canvasSize.height))
-    }
-
-    override func render(canvas: Canvas) {
         canvas.render(StrokeStyle(color: Color(.black)))
         canvas.render(FillStyle(color: Color(.lightblue)), Rectangle(rect: controlPanelRect, fillMode: .fillAndStroke))
         canvas.render(FillStyle(color: Color(.lightgray)), Rectangle(rect: levelEditorRect, fillMode: .fillAndStroke))
-    }
-    
+    }    
 }
