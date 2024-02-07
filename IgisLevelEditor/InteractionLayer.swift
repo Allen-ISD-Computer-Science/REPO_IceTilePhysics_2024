@@ -39,7 +39,7 @@ class InteractionLayer: Layer {
 //        self.levelList = LevelList(boundingBox: Rect(topLeft: Point(x: 10, y: 220), size: Size(width: 200, height: 400)))
 //        let levelFiles = try levelFileManager.fileManager.contentsOfDirectory(atPath: "./Levels")
 
-        guard let level = levelFileManager.initializeLevel(from: "Levels/3-1.lvl") else {
+        guard let level = levelFileManager.initializeLevel(from: "./Levels/test2.lvl") else {
             fatalError("failed to load level from file")
         }
         self.levelEditor = LevelEditor(level: level)
