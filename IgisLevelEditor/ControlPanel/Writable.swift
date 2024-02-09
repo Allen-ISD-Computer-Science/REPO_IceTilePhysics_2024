@@ -2,11 +2,11 @@ import Foundation
 
 protocol Writable {
     var fileManager: FileManager { get }
-    func write(path: String, content: String)
+    func write(path: String, content: String) -> String
 }
 
 extension Writable {
-    func write(path: String, content: String) {
+    func write(path: String, content: String) -> String {
         let filePath = URL(fileURLWithPath: path)
 
         // Check if the directory of the specified file path exists, if not, create it
@@ -15,17 +15,16 @@ extension Writable {
             do {
                 try fileManager.createDirectory(at: directory, withIntermediateDirectories: true, attributes: nil)
             } catch {
-                print("Error creating directory: \(error)")
-                return
+                return "Error creating directory: \(error)"
             }
         }
 
         // Save the specified string to the specified file path
         do {
             try content.write(to: filePath, atomically: true, encoding: .utf8)
-            print("File saved successfully at \(path)")
+            return "File saved successfully at \(path)"
         } catch {
-            print("Error writing to file: \(error)")
+            return "Error writing to file: \(error)"
         }
     }
 }

@@ -17,7 +17,9 @@ class LevelEditor: RenderableEntity, MouseDownHandler {
     var specialTileSelector: SpecialTileSelector!
     var levelEditorInformation: LevelEditorInformation!
     var levelEditorInterface: LevelEditorInterface!
-    // errorConsole = ErrorConsole()
+    var errorConsole: ErrorConsole!
+
+    private var updateRender = true
 
     init() {
         super.init(name: "LevelEditor")
@@ -45,6 +47,7 @@ class LevelEditor: RenderableEntity, MouseDownHandler {
         specialTileSelector.update()
         levelEditorInformation.update()
         levelEditorInterface.update()
+        errorConsole.update()
     }
 
     func onMouseDown(globalLocation: Point) {        
@@ -67,10 +70,14 @@ class LevelEditor: RenderableEntity, MouseDownHandler {
                 case .edit:
                     guard clickedTile.point != levelRenderer.level.startingPosition else {
                         // Throw to Error Console
-                        print("Cannot change the state of the level's starting position.")
+                        errorConsole.throwError("Cannot change the state of the level's starting position.")
                         return                          
                     }
-                    levelRenderer.setSpecialTileType(levelPoint: clickedTile.point, specialTileType: selectedSpecialTileType)                
+                    if clickedTile.specialTileType == selectedSpecialTileType {
+                        levelRenderer.setSpecialTileType(levelPoint: clickedTile.point, specialTileType: nil)                
+                    } else {
+                        levelRenderer.setSpecialTileType(levelPoint: clickedTile.point, specialTileType: selectedSpecialTileType)
+                    }
                 case .select:
                     selectedTile = clickedTile
                     levelRenderer.update()
@@ -126,12 +133,20 @@ class LevelEditor: RenderableEntity, MouseDownHandler {
         levelEditorInterfaceBoundingBox.top = levelRenderer.faceBoundingBoxs[Face.top.rawValue].bottomLeft.y + 5
         levelEditorInterfaceBoundingBox.right = levelRenderer.faceBoundingBoxs[Face.top.rawValue].bottomLeft.x - 5
         levelEditorInterface = LevelEditorInterface(boundingBox: levelEditorInterfaceBoundingBox)
+
+        // Setup Error Console
+        var errorConsoleBoundingBox = Rect()
+        errorConsoleBoundingBox.bottomRight = levelEditorBoundingBox.bottomRight
+        errorConsoleBoundingBox.top = levelRenderer.faceBoundingBoxs[Face.top.rawValue].bottomRight.y + 5
+        errorConsoleBoundingBox.left = levelRenderer.faceBoundingBoxs[Face.top.rawValue].bottomRight.x + 5
+        errorConsole = ErrorConsole(boundingBox: errorConsoleBoundingBox)
         
         // Layer
         layer.insert(entity: levelRenderer, at: .front)
         layer.insert(entity: specialTileSelector, at: .front)
         layer.insert(entity: levelEditorInformation, at: .front)
         layer.insert(entity: levelEditorInterface, at: .front)
+        layer.insert(entity: errorConsole, at: .front)
         // Scene
 
         // Dispatcher
@@ -141,15 +156,20 @@ class LevelEditor: RenderableEntity, MouseDownHandler {
 
     override func render(canvas: Canvas) {
         if !levelRenderer.levelStaged {
-            let loadText = Text(location: levelEditorBoundingBox.center, text: "Please Load a Level.",
+            let loadText = Text(location: levelRenderer.faceBoundingBoxs[Face.top.rawValue].center, text: "Please Load a Level.",
                                 fillMode: .fillAndStroke)
             loadText.font = "30pt Arial"
             loadText.alignment = .center
             loadText.baseline = .middle
             canvas.render(FillStyle(color: Color(.black)), StrokeStyle(color: Color(.black)), LineWidth(width: 1))
-            canvas.render(loadText)
+            canvas.render(loadText)            
         }
-    }
+
+        if updateRender {
+            update()
+            updateRender = false
+        }
+    }    
 
     override func teardown() {
         dispatcher.unregisterMouseDownHandler(handler: self)

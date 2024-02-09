@@ -50,12 +50,12 @@ class LevelEditorInterface: RenderableEntity, MouseDownHandler {
             if setStartingPositionRectButton.containment(target: globalLocation).contains(.containedFully) {
                 guard let selectedTilePoint = levelEditor().selectedTile?.point else {
                     // Throw to Error Console
-                    print("Must select a tile before setting starting position.")
+                    levelEditor().errorConsole.throwError("Must select a tile before setting starting position.")
                     return
                 }
                 guard levelEditor().levelRenderer.level.faceLevels[selectedTilePoint.face.rawValue].tiles[selectedTilePoint.x][selectedTilePoint.y].tileState == .critical else {
                     // Throw to Error Console
-                    print("Selected tile must be critical to set starting position.")
+                    levelEditor().errorConsole.throwError("Selected tile must be critical to set starting position.")
                     return
                 }                    
                 levelEditor().levelRenderer.level.startingPosition = selectedTilePoint

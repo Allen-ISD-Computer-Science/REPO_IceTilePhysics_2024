@@ -43,8 +43,7 @@ class SpecialTileSelector: RenderableEntity, MouseDownHandler {
                     case 1: levelEditor().selectSpecialTileType(.wall)
                     case 2:
                         guard let directionPair = levelEditor().levelEditorInterface.directionWheel.directionPair() else {
-                            // Throw to error console
-                            print("Must select a valid direction pair prior to placing a direction shift.")
+                            levelEditor().errorConsole.throwError("Must select a valid direction pair prior to placing a direction shift.")
                             return
                         }
                         levelEditor().selectSpecialTileType(.directionShift(pair: directionPair))
@@ -53,7 +52,7 @@ class SpecialTileSelector: RenderableEntity, MouseDownHandler {
                     case 3:
                         guard let destination = levelEditor().selectedTile?.point else {
                             // Throw to error console
-                            print("Must select a tile prior to placing a portal.")
+                            levelEditor().errorConsole.throwError("Must select a tile prior to placing a portal.")
                             return
                         }
                         levelEditor().selectSpecialTileType(.portal(to: destination))

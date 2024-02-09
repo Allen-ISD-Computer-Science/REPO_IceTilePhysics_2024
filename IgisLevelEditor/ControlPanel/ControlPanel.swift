@@ -9,11 +9,17 @@ class ControlPanel: RenderableEntity, MouseDownHandler, KeyDownHandler {
     var controlPanelBoundingBox: Rect!
     var setLevelSize: TextFieldButton!
     var saveFile: TextFieldButton!
-    // fileViewer
+    var fileViewer: FileViewer!
     // levelRenderer
+
+    private var updateRender = true
 
     init() {
         super.init(name: "ControlPanel")        
+    }
+
+    func update() {
+        fileViewer.update()
     }
 
     func mainScene() -> MainScene {
@@ -38,12 +44,12 @@ class ControlPanel: RenderableEntity, MouseDownHandler, KeyDownHandler {
         if setLevelSize.buttonBoundingBox.containment(target: globalLocation).contains(.containedFully) {
             guard let edgeLength = Int(setLevelSize.inputString) else {
                 // Throw to Error Console
-                print("Input must be of type Int")
+                levelEditor().errorConsole.throwError("Input must be of type Int")
                 return
             }
             guard edgeLength >= 6 else {
                 // Throw to Error Console
-                print("Input must be >= 6.")
+                levelEditor().errorConsole.throwError("Input must be >= 6.")
                 return
             }
             levelEditor().levelRenderer.stageLevel(level: Level(levelSize: LevelSize(edgeLength: edgeLength),
@@ -54,27 +60,27 @@ class ControlPanel: RenderableEntity, MouseDownHandler, KeyDownHandler {
         }
         // Hit test with saveFile Button
         if saveFile.buttonBoundingBox.containment(target: globalLocation).contains(.containedFully) {
-            guard saveFile.inputString != saveFile.defaultString else {
+            guard saveFile.inputString != saveFile.defaultString && saveFile.inputString != "" else {
                 // Throw to Error Console
-                print("Must provide file name.")
+                levelEditor().errorConsole.throwError("Must provide file name.")
                 return
             }
             guard let level = levelEditor().levelRenderer.level else {
                 // Throw to Error Console
-                print("Must load level before saving it to file.")
+                levelEditor().errorConsole.throwError("Must load level before saving it to file.")
                 return
             }
             guard level.solvable() else {
                 // Throw to Error Console
-                print("Cannot save unsolvable level")
+                levelEditor().errorConsole.throwError("Cannot save unsolvable level")
                 return
             }
             guard let fileData = levelFileManager.encodeLVL(from: levelEditor().levelRenderer.level) else {
                 // Throw to Error Console
-                print("Unable to encode Level")
+                levelEditor().errorConsole.throwError("Unable to encode Level")
                 return
             }
-            levelFileManager.write(path: "./Levels/\(saveFile.inputString).lvl", content: fileData)
+            levelEditor().errorConsole.throwError(levelFileManager.write(path: "./Levels/\(saveFile.inputString).lvl", content: fileData))
         }
     }
 
@@ -132,15 +138,30 @@ class ControlPanel: RenderableEntity, MouseDownHandler, KeyDownHandler {
         saveFileUILabel.baseline = .middle
         canvas.render(FillStyle(color: Color(.black)), saveFileUILabel)
                                                                                                               
+        // FileViewer
+        var fileViewerBoundingBox = Rect()
+        fileViewerBoundingBox.topLeft = saveFile.boundingBox.bottomLeft + Point(x: 0, y: 5)
+        fileViewerBoundingBox.right = controlPanelBoundingBox.topRight.x
+        fileViewerBoundingBox.bottom = fileViewerBoundingBox.top +
+          (controlPanelBoundingBox.bottom - fileViewerBoundingBox.top) / 3
+        fileViewer = FileViewer(boundingBox: fileViewerBoundingBox)
         
         // Layer
         layer.insert(entity: setLevelSize, at: .front)
         layer.insert(entity: saveFile, at: .front)
+        layer.insert(entity: fileViewer, at: .front)
         // Scene
 
         // Dispatcher        
         dispatcher.registerMouseDownHandler(handler: self)
         dispatcher.registerKeyDownHandler(handler: self)
+    }
+
+    override func render(canvas: Canvas) {
+        if updateRender {
+            update()
+            updateRender = false
+        }
     }
 
     override func teardown() {

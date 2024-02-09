@@ -19,6 +19,17 @@ class DirectionWheel: RenderableEntity, MouseDownHandler {
         updateRender = true
     }
 
+    func mainScene() -> MainScene {
+        guard let mainScene = scene as? MainScene else {
+            fatalError("mainScene is required to be of type MainScene")
+        }
+        return mainScene
+    }
+
+    func levelEditor() -> LevelEditor {
+        return mainScene().interactionLayer.levelEditor
+    }
+
     func onMouseDown(globalLocation: Point) {
         for index in 0 ..< directionBoundingBoxs.count {
             if directionBoundingBoxs[index].containment(target: globalLocation).contains(.containedFully) {
@@ -37,12 +48,12 @@ class DirectionWheel: RenderableEntity, MouseDownHandler {
         }
         guard selectedDirections.count == 2 else {
             // Throw to error Console
-            print("There must be exactly 2 selected Directions.")
+            levelEditor().errorConsole.throwError("There must be exactly 2 selected Directions.")
             return nil
         }
         guard selectedDirections[0].toggle() != selectedDirections[1] else {
             // Throw to error Console
-            print("Directions must not be opposites in a DirectionPair.")
+            levelEditor().errorConsole.throwError("Directions must not be opposites in a DirectionPair.")
             return nil
         }
         return DirectionPair(selectedDirections[0], selectedDirections[1])
