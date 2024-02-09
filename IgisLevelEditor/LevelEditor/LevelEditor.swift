@@ -70,17 +70,12 @@ class LevelEditor: RenderableEntity, MouseDownHandler {
                         print("Cannot change the state of the level's starting position.")
                         return                          
                     }
-                    if clickedTile.specialTileType == selectedSpecialTileType {
-                        levelRenderer.setSpecialTileType(levelPoint: clickedTile.point, specialTileType: nil)
-                    }
-                    if clickedTile.specialTileType == nil {
-                        levelRenderer.setSpecialTileType(levelPoint: clickedTile.point, specialTileType: selectedSpecialTileType)
-                    }
+                    levelRenderer.setSpecialTileType(levelPoint: clickedTile.point, specialTileType: selectedSpecialTileType)                
                 case .select:
                     selectedTile = clickedTile
                     levelRenderer.update()
                 case .erase:
-                    levelRenderer.setSpecialTileType(levelPoint: clickedTile.point, specialTileType: selectedSpecialTileType)
+                    levelRenderer.setSpecialTileType(levelPoint: clickedTile.point, specialTileType: nil)
                 }
                 levelEditorInformation.update()                    
             }
@@ -94,9 +89,6 @@ class LevelEditor: RenderableEntity, MouseDownHandler {
     }
     func setMode(_ mode: LevelEditorMode) {
         self.mode = mode
-        if case .erase = mode {
-            selectedSpecialTileType = nil
-        }
         levelEditorInformation.update()
     }
     

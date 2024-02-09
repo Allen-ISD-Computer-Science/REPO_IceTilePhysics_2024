@@ -11,7 +11,9 @@ class SpecialTileSelector: RenderableEntity, MouseDownHandler {
     static let latestSpecialTile = "portal"
     static let specialTileColors = [Color(.black), Color(.orange), Color(.lightblue)]
     static let specialTileLabels = ["wall", "directionShift", "portal"]
-    var specialTileButtonRects = [Rect]() 
+    var specialTileButtonRects = [Rect]()
+
+    var directionShiftPath = Path()
 
     init(boundingBox: Rect) {
         self.boundingBox = boundingBox
@@ -36,8 +38,7 @@ class SpecialTileSelector: RenderableEntity, MouseDownHandler {
     func onMouseDown(globalLocation: Point) {
         if boundingBox.containment(target: globalLocation).contains(.containedFully) {
             for specialTileIndex in 0 ..< specialTileButtonRects.count {
-                if specialTileButtonRects[specialTileIndex].containment(target: globalLocation).contains(.containedFully),
-                   levelEditor().mode != .erase {
+                if specialTileButtonRects[specialTileIndex].containment(target: globalLocation).contains(.containedFully) {
                     switch specialTileIndex + 1 {
                     case 1: levelEditor().selectSpecialTileType(.wall)
                     case 2:
@@ -47,6 +48,8 @@ class SpecialTileSelector: RenderableEntity, MouseDownHandler {
                             return
                         }
                         levelEditor().selectSpecialTileType(.directionShift(pair: directionPair))
+                        directionShiftPath = levelEditor().levelRenderer.directionShiftPath(directionPair: directionPair,
+                                                                                            tileRect: specialTileButtonRects[specialTileIndex])
                     case 3:
                         guard let destination = levelEditor().selectedTile?.point else {
                             // Throw to error console
@@ -95,6 +98,8 @@ class SpecialTileSelector: RenderableEntity, MouseDownHandler {
                 specialTileText.baseline = .middle
                 canvas.render(FillStyle(color: Color(.black)), specialTileText)
             }
+
+            canvas.render(directionShiftPath)
             updateRender = false
         }
         

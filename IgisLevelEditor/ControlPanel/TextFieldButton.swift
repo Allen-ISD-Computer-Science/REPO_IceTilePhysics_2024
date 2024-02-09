@@ -84,15 +84,7 @@ class TextFieldButton: RenderableEntity, MouseDownHandler, KeyDownHandler {
         dispatcher.registerKeyDownHandler(handler: self)
     }
 
-    override func render(canvas: Canvas) {
-        let buttonLabelText = Text(location: buttonBoundingBox.center, text: buttonLabel, fillMode: .fill)
-        buttonLabelText.font = "15pt Arial"
-        buttonLabelText.alignment = .center
-        buttonLabelText.baseline = .middle
-        canvas.render(StrokeStyle(color: Color(.black)), FillStyle(color: Color(.white)),
-                      Rectangle(rect: buttonBoundingBox, fillMode: .fillAndStroke),
-                      FillStyle(color: Color(.black)), buttonLabelText)
-        
+    override func render(canvas: Canvas) {        
             
         if textMetric.isReady {
             if resizing {
@@ -100,6 +92,16 @@ class TextFieldButton: RenderableEntity, MouseDownHandler, KeyDownHandler {
             }                                                
 
             if updatedText {
+                let buttonLabelText = Text(location: buttonBoundingBox.center, text: buttonLabel, fillMode: .fill)
+                buttonLabelText.font = "15pt Arial"
+                buttonLabelText.alignment = .center
+                buttonLabelText.baseline = .middle
+                canvas.render(StrokeStyle(color: Color(.black)), LineWidth(width: 1),
+                              FillStyle(color: Color(.white)),
+                              Rectangle(rect: buttonBoundingBox, fillMode: .fillAndStroke),
+                              FillStyle(color: Color(.black)), buttonLabelText)
+        
+                
                 switch active {
                 case true: canvas.render(FillStyle(color: Color(.yellow)))
                 case false: canvas.render(FillStyle(color: Color(.white)))

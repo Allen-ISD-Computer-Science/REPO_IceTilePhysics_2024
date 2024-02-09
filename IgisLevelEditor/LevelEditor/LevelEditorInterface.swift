@@ -121,7 +121,7 @@ class LevelEditorInterface: RenderableEntity, MouseDownHandler {
             setStartingPositionText.font = "12pt Arial"
             setStartingPositionText.alignment = .center
             setStartingPositionText.baseline = .middle
-            canvas.render(Rectangle(rect: setStartingPositionRectButton, fillMode: .stroke),
+            canvas.render(StrokeStyle(color: Color(.black)), LineWidth(width: 1), Rectangle(rect: setStartingPositionRectButton, fillMode: .stroke),
                           FillStyle(color: Color(.black)), setStartingPositionText)
 
             updateRender = false
