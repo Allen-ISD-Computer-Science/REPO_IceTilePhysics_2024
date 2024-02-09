@@ -4,24 +4,26 @@ import LevelGeneration
 
 class DirectionWheel: RenderableEntity, MouseDownHandler {
 
-    var wheelBoundingBox = Rect()
+    let boundingBox: Rect
     private var directionBoundingBoxs = [Rect]()
     private var directionPaths = [Path]()
     private var selected: [Bool] = Array(repeating: false, count: 4)
-    private var updated = true
+    private var updateRender = false
 
-    init() {        
+    init(boundingBox: Rect) {
+        self.boundingBox = boundingBox
         super.init(name: "DirectionWheel")
     }
 
-    func setBoundingBox(rect: Rect) {
-        wheelBoundingBox = rect
+    func update() {
+        updateRender = true
     }
 
     func onMouseDown(globalLocation: Point) {
         for index in 0 ..< directionBoundingBoxs.count {
             if directionBoundingBoxs[index].containment(target: globalLocation).contains(.containedFully) {
                 selected[index] = !selected[index]
+                updateRender = true
             }
         }
     }
@@ -34,10 +36,12 @@ class DirectionWheel: RenderableEntity, MouseDownHandler {
             }
         }
         guard selectedDirections.count == 2 else {
+            // Throw to error Console
             print("There must be exactly 2 selected Directions.")
             return nil
         }
         guard selectedDirections[0].toggle() != selectedDirections[1] else {
+            // Throw to error Console
             print("Directions must not be opposites in a DirectionPair.")
             return nil
         }
@@ -47,10 +51,10 @@ class DirectionWheel: RenderableEntity, MouseDownHandler {
     override func setup(canvasSize: Size, canvas: Canvas) {
         
         // Define Direction Bounding Boxes
-        let maxHeight = (wheelBoundingBox.height - 10) / 3
-        let maxWidth = (wheelBoundingBox.width - 10) / 3
+        let maxHeight = (boundingBox.height - 10) / 3
+        let maxWidth = (boundingBox.width - 10) / 3
         let directionSize = maxHeight > maxWidth ? Size(width: maxWidth, height: maxWidth) : Size(width: maxHeight, height: maxWidth)
-        let leftBoundingBox = Rect(topLeft: wheelBoundingBox.topLeft + Point(x: 5, y: 5 + maxHeight), size: directionSize)
+        let leftBoundingBox = Rect(topLeft: boundingBox.topLeft + Point(x: 5, y: 5 + maxHeight), size: directionSize)
         let upBoundingBox = Rect(bottomLeft: leftBoundingBox.topRight, size: directionSize)
         let downBoundingBox = Rect(topLeft: leftBoundingBox.bottomRight, size: directionSize)
         let rightBoundingBox = Rect(topLeft: upBoundingBox.bottomRight, size: directionSize)
@@ -77,28 +81,29 @@ class DirectionWheel: RenderableEntity, MouseDownHandler {
         rightPath.lineTo(Point(x: directionBoundingBoxs[3].right, y: directionBoundingBoxs[3].centerY))
         rightPath.lineTo(directionBoundingBoxs[3].bottomLeft + Point(x: 5, y: -5))
         rightPath.close()
-        directionPaths = [upPath, downPath, leftPath, rightPath]
-
-        // Render DirectionWheel Bounding Box Rectangle
-        canvas.render(FillStyle(color: Color(.darkgray)),
-                      StrokeStyle(color: Color(.black)),
-                      Rectangle(rect: wheelBoundingBox, fillMode: .fillAndStroke))
+        directionPaths = [upPath, downPath, leftPath, rightPath]        
 
         // Register Click Handler
         dispatcher.registerMouseDownHandler(handler: self)
     }
 
     override func render(canvas: Canvas) {
-        if updated {
+        if updateRender {
+            // Render Bounding Box
+            canvas.render(FillStyle(color: Color(.lightgray)),
+                          StrokeStyle(color: Color(.black)), LineWidth(width: 1),
+                          Rectangle(rect: boundingBox, fillMode: .fillAndStroke))
+            
             for index in 0 ..< directionPaths.count {
                 if selected[index] {
-                    canvas.render(StrokeStyle(color: Color(.red)), directionPaths[index])
+                    canvas.render(LineWidth(width: 3), StrokeStyle(color: Color(.red)), FillStyle(color: Color(.black)), directionPaths[index])
                 } else {
-                    canvas.render(StrokeStyle(color: Color(.black)), directionPaths[index])
+                    canvas.render(LineWidth(width: 1), StrokeStyle(color: Color(.black)), FillStyle(color: Color(.black)), directionPaths[index])
                 }
             }
         }
         canvas.render(StrokeStyle(color: Color(.black)))
+        updateRender = false
     }
 
     override func teardown() {
