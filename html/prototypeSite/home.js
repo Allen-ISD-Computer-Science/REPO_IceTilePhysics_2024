@@ -1,14 +1,13 @@
-const fs = require('fs');
+const fs = import fs from 'fs';
 const root = '../..';
 const levelsDir =  root.concat('/IgisLevelEditor/Levels');
 const assets = root.concat('/assets')
 const textures = assets.concat('/textures/ui/titleScreen');
 
-var scene
-
-
 const canvas = document.getElementById("renderCanvas"); // Get the canvas element
 const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
+
+var scene;
 
 function fetchLevels(){
     var levels = [];
