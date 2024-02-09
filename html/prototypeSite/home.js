@@ -1,4 +1,3 @@
-const fs = import fs from 'fs';
 const root = '../..';
 const levelsDir =  root.concat('/IgisLevelEditor/Levels');
 const assets = root.concat('/assets')
@@ -8,15 +7,6 @@ const canvas = document.getElementById("renderCanvas"); // Get the canvas elemen
 const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
 
 var scene;
-
-function fetchLevels(){
-    var levels = [];
-
-    // reads from the levels folder in directory, puts them into an array
-    levels = fs.readdir(levelsDir);
-    
-    return levels;
-}
 
 function createScene(level){
     // Creates a basic Babylon Scene object
