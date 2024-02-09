@@ -8,6 +8,9 @@ const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engi
 
 var scene;
 
+const debug = document.getElementById("debug"));
+debug.innerText = textures.concat('.bg_1.png'));
+
 function createScene(level){
     // Creates a basic Babylon Scene object
     const scene = new BABYLON.Scene(engine);  // Creates and positions an Arc Rotating camera
@@ -21,7 +24,7 @@ function createScene(level){
     const ground = BABYLON.MeshBuilder.CreateGround("ground",     { width: 6, height: 6 }, scene);
     const tex = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("myUI");
 
-    if (level == "levels"){
+    if (level == "levels") {
 	var bg = new BABYLON.GUI.Image(textures.concat('.bg_1.png'))
 	bg.width = canvas.width
 	bg.height = canvas.height
