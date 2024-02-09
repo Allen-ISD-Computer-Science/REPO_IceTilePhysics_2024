@@ -8,7 +8,7 @@ const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engi
 
 var scene;
 
-const debug = document.getElementById("debug"));
+const debug = document.getElementById("debug");
 debug.innerText = textures.concat('.bg_1.png');
 
 function createScene(level){
