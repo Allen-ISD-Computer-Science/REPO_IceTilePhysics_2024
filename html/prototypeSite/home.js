@@ -22,7 +22,7 @@ function createScene(level){
     const tex = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("myUI");
 
     if (level == "levels"){
-	var bg = new BABYLON.Image(textures.concat('.bg_1.png'))
+	var bg = new BABYLON.GUI.Image(textures.concat('.bg_1.png'))
 	bg.width = canvas.width
 	bg.height = canvas.height
 	
