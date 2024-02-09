@@ -13,6 +13,7 @@ const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engi
 function fetchLevels(){
     var levels = [];
 
+    // reads from the levels folder in directory, puts them into an array
     levels = fs.readdir(levelsDir);
     
     return levels;
@@ -36,9 +37,7 @@ function createScene(level){
 	bg.width = canvas.width
 	bg.height = canvas.height
 	
-	tex.addControl(bg);
-	
-	
+	tex.addControl(bg);	
     }
 
     return scene;
@@ -50,9 +49,6 @@ function play(){
 	return;
     }
     scene = createScene("levels");
-
-    
-    
 
     engine.runRenderLoop(function(){
 	scene.render();	
