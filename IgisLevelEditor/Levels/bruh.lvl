@@ -1,4 +1,16 @@
 {
+  "portal_tile_data" : [
+
+  ],
+  "player_point" : {
+    "x" : 1,
+    "y" : 1,
+    "face" : 0
+  },
+  "version" : "1.1.0",
+  "direction_shift_tile_data" : [
+
+  ],
   "face_tiles" : [
     [
       [
@@ -177,9 +189,9 @@
       ],
       [
         0,
-        1,
-        1,
-        1,
+        0,
+        0,
+        0,
         1,
         1,
         1,
@@ -189,7 +201,7 @@
         0,
         1,
         1,
-        1,
+        0,
         1,
         1,
         1,
@@ -197,9 +209,9 @@
       ],
       [
         0,
-        1,
-        1,
-        1,
+        0,
+        0,
+        0,
         1,
         1,
         1,
@@ -492,17 +504,5 @@
         1
       ]
     ]
-  ],
-  "portal_tile_data" : [
-
-  ],
-  "version" : "1.1.0",
-  "direction_shift_tile_data" : [
-
-  ],
-  "player_point" : {
-    "x" : 1,
-    "y" : 1,
-    "face" : 0
-  }
+  ]
 }

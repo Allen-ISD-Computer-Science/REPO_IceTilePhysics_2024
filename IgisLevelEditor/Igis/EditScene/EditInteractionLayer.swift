@@ -3,7 +3,7 @@ import ScenesControls
 import Igis
 import LevelGeneration
 
-class InteractionLayer: Layer {
+class EditInteractionLayer: Layer {
 
     var levelEditor: LevelEditor
     var controlPanel: ControlPanel
@@ -13,7 +13,7 @@ class InteractionLayer: Layer {
         self.levelEditor = LevelEditor()
         self.controlPanel = ControlPanel()
 
-        super.init(name: "Interaction")
+        super.init(name: "EditInteraction")
 
         insert(entity: controlPanel, at: .front)
         insert(entity: levelEditor, at: .back)

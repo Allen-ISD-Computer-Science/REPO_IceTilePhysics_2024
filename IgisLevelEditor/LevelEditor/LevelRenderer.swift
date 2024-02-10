@@ -1,7 +1,9 @@
+import Foundation
 import Scenes
 import Igis
 import LevelGeneration
 
+// Can be utilized by Edit and Play Scenes
 class LevelRenderer: RenderableEntity {
 
     // LevelGeneration
@@ -9,6 +11,9 @@ class LevelRenderer: RenderableEntity {
 
     // Editable
     var levelEditor: LevelEditor? = nil
+
+    // Player
+    var playerLocation: LevelPoint? = nil
 
     // Igis
     let initialFaceBoundingBoxs: [Rect] // Used as constant to dynamically resize tiles when staging new levels
@@ -96,8 +101,34 @@ class LevelRenderer: RenderableEntity {
                let selectedTilePoint = levelEditor.selectedTile?.point {
                 let selectionPath = Path(rect: tileRect(selectedTilePoint))
                 canvas.render(LineWidth(width: 3), StrokeStyle(color: Color(.red)), selectionPath)            
-            }        
-            
+            }
+
+            // Render Player Location, if nil, render starting location
+            func drawStar(path: Path, center: Point, spikes: Int, innerRadius: Int, outerRadius: Int) {
+                var rotation = Double.pi * 3 / 2
+                var x = center.x
+                var y = center.y
+                let angleStep = Double.pi / Double(spikes)
+
+                for _ in 0 ..< spikes {
+                    x = center.x + Int(cos(rotation) * Double(outerRadius))
+                    y = center.y + Int(sin(rotation) * Double(outerRadius))
+                    path.lineTo(Point(x: x, y: y))
+                    rotation += angleStep
+
+                    x = center.x + Int(cos(rotation) * Double(innerRadius))
+                    y = center.y + Int(sin(rotation) * Double(innerRadius))
+                    path.lineTo(Point(x: x, y: y))
+                    rotation += angleStep                    
+                }
+                path.lineTo(Point(x: center.x, y: center.y - outerRadius))
+                path.close()                
+            }
+            let playerPath = Path(fillMode: .fillAndStroke)
+            drawStar(path: playerPath, center: tileRect(playerLocation ?? level.startingPosition).center, spikes: 5,
+                     innerRadius: tileSize.height / 2 - 7, outerRadius: tileSize.height / 2 - 2)
+            canvas.render(StrokeStyle(color: Color(.black)), LineWidth(width: 1),
+                          FillStyle(color: Color(.yellow)), playerPath)
             updateRender = false
         }
     }

@@ -17,15 +17,15 @@ class LevelEditorInformation: RenderableEntity {
         updateRender = true
     }
 
-    func mainScene() -> MainScene {
-        guard let mainScene = scene as? MainScene else {
-            fatalError("mainScene is required to be of type MainScene")
+    func editScene() -> EditScene {
+        guard let editScene = scene as? EditScene else {
+            fatalError("editScene is required to be of type EditScene for LevelEditorInformation")
         }
-        return mainScene
+        return editScene
     }
 
     func levelEditor() -> LevelEditor {
-        return mainScene().interactionLayer.levelEditor
+        return editScene().interactionLayer.levelEditor
     }
 
     func level() -> Level? {

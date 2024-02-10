@@ -20,15 +20,15 @@ class SpecialTileSelector: RenderableEntity, MouseDownHandler {
         super.init(name: "SpecialTileSelector")
     }
 
-    func mainScene() -> MainScene {
-        guard let mainScene = scene as? MainScene else {
-            fatalError("mainScene is required to be of type MainScene.")
+    func editScene() -> EditScene {
+        guard let editScene = scene as? EditScene else {
+            fatalError("scene is required to be of type EditScene for SpecialTileSelector.")
         }
-        return mainScene
+        return editScene
     }
 
     func levelEditor() -> LevelEditor {
-        return mainScene().interactionLayer.levelEditor
+        return editScene().interactionLayer.levelEditor
     }
 
     func update() {

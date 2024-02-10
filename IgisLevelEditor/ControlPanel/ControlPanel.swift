@@ -26,20 +26,20 @@ class ControlPanel: RenderableEntity, MouseDownHandler {
         levelViewer.update()
     }
 
-    func mainScene() -> MainScene {
-        guard let mainScene = scene as? MainScene else {
-            fatalError("mainScene of type MainScene is required")
+    func editScene() -> EditScene {
+        guard let editScene = scene as? EditScene else {
+            fatalError("Scene of type EditScene is required for ControlPanel")
         }
-        return mainScene
+        return editScene
     }
 
     func levelEditor() -> LevelEditor {        
-        let interactionLayer = mainScene().interactionLayer
+        let interactionLayer = editScene().interactionLayer
         return interactionLayer.levelEditor
     }
 
-    func background() -> Background {
-        let backgroundLayer = mainScene().backgroundLayer
+    func background() -> EditBackground {
+        let backgroundLayer = editScene().backgroundLayer
         return backgroundLayer.background
     }
 

@@ -19,15 +19,15 @@ class DirectionWheel: RenderableEntity, MouseDownHandler {
         updateRender = true
     }
 
-    func mainScene() -> MainScene {
-        guard let mainScene = scene as? MainScene else {
-            fatalError("mainScene is required to be of type MainScene")
+    func editScene() -> EditScene {
+        guard let editScene = scene as? EditScene else {
+            fatalError("scene is required to be of type EditScene for DirectionWheel")
         }
-        return mainScene
+        return editScene
     }
 
     func levelEditor() -> LevelEditor {
-        return mainScene().interactionLayer.levelEditor
+        return editScene().interactionLayer.levelEditor
     }
 
     func onMouseDown(globalLocation: Point) {

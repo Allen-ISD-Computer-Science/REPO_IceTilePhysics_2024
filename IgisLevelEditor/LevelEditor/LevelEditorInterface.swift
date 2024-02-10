@@ -11,6 +11,7 @@ class LevelEditorInterface: RenderableEntity, MouseDownHandler {
     var modeRectButtons = [Rect]()
     var directionWheel: DirectionWheel!
     var setStartingPositionRectButton: Rect!
+    var playTestRectButton: Rect!
     
     init(boundingBox: Rect) {
         self.boundingBox = boundingBox
@@ -22,15 +23,22 @@ class LevelEditorInterface: RenderableEntity, MouseDownHandler {
         directionWheel.update()
     }
 
-    func mainScene() -> MainScene {
-        guard let mainScene = scene as? MainScene else {
-            fatalError("mainScene is required to be of type MainScene.")
+    func shellDirector() -> ShellDirector {
+        guard let shellDirector = director as? ShellDirector else {
+            fatalError("director is required to be of type ShellDirector for PlayInteractionLayer.")
         }
-        return mainScene        
+        return shellDirector
+    }
+    
+    func editScene() -> EditScene {
+        guard let editScene = scene as? EditScene else {
+            fatalError("scene is required to be of type EditScene for LevelEditorInterface.")
+        }
+        return editScene        
     }
 
     func levelEditor() -> LevelEditor {
-        return mainScene().interactionLayer.levelEditor
+        return editScene().interactionLayer.levelEditor
     }
 
     func onMouseDown(globalLocation: Point) {
@@ -59,6 +67,12 @@ class LevelEditorInterface: RenderableEntity, MouseDownHandler {
                     return
                 }                    
                 levelEditor().levelRenderer.level.startingPosition = selectedTilePoint
+                levelEditor().levelRenderer.update()
+                return
+            }
+            if playTestRectButton.containment(target: globalLocation).contains(.containedFully) {
+                shellDirector().play(level: levelEditor().levelRenderer.level.emptyLevel())
+                director.transitionToNextScene()
             }
         }
     }
@@ -84,6 +98,9 @@ class LevelEditorInterface: RenderableEntity, MouseDownHandler {
         
         // Setup Set Starting Position Rect Button
         setStartingPositionRectButton = Rect(topLeft: boundingBox.topLeft + Point(x: 5, y: 60), size: Size(width: boundingBox.size.width - directionWheelSize - 15, height: 50))
+
+        // Setup Play Test Rect Button
+        playTestRectButton = Rect(topLeft: setStartingPositionRectButton.bottomLeft + Point(x: 0, y: 5), size: setStartingPositionRectButton.size)
 
         // Layer
         layer.insert(entity: directionWheel, at: .front)
@@ -123,6 +140,15 @@ class LevelEditorInterface: RenderableEntity, MouseDownHandler {
             setStartingPositionText.baseline = .middle
             canvas.render(StrokeStyle(color: Color(.black)), LineWidth(width: 1), Rectangle(rect: setStartingPositionRectButton, fillMode: .stroke),
                           FillStyle(color: Color(.black)), setStartingPositionText)
+
+            let playTestText = Text(location: playTestRectButton.center,
+                                    text: "Play Test",
+                                    fillMode: .fill)
+            playTestText.font = "12pt Arial"
+            playTestText.alignment = .center
+            playTestText.baseline = .middle
+            canvas.render(StrokeStyle(color: Color(.black)), LineWidth(width: 1), Rectangle(rect: playTestRectButton, fillMode: .stroke),
+                          FillStyle(color: Color(.black)), playTestText)
 
             updateRender = false
         }

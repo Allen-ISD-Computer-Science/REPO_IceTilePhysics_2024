@@ -1,7 +1,7 @@
 import Scenes
 import Igis
 
-class Background: RenderableEntity {
+class EditBackground: RenderableEntity {
 
     var controlPanelRect: Rect!
     var levelEditorRect: Rect!

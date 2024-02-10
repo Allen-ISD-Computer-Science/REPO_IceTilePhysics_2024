@@ -25,20 +25,20 @@ class LevelEditor: RenderableEntity, MouseDownHandler {
         super.init(name: "LevelEditor")
     }
 
-    func mainScene() -> MainScene {
-        guard let mainScene = scene as? MainScene else {
-            fatalError("mainScene of type MainScene is required")
+    func editScene() -> EditScene {
+        guard let editScene = scene as? EditScene else {
+            fatalError("scene of type EditScene is required for LevelEditor")
         }
-        return mainScene
+        return editScene
     }
 
     func controlPanel() -> ControlPanel {
-        let interactionLayer = mainScene().interactionLayer
+        let interactionLayer = editScene().interactionLayer
         return interactionLayer.controlPanel
     }
 
-    func background() -> Background {
-        let backgroundLayer = mainScene().backgroundLayer
+    func background() -> EditBackground {
+        let backgroundLayer = editScene().backgroundLayer
         return backgroundLayer.background
     }
 

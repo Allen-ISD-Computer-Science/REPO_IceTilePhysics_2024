@@ -29,23 +29,23 @@ class FileViewer: RenderableEntity, MouseDownHandler {
         self.boundingBox = boundingBox
     }
 
-    func mainScene() -> MainScene {
-        guard let mainScene = scene as? MainScene else {
-            fatalError("mainScene is required to be of type MainScene.")
+    func editScene() -> EditScene {
+        guard let editScene = scene as? EditScene else {
+            fatalError("Scene is required to be of type EditScene for FileViewer.")
         }
-        return mainScene        
+        return editScene        
     }
 
     func levelEditor() -> LevelEditor {
-        return mainScene().interactionLayer.levelEditor
+        return editScene().interactionLayer.levelEditor
     }
 
     func controlPanel() -> ControlPanel {
-        return mainScene().interactionLayer.controlPanel
+        return editScene().interactionLayer.controlPanel
     }
 
-    func background() -> Background {
-        return mainScene().backgroundLayer.background
+    func background() -> EditBackground {
+        return editScene().backgroundLayer.background
     }
 
     func update() {
