@@ -11,6 +11,7 @@ class LevelRenderer: RenderableEntity {
     var levelEditor: LevelEditor? = nil
 
     // Igis
+    let initialFaceBoundingBoxs: [Rect] // Used as constant to dynamically resize tiles when staging new levels
     var faceBoundingBoxs: [Rect]
     var tileSize: Size!
 
@@ -24,7 +25,8 @@ class LevelRenderer: RenderableEntity {
         let rightFaceRect = Rect(topLeft: topFaceRect.topRight, size: faceSize)
         let frontFaceRect = Rect(topRight: rightFaceRect.bottomLeft, size: faceSize)
         let bottomFaceRect = Rect(topLeft: frontFaceRect.bottomLeft, size: faceSize)
-        self.faceBoundingBoxs = [backFaceRect, leftFaceRect, topFaceRect, rightFaceRect, frontFaceRect, bottomFaceRect]
+        self.initialFaceBoundingBoxs = [backFaceRect, leftFaceRect, topFaceRect, rightFaceRect, frontFaceRect, bottomFaceRect]
+        self.faceBoundingBoxs = initialFaceBoundingBoxs
         super.init(name: "LevelRenderer")
     }
 
@@ -40,12 +42,13 @@ class LevelRenderer: RenderableEntity {
     func stageLevel(level: Level) {
         self.level = level
         levelStaged = true
+        updateRender = true
 
-        self.tileSize = Size(width: faceBoundingBoxs[Face.back.rawValue].size.width / level.levelSize.faceSize(face: .back).maxX,
-                             height: faceBoundingBoxs[Face.back.rawValue].size.height / level.levelSize.faceSize(face: .back).maxY)
+        self.tileSize = Size(width: initialFaceBoundingBoxs[Face.back.rawValue].size.width / level.levelSize.faceSize(face: .back).maxX,
+                             height: initialFaceBoundingBoxs[Face.back.rawValue].size.height / level.levelSize.faceSize(face: .back).maxY)
         for faceIndex in 0 ..< faceBoundingBoxs.count {
             let faceSize = level.levelSize.faceSize(face: Face.allCases[faceIndex])
-            faceBoundingBoxs[faceIndex] = Rect(topLeft: faceBoundingBoxs[faceIndex].topLeft,
+            faceBoundingBoxs[faceIndex] = Rect(topLeft: initialFaceBoundingBoxs[faceIndex].topLeft,
                                                size: Size(width: tileSize.width * faceSize.maxX, height: tileSize.height * faceSize.maxY))
         }
     }

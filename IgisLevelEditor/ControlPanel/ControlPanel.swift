@@ -1,16 +1,18 @@
+import Foundation
 import Scenes
 import Igis
 import LevelGeneration
 
-class ControlPanel: RenderableEntity, MouseDownHandler, KeyDownHandler {
+class ControlPanel: RenderableEntity, MouseDownHandler {
 
-    let levelFileManager = LevelFileManager.shared
+    let levelFileManager = LevelFileManager.shared    
+    static let levelsPath = "./Levels/"
     
     var controlPanelBoundingBox: Rect!
     var setLevelSize: TextFieldButton!
     var saveFile: TextFieldButton!
     var fileViewer: FileViewer!
-    // levelRenderer
+    var levelViewer: LevelRenderer!
 
     private var updateRender = true
 
@@ -19,7 +21,9 @@ class ControlPanel: RenderableEntity, MouseDownHandler, KeyDownHandler {
     }
 
     func update() {
+        updateRender = true
         fileViewer.update()
+        levelViewer.update()
     }
 
     func mainScene() -> MainScene {
@@ -81,11 +85,31 @@ class ControlPanel: RenderableEntity, MouseDownHandler, KeyDownHandler {
                 return
             }
             levelEditor().errorConsole.throwError(levelFileManager.write(path: "./Levels/\(saveFile.inputString).lvl", content: fileData))
+            insertFilesIntoFileViewer()
+            background().clear(controlPanel: true)            
+            update()
         }
     }
 
-    func onKeyDown(key: String, code: String, ctrlKey: Bool, shiftKey: Bool, altKey: Bool, metaKey: Bool) {
-
+    func insertFilesIntoFileViewer() {
+        do {
+            let levelFiles: [NSString] = try levelFileManager.fileManager.contentsOfDirectory(atPath: ControlPanel.levelsPath).sorted().map { $0 as NSString }
+            var processedFileNames = [NSString]()
+            var levels = [Level]()
+            levelFiles.forEach {
+                if let level = levelFileManager.initializeLevel(from: ControlPanel.levelsPath + ($0 as String)) {
+                    processedFileNames.append($0)
+                    levels.append(level)
+                } else {
+                    print("failed to generate level from \($0)")
+                }
+            }
+            fileViewer.loadLevels(fileNames: processedFileNames, levels: levels)
+            fileViewer.update()
+        }
+        catch {
+            levelEditor().errorConsole.throwError("\(error)")
+        }
     }
 
     override func setup(canvasSize: Size, canvas: Canvas) {
@@ -111,12 +135,7 @@ class ControlPanel: RenderableEntity, MouseDownHandler, KeyDownHandler {
                                        buttonLabel: "Set",
                                        allowedKeys: setSizeFieldAllowedKeys,
                                        restrictions: [setSizeSizeRestriction])
-        let setLevelSizeUILabel = Text(location: Point(x: controlPanelBoundingBox.centerX, y: 20), text: "Set Level Size (Basic Seed, 6 - 15)", fillMode: .fill)
-        setLevelSizeUILabel.font = "15pt Arial"
-        setLevelSizeUILabel.alignment = .center
-        setLevelSizeUILabel.baseline = .middle
-        canvas.render(FillStyle(color: Color(.black)), setLevelSizeUILabel)
-
+        
         // Save File TextFieldButton
         let saveFileAllowedKeys = {
             let lowerCaseCharacters = (Character("a").asciiValue!...Character("z").asciiValue!).map { String(Character(UnicodeScalar($0))) }
@@ -131,42 +150,60 @@ class ControlPanel: RenderableEntity, MouseDownHandler, KeyDownHandler {
                                    defaultString: "Enter File Name",
                                    buttonLabel: "Save",
                                    allowedKeys: saveFileAllowedKeys)
-        let saveFileUILabel = Text(location: Point(x: controlPanelBoundingBox.centerX, y: setLevelSize.boundingBox.bottom + 25),
-                                   text: "Save Level To File", fillMode: .fill)
-        saveFileUILabel.font = "15pt Arial"
-        saveFileUILabel.alignment = .center
-        saveFileUILabel.baseline = .middle
-        canvas.render(FillStyle(color: Color(.black)), saveFileUILabel)
                                                                                                               
         // FileViewer
         var fileViewerBoundingBox = Rect()
         fileViewerBoundingBox.topLeft = saveFile.boundingBox.bottomLeft + Point(x: 0, y: 5)
         fileViewerBoundingBox.right = controlPanelBoundingBox.topRight.x
         fileViewerBoundingBox.bottom = fileViewerBoundingBox.top +
-          (controlPanelBoundingBox.bottom - fileViewerBoundingBox.top) / 3
+          (controlPanelBoundingBox.bottom - fileViewerBoundingBox.top) * 5 / 12
         fileViewer = FileViewer(boundingBox: fileViewerBoundingBox)
+        insertFilesIntoFileViewer()
+
+        // Setup Level Viewer
+        var levelViewerBoundingBox = Rect()
+        levelViewerBoundingBox.topLeft = fileViewerBoundingBox.bottomLeft + Point(x: 0, y: 5)
+        levelViewerBoundingBox.bottom = controlPanelBoundingBox.bottom
+        levelViewerBoundingBox.right = controlPanelBoundingBox.right
+        let levelViewerFaceSize = (levelViewerBoundingBox.size.width / 3) > (levelViewerBoundingBox.size.height / 4) ?
+          Size(width: levelViewerBoundingBox.size.height / 4, height: levelViewerBoundingBox.size.height / 4) :
+          Size(width: levelViewerBoundingBox.size.width / 3, height: levelViewerBoundingBox.size.width / 3)
+        var levelBoundingBox = Rect(size: Size(width: levelViewerFaceSize.width * 3, height: levelViewerFaceSize.height * 4))
+        levelBoundingBox.center = levelViewerBoundingBox.center
+        levelViewer = LevelRenderer(boundingBox: levelBoundingBox, faceSize: levelViewerFaceSize)
         
         // Layer
         layer.insert(entity: setLevelSize, at: .front)
         layer.insert(entity: saveFile, at: .front)
         layer.insert(entity: fileViewer, at: .front)
+        layer.insert(entity: levelViewer, at: .front)
         // Scene
 
         // Dispatcher        
         dispatcher.registerMouseDownHandler(handler: self)
-        dispatcher.registerKeyDownHandler(handler: self)
     }
 
     override func render(canvas: Canvas) {
         if updateRender {
-            update()
+            let setLevelSizeUILabel = Text(location: Point(x: controlPanelBoundingBox.centerX, y: 20), text: "Set Level Size (Basic Seed, 6 - 15)", fillMode: .fill)
+            setLevelSizeUILabel.font = "15pt Arial"
+            setLevelSizeUILabel.alignment = .center
+            setLevelSizeUILabel.baseline = .middle
+            canvas.render(FillStyle(color: Color(.black)), setLevelSizeUILabel)
+
+            let saveFileUILabel = Text(location: Point(x: controlPanelBoundingBox.centerX, y: setLevelSize.boundingBox.bottom + 25),
+                                       text: "Save Level To File", fillMode: .fill)
+            saveFileUILabel.font = "15pt Arial"
+            saveFileUILabel.alignment = .center
+            saveFileUILabel.baseline = .middle
+            canvas.render(FillStyle(color: Color(.black)), saveFileUILabel)
+            
             updateRender = false
         }
     }
-
+    
     override func teardown() {
         // Dispatcher
         dispatcher.unregisterMouseDownHandler(handler: self)
-        dispatcher.unregisterKeyDownHandler(handler: self)
     }
 }

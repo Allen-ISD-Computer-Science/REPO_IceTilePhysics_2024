@@ -28,12 +28,12 @@
       "y" : 7
     },
     {
-      "entrance_two" : {
+      "exit_two" : {
         "right" : {
 
         }
       },
-      "entrance_one" : {
+      "exit_one" : {
         "down" : {
 
         }
