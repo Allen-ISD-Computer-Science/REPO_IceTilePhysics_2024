@@ -8,12 +8,12 @@ class ShellDirector: Director {
         edit()
     }
 
-    func edit(level: Level? = nil) {
-        enqueueScene(scene:EditScene(level: level))
+    func edit(fileName: String? = nil, level: Level? = nil) {
+        enqueueScene(scene:EditScene(fileName: fileName, level: level))
     }
 
-    func play(level: Level) {
-        enqueueScene(scene:PlayScene(level: level))
+    func play(fileName: String? = nil, level: Level) {
+        enqueueScene(scene:PlayScene(fileName: fileName, level: level))
     }
 
     override func framesPerSecond() -> Int {

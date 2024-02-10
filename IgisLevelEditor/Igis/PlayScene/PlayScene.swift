@@ -4,12 +4,14 @@ import LevelGeneration
 class PlayScene: Scene {
 
     var level: Level
+    let fileName: String?
 
     let interactionLayer = PlayInteractionLayer()
     let backgroundLayer = PlayBackgroundLayer()
 
-    init(level: Level) {
+    init(fileName: String? = nil, level: Level) {
         self.level = level
+        self.fileName = fileName
         super.init(name: "PlayScene")
 
         insert(layer: interactionLayer, at: .front)

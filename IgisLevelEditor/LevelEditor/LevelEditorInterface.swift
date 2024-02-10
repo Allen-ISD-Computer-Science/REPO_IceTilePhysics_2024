@@ -41,6 +41,10 @@ class LevelEditorInterface: RenderableEntity, MouseDownHandler {
         return editScene().interactionLayer.levelEditor
     }
 
+    func controlPanel() -> ControlPanel {
+        return editScene().interactionLayer.controlPanel
+    }
+
     func onMouseDown(globalLocation: Point) {
         if boundingBox.containment(target: globalLocation).contains(.containedFully) {
             for modeRectButtonIndex in 0 ..< modeRectButtons.count {
@@ -71,7 +75,11 @@ class LevelEditorInterface: RenderableEntity, MouseDownHandler {
                 return
             }
             if playTestRectButton.containment(target: globalLocation).contains(.containedFully) {
-                shellDirector().play(level: levelEditor().levelRenderer.level.emptyLevel())
+                var fileName: String? = nil
+                if let activeFileIndex = controlPanel().fileViewer.activeFileIndex {
+                    fileName = controlPanel().fileViewer.fileNames[activeFileIndex] as String
+                }
+                shellDirector().play(fileName: fileName, level: levelEditor().levelRenderer.level.emptyLevel())
                 director.transitionToNextScene()
             }
         }

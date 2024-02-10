@@ -1,51 +1,32 @@
 {
-  "portal_tile_data" : [
-    {
-      "x" : 7,
-      "face" : 3,
-      "y" : 7
-    },
-    {
-      "x" : 5,
-      "face" : 2,
-      "y" : 0
-    },
-    {
-      "x" : 5,
-      "face" : 2,
-      "y" : 0
-    },
-    {
-      "x" : 1,
-      "face" : 4,
-      "y" : 7
-    }
-  ],
-  "direction_shift_tile_data" : [
-    {
-      "x" : 4,
-      "face" : 2,
-      "y" : 7
-    },
-    {
-      "exit_two" : {
-        "right" : {
-
-        }
-      },
-      "exit_one" : {
-        "down" : {
-
-        }
-      }
-    }
-  ],
   "player_point" : {
-    "x" : 1,
+    "y" : 1,
     "face" : 0,
-    "y" : 1
+    "x" : 1
   },
   "version" : "1.1.0",
+  "portal_tile_data" : [
+    {
+      "y" : 7,
+      "face" : 3,
+      "x" : 7
+    },
+    {
+      "y" : 0,
+      "face" : 2,
+      "x" : 5
+    },
+    {
+      "y" : 0,
+      "face" : 2,
+      "x" : 5
+    },
+    {
+      "y" : 7,
+      "face" : 4,
+      "x" : 1
+    }
+  ],
   "face_tiles" : [
     [
       [
@@ -653,5 +634,24 @@
         1
       ]
     ]
+  ],
+  "direction_shift_tile_data" : [
+    {
+      "y" : 7,
+      "face" : 2,
+      "x" : 4
+    },
+    {
+      "exit_two" : {
+        "left" : {
+
+        }
+      },
+      "exit_one" : {
+        "up" : {
+
+        }
+      }
+    }
   ]
 }

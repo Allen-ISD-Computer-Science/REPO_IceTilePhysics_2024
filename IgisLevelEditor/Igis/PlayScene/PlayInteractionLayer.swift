@@ -17,7 +17,7 @@ class PlayInteractionLayer: Layer, KeyDownHandler {
 
     func onDoneButtonClickHandler(control: Control, localLocation: Point) {
         playScene().level.resetLevel()
-        shellDirector().edit(level: playScene().level)
+        shellDirector().edit(fileName: playScene().fileName, level: playScene().level)
         director.transitionToNextScene()
     }
 

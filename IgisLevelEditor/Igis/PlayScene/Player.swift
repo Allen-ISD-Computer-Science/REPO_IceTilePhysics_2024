@@ -27,7 +27,7 @@ class Player: RenderableEntity {
     func slide(_ direction: Direction) {
         let possibleSlides = levelGraph.slides.filter { $0.originPoint == location && $0.originDirection == direction }
         guard possibleSlides.count == 1, let slide = possibleSlides.first else {
-            fatalError("Unexpected multiple slides of the same entry found")
+            return
         }
         location = slide.destinationPoint
         levelRenderer().playerLocation = location

@@ -5,8 +5,8 @@ import LevelGeneration
 
 class FileViewer: RenderableEntity, MouseDownHandler {
 
-    private var fileNames = [NSString]()
-    private var levels = [Level]()
+    public var fileNames = [NSString]()
+    public var levels = [Level]()
     var pageCount: Int {
         fileNames.count % 10 == 0 ? fileNames.count / 10 : fileNames.count / 10 + 1
     }
