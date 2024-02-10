@@ -14,6 +14,7 @@ class LevelRenderer: RenderableEntity {
 
     // Player
     var playerLocation: LevelPoint? = nil
+    var paintColor: Color? = nil
 
     // Igis
     let initialFaceBoundingBoxs: [Rect] // Used as constant to dynamically resize tiles when staging new levels
@@ -142,9 +143,17 @@ class LevelRenderer: RenderableEntity {
             }
         }
         switch tile.tileState {
-        case .active: return Color(.yellow)
+        case .active:
+            if let color = paintColor {
+                return color
+            }
+            return Color(.yellow)
         case .inactive: return Color(.gray)
-        case .critical: return Color(.purple)
+        case .critical:
+            if let color = paintColor {
+                return color
+            }
+            return Color(.purple)
         }
     }
 

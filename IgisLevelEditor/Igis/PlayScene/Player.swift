@@ -6,6 +6,8 @@ class Player: RenderableEntity {
 
     var location: LevelPoint
     let levelGraph: Graph
+    var currentSlide: Slide? = nil
+    var currentFrame: Int? = nil
     
     init(startingLocation: LevelPoint, levelGraph: Graph) {
         self.location = startingLocation
@@ -29,8 +31,25 @@ class Player: RenderableEntity {
         guard possibleSlides.count == 1, let slide = possibleSlides.first else {
             return
         }
-        location = slide.destinationPoint
-        levelRenderer().playerLocation = location
+        currentSlide = slide
+        currentFrame = 0
         playScene().backgroundLayer.background.slide(slide: slide)
+    }
+
+    override func render(canvas: Canvas) {
+        if currentSlide != nil,
+           currentFrame != nil {
+            let animationPoints = currentSlide!.activatedTilePoints + [currentSlide!.destinationPoint]
+            if currentFrame! < animationPoints.count {
+                location = animationPoints[currentFrame!]
+            } else {
+                self.currentSlide = nil
+                self.currentFrame = nil
+                return
+            }
+            levelRenderer().playerLocation = location
+            levelRenderer().update()
+            self.currentFrame! += 1
+        }
     }
 }

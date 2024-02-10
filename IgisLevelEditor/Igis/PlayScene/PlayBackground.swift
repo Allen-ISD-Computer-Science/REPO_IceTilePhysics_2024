@@ -42,6 +42,9 @@ class PlayBackground: RenderableEntity {
         levelRendererBoundingBox.center = center
         levelRenderer = LevelRenderer(boundingBox: levelRendererBoundingBox, faceSize: levelRendererFaceSize)
         levelRenderer.stageLevel(level: playScene().level)
+        levelRenderer.paintColor = Color(red: UInt8.random(in: 0...UInt8.max),
+                                         green: UInt8.random(in: 0...UInt8.max),
+                                         blue: UInt8.random(in: 0...UInt8.max))
         
         // Layer
         layer.insert(entity: levelRenderer, at: .front)                
