@@ -20,8 +20,8 @@ class PlayBackground: RenderableEntity {
     }
 
     func slide(slide: Slide) {
-        levelRenderer.level.changeTileStateIfCurrent(levelPoints: slide.activatedTilePoints, current: .inactive, new: .active)
-        levelRenderer.level.setTileState(levelPoint: slide.destinationPoint, tileState: .critical)
+        levelRenderer.level.changeTileStateIfCurrent(levelPoints: slide.intermediatePlayerStates.map { $0.point }, current: .inactive, new: .active)
+        levelRenderer.level.setTileState(levelPoint: slide.destinationPlayerState.point, tileState: .critical)
         levelRenderer.update()
     }
 
@@ -30,7 +30,7 @@ class PlayBackground: RenderableEntity {
         canvas.render(FillStyle(color: Color(.lightblue)), Rectangle(rect: Rect(size: canvasSize), fillMode: .fill))
 
         // Setup Total Inactive Tilestate
-        totalInactive = Double(playScene().level.tilePointsOfStateAndType(tileState: .inactive).count)
+        totalInactive = Double(playScene().level.tilePointsOfStateAndType(tileState: .inactive, specialTileType: nil).count)
 
         // Setup Level Renderer
         let center = Point(x: canvasSize.width / 2, y: canvasSize.height / 2)
@@ -51,7 +51,7 @@ class PlayBackground: RenderableEntity {
     }
 
     override func render(canvas: Canvas) {
-        let currentInactive = Double(levelRenderer.level.tilePointsOfStateAndType(tileState: .inactive).count)
+        let currentInactive = Double(levelRenderer.level.tilePointsOfStateAndType(tileState: .inactive, specialTileType: nil).count)
         let percentage = Int(((totalInactive - currentInactive) / totalInactive) * 100.0)
         let percentageRect = Rect(topLeft: Point(x: 5, y: 50), size: Size(width: 300, height: 50))
         let percentageText = Text(location: Point(x: percentageRect.left, y: percentageRect.centerY),

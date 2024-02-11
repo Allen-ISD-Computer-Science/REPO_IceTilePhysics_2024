@@ -27,7 +27,8 @@ class Player: RenderableEntity {
     }
 
     func slide(_ direction: Direction) {
-        let possibleSlides = levelGraph.slides.filter { $0.originPoint == location && $0.originDirection == direction }
+        let playerState = PlayerState(point: location, direction: direction)
+        let possibleSlides = levelGraph.slides.filter { $0.originPlayerState == playerState }
         guard possibleSlides.count == 1, let slide = possibleSlides.first else {
             return
         }
@@ -39,7 +40,7 @@ class Player: RenderableEntity {
     override func render(canvas: Canvas) {
         if currentSlide != nil,
            currentFrame != nil {
-            let animationPoints = currentSlide!.activatedTilePoints + [currentSlide!.destinationPoint]
+            let animationPoints = currentSlide!.intermediatePlayerStates.map { $0.point } + [currentSlide!.destinationPlayerState.point]
             if currentFrame! < animationPoints.count {
                 location = animationPoints[currentFrame!]
             } else {

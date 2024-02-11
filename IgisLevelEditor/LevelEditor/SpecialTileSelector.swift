@@ -8,9 +8,9 @@ class SpecialTileSelector: RenderableEntity, MouseDownHandler {
     private var updateRender = false
 
     // Lists follow SpecialTileType encoding behavior with respective Int as Index, .wall = 1, .directionShift = 2, .portal = 3, etc.
-    static let latestSpecialTile = "portal"
-    static let specialTileColors = [Color(.black), Color(.orange), Color(.lightblue)]
-    static let specialTileLabels = ["wall", "directionShift", "portal"]
+    static let latestSpecialTile = "sticky"
+    static let specialTileColors = [Color(.black), Color(.orange), Color(.lightblue), Color(.lightgreen)]
+    static let specialTileLabels = ["wall", "directionShift", "portal", "sticky"]
     var specialTileButtonRects = [Rect]()
 
     var directionShiftPath = Path()
@@ -56,6 +56,8 @@ class SpecialTileSelector: RenderableEntity, MouseDownHandler {
                             return
                         }
                         levelEditor().selectSpecialTileType(.portal(to: destination))
+                    case 4:
+                        levelEditor().selectSpecialTileType(.sticky)
                     default: fatalError("Latest supported special tile is \(SpecialTileSelector.latestSpecialTile).")
                     }
                     levelEditor().setMode(.edit)
@@ -72,8 +74,10 @@ class SpecialTileSelector: RenderableEntity, MouseDownHandler {
         specialTileButtonRects.append(wallButtonRect)
         let directionShiftButtonRect = Rect(topLeft: wallButtonRect.bottomLeft + Point(x: 0, y: 5), size: buttonRectSize)
         specialTileButtonRects.append(directionShiftButtonRect)
-        let portalButtonRect = Rect(topLeft: directionShiftButtonRect.bottomLeft + Point(x: 0, y: 5), size: buttonRectSize)
+        let portalButtonRect = Rect(topLeft: directionShiftButtonRect.bottomLeft + Point(x: 0, y: 5), size: buttonRectSize)        
         specialTileButtonRects.append(portalButtonRect)
+        let stickyButtonRect = Rect(topLeft: wallButtonRect.topRight + Point(x: 100, y: 0), size: buttonRectSize)
+        specialTileButtonRects.append(stickyButtonRect)
 
         // Dispatcher        
         dispatcher.registerMouseDownHandler(handler: self)

@@ -49,6 +49,7 @@ class LevelEditorInformation: RenderableEntity {
             levelEditorModeText.baseline = .top
             canvas.render(FillStyle(color: Color(.black)), levelEditorModeText)
 
+            
             if let level = level() {
                 let solvableText = Text(location: boundingBox.topLeft + Point(x: 5, y: 35),
                                         text: "Solvable: \(level.solvable())",
@@ -65,6 +66,7 @@ class LevelEditorInformation: RenderableEntity {
                 case .wall: specialTileTypeString = "wall"
                 case .directionShift: specialTileTypeString = "directionShift"
                 case .portal: specialTileTypeString = "portal"
+                case .sticky: specialTileTypeString = "sticky"
                 }
             } else {
                 specialTileTypeString = "N/A"

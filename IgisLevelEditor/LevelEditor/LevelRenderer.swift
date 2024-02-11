@@ -140,6 +140,7 @@ class LevelRenderer: RenderableEntity {
             case .wall: return Color(.black)
             case .directionShift: return Color(.orange)
             case .portal: return Color(.lightblue)
+            case .sticky: return Color(.lightgreen)
             }
         }
         switch tile.tileState {
