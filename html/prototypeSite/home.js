@@ -8,8 +8,8 @@ const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engi
 
 var scene;
 
-const debug = document.getElementById("debug");
-debug.textContent = textures.concat('.bg_1.png');
+console.log(textures.concat('.bg_1.png'))
+console.log(assets)
 
 function createScene(level){
     // Creates a basic Babylon Scene object
