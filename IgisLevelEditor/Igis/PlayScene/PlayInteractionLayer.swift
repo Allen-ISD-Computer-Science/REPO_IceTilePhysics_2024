@@ -42,7 +42,7 @@ class PlayInteractionLayer: Layer, KeyDownHandler {
           "ArrowLeft":.left,
           "ArrowRight":.right
         ]
-        if let direction = arrowKeyToDirection[key] {
+        if let direction = arrowKeyToDirection[key], player.currentSlide == nil {
             player.slide(direction)
         }
     }
