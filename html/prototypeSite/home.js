@@ -24,12 +24,60 @@ function createScene(level){
     const ground = BABYLON.MeshBuilder.CreateGround("ground",     { width: 6, height: 6 }, scene);
     const tex = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("myUI");
 
+    // if level is levels, display level select screen
     if (level == "levels") {
 	var bg = new BABYLON.GUI.Image(textures.concat('.bg_1.png'))
 	bg.width = canvas.width
 	bg.height = canvas.height
 	
 	tex.addControl(bg);	
+
+    //defining the grid
+    const grid = new BABYLON.GUI.Grid();
+
+    grid.height = 0.8;
+    grid.width = 0.8;
+// initilizing the grid with its first row
+    grid.addRowDefinition(100, true)
+
+// lc = level count, will hold the number of levels needing to be displayed
+    var lc = 20;
+    var column = 0;
+    let columnLimit = 6
+    var row = 0;
+    var rects = {}
+
+    //loops through each level, makes a new rectangle for each
+    for (i = 0; i < lc; i++) {
+        var rect = new BABYLON.GUI.Rectangle();
+        var color = "blue"
+        if (i % 2 == 0) {
+            color = "red";
+        }
+
+        rect.background = color;
+        rect.thickness = 0;
+        rect.paddingBottom = '15px';
+        rect.paddingRight = '15px';
+        rect.paddingTop = '15px';
+        rect.paddingLeft = '15px';
+        rect.width = '100px'
+        rect.height = '100px'
+        
+        
+
+        if (column < columnLimit) {
+            grid.addColumnDefinition(100, true);
+        } else {
+            grid.addRowDefinition(100, true)
+            row++;
+            column = 0;
+        }
+
+        grid.addControl(rect, row, column);
+        column++;
+    }
+    tex.addControl(grid);
     }
 
     return scene;
