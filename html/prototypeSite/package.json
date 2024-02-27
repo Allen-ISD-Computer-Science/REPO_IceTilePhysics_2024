@@ -1,0 +1,14 @@
+{
+  "name": "repo_icetilephysics_2024",
+  "version": "1.0.0",
+  "description": "Our game is designed to redefine the puzzle genre, offering an immersive 3D environment that challenges and delights players aged 8 and above. At its core, the game aims to craft engaging, dynamic puzzles that stimulate both the mind and the senses, ensuring a unique and enjoyable user experience. We stand out with our innovative 3D gameplay, enhancing puzzle complexity and player engagement.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
