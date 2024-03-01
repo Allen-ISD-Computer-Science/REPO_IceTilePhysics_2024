@@ -89,6 +89,7 @@ class LevelEditorInterface: RenderableEntity, MouseDownHandler {
             }
             if playTestCampaignRectButton.containment(target: globalLocation).contains(.containedFully) {
                 var campaignLevels = [(worldInt: Int, levelInt: Int, level: Level)]()
+                var fileNames = [String]()
                 for (fileIndex, fileName) in controlPanel().fileViewer.fileNames.enumerated() {
                     let campaignLevelIntegers = String(fileName.deletingPathExtension).split(separator: "-")
                     guard campaignLevelIntegers.count == 2,
@@ -99,9 +100,12 @@ class LevelEditorInterface: RenderableEntity, MouseDownHandler {
                         continue
                     }
                     campaignLevels.append((worldInt: worldInt, levelInt: levelInt, level: controlPanel().fileViewer.levels[fileIndex]))
+                    fileNames.append(String(fileName))
                 }
-                campaignLevels.sort(by: { ($0.worldInt, $0.levelInt) < ($1.worldInt, $1.levelInt) })
-                shellDirector().play(levelList: campaignLevels.map { $0.level.emptyLevel() })
+                let combined = zip(campaignLevels, fileNames).sorted(by: { ($0.0.worldInt, $0.0.levelInt) < ($1.0.worldInt, $1.0.levelInt) })
+                
+                
+                shellDirector().play(fileNameList: combined.map { $0.1 }, levelList: combined.map { $0.0.level.emptyLevel() })
                 director.transitionToNextScene()
             }
         }

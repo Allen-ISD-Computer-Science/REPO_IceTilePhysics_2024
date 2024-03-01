@@ -20,10 +20,12 @@ class PlayScene: Scene {
         insert(layer: backgroundLayer, at: .back)        
     }
 
-    init(levelList: [Level]) {
+    init(fileNameList: [String]? = nil, levelList: [Level]) {
         guard !levelList.isEmpty else {
             fatalError("Cannot initialize PlayScene with empty LevelList")
         }
+        self.fileNameList = fileNameList
+        self.fileName = self.fileNameList?.removeFirst()
         self.levelList = levelList
         self.level = self.levelList!.removeFirst()
         super.init(name: "PlayScene")
@@ -49,6 +51,7 @@ class PlayScene: Scene {
             director.transitionToNextScene()
         } else {
             level = levelList!.removeFirst()
+            fileName = fileNameList?.removeFirst()
             backgroundLayer.background.totalInactive = backgroundLayer.background.calculateTotalInactive(level: level)
             interactionLayer.player.levelGraph = level.levelGraph
             interactionLayer.player.location = level.startingPosition
