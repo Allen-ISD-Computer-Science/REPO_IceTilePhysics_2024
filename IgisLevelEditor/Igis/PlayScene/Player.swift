@@ -5,7 +5,7 @@ import LevelGeneration
 class Player: RenderableEntity {
 
     var location: LevelPoint
-    let levelGraph: Graph
+    var levelGraph: Graph
     var currentSlide: Slide? = nil
     var currentFrame: Int? = nil
     
@@ -27,9 +27,8 @@ class Player: RenderableEntity {
     }
 
     func slide(_ direction: Direction) {
-        let playerState = PlayerState(point: location, direction: direction)
-        let possibleSlides = levelGraph.slides.filter { $0.originPlayerState == playerState }
-        guard possibleSlides.count == 1, let slide = possibleSlides.first else {
+        let playerState = SlideState(point: location, direction: direction)
+        guard let slide = levelGraph.originToSlide[playerState] else {
             return
         }
         currentSlide = slide
@@ -40,7 +39,7 @@ class Player: RenderableEntity {
     override func render(canvas: Canvas) {
         if currentSlide != nil,
            currentFrame != nil {
-            let animationPoints = currentSlide!.intermediatePlayerStates.map { $0.point } + [currentSlide!.destinationPlayerState.point]
+            let animationPoints = currentSlide!.intermediates.map { $0.point } + [currentSlide!.destination.point]
             if currentFrame! < animationPoints.count {
                 location = animationPoints[currentFrame!]
             } else {

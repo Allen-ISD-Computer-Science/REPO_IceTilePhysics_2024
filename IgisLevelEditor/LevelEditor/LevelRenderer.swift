@@ -143,13 +143,13 @@ class LevelRenderer: RenderableEntity {
             case .sticky: return Color(.lightgreen)
             }
         }
-        switch tile.tileState {
-        case .active:
+        switch tile.tileStatus {
+        case .paintable:
             if let color = paintColor {
                 return color
             }
             return Color(.yellow)
-        case .inactive: return Color(.gray)
+        case .nonPaintable: return Color(.gray)
         case .critical:
             if let color = paintColor {
                 return color

@@ -642,16 +642,8 @@
       "x" : 4
     },
     {
-      "exit_two" : {
-        "left" : {
-
-        }
-      },
-      "exit_one" : {
-        "up" : {
-
-        }
-      }
+      "exit_two" : "left",
+      "exit_one" : "up"
     }
   ]
 }

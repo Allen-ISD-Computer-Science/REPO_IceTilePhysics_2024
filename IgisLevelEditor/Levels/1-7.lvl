@@ -1,9 +1,1400 @@
 {
+  "level_graph" : {
+    "origin_to_slide" : [
+      {
+        "point" : {
+          "face" : 0,
+          "y" : 3,
+          "x" : 5
+        },
+        "direction" : "down"
+      },
+      {
+        "intermediates" : [
+          {
+            "point" : {
+              "face" : 0,
+              "y" : 4,
+              "x" : 5
+            },
+            "direction" : "down"
+          }
+        ],
+        "origin" : {
+          "point" : {
+            "x" : 5,
+            "face" : 0,
+            "y" : 3
+          },
+          "direction" : "down"
+        },
+        "destination" : {
+          "point" : {
+            "x" : 5,
+            "face" : 0,
+            "y" : 5
+          },
+          "direction" : "down"
+        }
+      },
+      {
+        "point" : {
+          "x" : 1,
+          "y" : 2,
+          "face" : 0
+        },
+        "direction" : "up"
+      },
+      {
+        "intermediates" : [
+
+        ],
+        "origin" : {
+          "point" : {
+            "x" : 1,
+            "face" : 0,
+            "y" : 2
+          },
+          "direction" : "up"
+        },
+        "destination" : {
+          "point" : {
+            "face" : 0,
+            "y" : 1,
+            "x" : 1
+          },
+          "direction" : "up"
+        }
+      },
+      {
+        "point" : {
+          "y" : 3,
+          "x" : 3,
+          "face" : 0
+        },
+        "direction" : "right"
+      },
+      {
+        "intermediates" : [
+          {
+            "direction" : "right",
+            "point" : {
+              "y" : 3,
+              "face" : 0,
+              "x" : 4
+            }
+          }
+        ],
+        "origin" : {
+          "direction" : "right",
+          "point" : {
+            "x" : 3,
+            "face" : 0,
+            "y" : 3
+          }
+        },
+        "destination" : {
+          "direction" : "right",
+          "point" : {
+            "face" : 0,
+            "x" : 5,
+            "y" : 3
+          }
+        }
+      },
+      {
+        "point" : {
+          "x" : 5,
+          "y" : 3,
+          "face" : 0
+        },
+        "direction" : "up"
+      },
+      {
+        "intermediates" : [
+          {
+            "direction" : "up",
+            "point" : {
+              "x" : 5,
+              "face" : 0,
+              "y" : 2
+            }
+          }
+        ],
+        "origin" : {
+          "direction" : "up",
+          "point" : {
+            "x" : 5,
+            "y" : 3,
+            "face" : 0
+          }
+        },
+        "destination" : {
+          "direction" : "up",
+          "point" : {
+            "y" : 1,
+            "x" : 5,
+            "face" : 0
+          }
+        }
+      },
+      {
+        "point" : {
+          "face" : 0,
+          "y" : 1,
+          "x" : 4
+        },
+        "direction" : "right"
+      },
+      {
+        "intermediates" : [
+
+        ],
+        "origin" : {
+          "point" : {
+            "x" : 4,
+            "y" : 1,
+            "face" : 0
+          },
+          "direction" : "right"
+        },
+        "destination" : {
+          "point" : {
+            "face" : 0,
+            "y" : 1,
+            "x" : 5
+          },
+          "direction" : "right"
+        }
+      },
+      {
+        "point" : {
+          "face" : 0,
+          "y" : 3,
+          "x" : 3
+        },
+        "direction" : "up"
+      },
+      {
+        "intermediates" : [
+
+        ],
+        "origin" : {
+          "point" : {
+            "x" : 3,
+            "y" : 3,
+            "face" : 0
+          },
+          "direction" : "up"
+        },
+        "destination" : {
+          "point" : {
+            "x" : 3,
+            "y" : 2,
+            "face" : 0
+          },
+          "direction" : "up"
+        }
+      },
+      {
+        "point" : {
+          "face" : 0,
+          "x" : 3,
+          "y" : 3
+        },
+        "direction" : "down"
+      },
+      {
+        "intermediates" : [
+          {
+            "direction" : "down",
+            "point" : {
+              "x" : 3,
+              "face" : 0,
+              "y" : 4
+            }
+          }
+        ],
+        "origin" : {
+          "direction" : "down",
+          "point" : {
+            "y" : 3,
+            "x" : 3,
+            "face" : 0
+          }
+        },
+        "destination" : {
+          "point" : {
+            "y" : 5,
+            "x" : 3,
+            "face" : 0
+          },
+          "direction" : "down"
+        }
+      },
+      {
+        "point" : {
+          "y" : 2,
+          "x" : 3,
+          "face" : 0
+        },
+        "direction" : "right"
+      },
+      {
+        "intermediates" : [
+          {
+            "point" : {
+              "y" : 2,
+              "x" : 4,
+              "face" : 0
+            },
+            "direction" : "right"
+          }
+        ],
+        "origin" : {
+          "point" : {
+            "face" : 0,
+            "x" : 3,
+            "y" : 2
+          },
+          "direction" : "right"
+        },
+        "destination" : {
+          "point" : {
+            "face" : 0,
+            "x" : 5,
+            "y" : 2
+          },
+          "direction" : "right"
+        }
+      },
+      {
+        "point" : {
+          "face" : 0,
+          "x" : 4,
+          "y" : 1
+        },
+        "direction" : "down"
+      },
+      {
+        "intermediates" : [
+          {
+            "direction" : "down",
+            "point" : {
+              "y" : 2,
+              "x" : 4,
+              "face" : 0
+            }
+          }
+        ],
+        "origin" : {
+          "direction" : "down",
+          "point" : {
+            "face" : 0,
+            "y" : 1,
+            "x" : 4
+          }
+        },
+        "destination" : {
+          "direction" : "down",
+          "point" : {
+            "y" : 3,
+            "x" : 4,
+            "face" : 0
+          }
+        }
+      },
+      {
+        "point" : {
+          "face" : 0,
+          "y" : 3,
+          "x" : 4
+        },
+        "direction" : "right"
+      },
+      {
+        "intermediates" : [
+
+        ],
+        "origin" : {
+          "point" : {
+            "x" : 4,
+            "face" : 0,
+            "y" : 3
+          },
+          "direction" : "right"
+        },
+        "destination" : {
+          "point" : {
+            "x" : 5,
+            "y" : 3,
+            "face" : 0
+          },
+          "direction" : "right"
+        }
+      },
+      {
+        "point" : {
+          "x" : 2,
+          "y" : 1,
+          "face" : 0
+        },
+        "direction" : "left"
+      },
+      {
+        "intermediates" : [
+
+        ],
+        "origin" : {
+          "point" : {
+            "face" : 0,
+            "y" : 1,
+            "x" : 2
+          },
+          "direction" : "left"
+        },
+        "destination" : {
+          "point" : {
+            "y" : 1,
+            "x" : 1,
+            "face" : 0
+          },
+          "direction" : "left"
+        }
+      },
+      {
+        "point" : {
+          "x" : 2,
+          "y" : 2,
+          "face" : 0
+        },
+        "direction" : "left"
+      },
+      {
+        "intermediates" : [
+
+        ],
+        "origin" : {
+          "direction" : "left",
+          "point" : {
+            "x" : 2,
+            "face" : 0,
+            "y" : 2
+          }
+        },
+        "destination" : {
+          "direction" : "left",
+          "point" : {
+            "x" : 1,
+            "face" : 0,
+            "y" : 2
+          }
+        }
+      },
+      {
+        "point" : {
+          "face" : 0,
+          "y" : 3,
+          "x" : 4
+        },
+        "direction" : "left"
+      },
+      {
+        "intermediates" : [
+
+        ],
+        "origin" : {
+          "direction" : "left",
+          "point" : {
+            "y" : 3,
+            "x" : 4,
+            "face" : 0
+          }
+        },
+        "destination" : {
+          "direction" : "left",
+          "point" : {
+            "y" : 3,
+            "face" : 0,
+            "x" : 3
+          }
+        }
+      },
+      {
+        "point" : {
+          "y" : 2,
+          "face" : 0,
+          "x" : 5
+        },
+        "direction" : "left"
+      },
+      {
+        "intermediates" : [
+          {
+            "direction" : "left",
+            "point" : {
+              "x" : 4,
+              "y" : 2,
+              "face" : 0
+            }
+          },
+          {
+            "direction" : "left",
+            "point" : {
+              "y" : 2,
+              "x" : 3,
+              "face" : 0
+            }
+          },
+          {
+            "direction" : "left",
+            "point" : {
+              "face" : 0,
+              "x" : 2,
+              "y" : 2
+            }
+          }
+        ],
+        "origin" : {
+          "direction" : "left",
+          "point" : {
+            "y" : 2,
+            "x" : 5,
+            "face" : 0
+          }
+        },
+        "destination" : {
+          "direction" : "left",
+          "point" : {
+            "y" : 2,
+            "face" : 0,
+            "x" : 1
+          }
+        }
+      },
+      {
+        "point" : {
+          "x" : 3,
+          "y" : 5,
+          "face" : 0
+        },
+        "direction" : "left"
+      },
+      {
+        "intermediates" : [
+          {
+            "point" : {
+              "face" : 0,
+              "x" : 2,
+              "y" : 5
+            },
+            "direction" : "left"
+          }
+        ],
+        "origin" : {
+          "point" : {
+            "x" : 3,
+            "face" : 0,
+            "y" : 5
+          },
+          "direction" : "left"
+        },
+        "destination" : {
+          "point" : {
+            "y" : 5,
+            "face" : 0,
+            "x" : 1
+          },
+          "direction" : "left"
+        }
+      },
+      {
+        "point" : {
+          "face" : 0,
+          "x" : 5,
+          "y" : 2
+        },
+        "direction" : "up"
+      },
+      {
+        "intermediates" : [
+
+        ],
+        "origin" : {
+          "point" : {
+            "face" : 0,
+            "y" : 2,
+            "x" : 5
+          },
+          "direction" : "up"
+        },
+        "destination" : {
+          "point" : {
+            "face" : 0,
+            "y" : 1,
+            "x" : 5
+          },
+          "direction" : "up"
+        }
+      },
+      {
+        "point" : {
+          "y" : 5,
+          "x" : 1,
+          "face" : 0
+        },
+        "direction" : "up"
+      },
+      {
+        "intermediates" : [
+          {
+            "point" : {
+              "x" : 1,
+              "face" : 0,
+              "y" : 4
+            },
+            "direction" : "up"
+          },
+          {
+            "point" : {
+              "y" : 3,
+              "x" : 1,
+              "face" : 0
+            },
+            "direction" : "up"
+          },
+          {
+            "point" : {
+              "x" : 1,
+              "y" : 2,
+              "face" : 0
+            },
+            "direction" : "up"
+          }
+        ],
+        "origin" : {
+          "point" : {
+            "x" : 1,
+            "y" : 5,
+            "face" : 0
+          },
+          "direction" : "up"
+        },
+        "destination" : {
+          "point" : {
+            "face" : 0,
+            "y" : 1,
+            "x" : 1
+          },
+          "direction" : "up"
+        }
+      },
+      {
+        "point" : {
+          "face" : 0,
+          "y" : 5,
+          "x" : 3
+        },
+        "direction" : "up"
+      },
+      {
+        "intermediates" : [
+          {
+            "direction" : "up",
+            "point" : {
+              "x" : 3,
+              "face" : 0,
+              "y" : 4
+            }
+          },
+          {
+            "direction" : "up",
+            "point" : {
+              "face" : 0,
+              "y" : 3,
+              "x" : 3
+            }
+          }
+        ],
+        "origin" : {
+          "direction" : "up",
+          "point" : {
+            "y" : 5,
+            "x" : 3,
+            "face" : 0
+          }
+        },
+        "destination" : {
+          "direction" : "up",
+          "point" : {
+            "x" : 3,
+            "y" : 2,
+            "face" : 0
+          }
+        }
+      },
+      {
+        "point" : {
+          "y" : 2,
+          "face" : 0,
+          "x" : 3
+        },
+        "direction" : "down"
+      },
+      {
+        "intermediates" : [
+          {
+            "point" : {
+              "y" : 3,
+              "x" : 3,
+              "face" : 0
+            },
+            "direction" : "down"
+          },
+          {
+            "point" : {
+              "y" : 4,
+              "face" : 0,
+              "x" : 3
+            },
+            "direction" : "down"
+          }
+        ],
+        "origin" : {
+          "point" : {
+            "face" : 0,
+            "y" : 2,
+            "x" : 3
+          },
+          "direction" : "down"
+        },
+        "destination" : {
+          "point" : {
+            "x" : 3,
+            "y" : 5,
+            "face" : 0
+          },
+          "direction" : "down"
+        }
+      },
+      {
+        "point" : {
+          "x" : 1,
+          "y" : 1,
+          "face" : 0
+        },
+        "direction" : "down"
+      },
+      {
+        "intermediates" : [
+          {
+            "direction" : "down",
+            "point" : {
+              "x" : 1,
+              "face" : 0,
+              "y" : 2
+            }
+          },
+          {
+            "direction" : "down",
+            "point" : {
+              "y" : 3,
+              "face" : 0,
+              "x" : 1
+            }
+          },
+          {
+            "direction" : "down",
+            "point" : {
+              "face" : 0,
+              "y" : 4,
+              "x" : 1
+            }
+          }
+        ],
+        "origin" : {
+          "direction" : "down",
+          "point" : {
+            "face" : 0,
+            "x" : 1,
+            "y" : 1
+          }
+        },
+        "destination" : {
+          "direction" : "down",
+          "point" : {
+            "face" : 0,
+            "x" : 1,
+            "y" : 5
+          }
+        }
+      },
+      {
+        "point" : {
+          "x" : 5,
+          "face" : 0,
+          "y" : 1
+        },
+        "direction" : "down"
+      },
+      {
+        "intermediates" : [
+          {
+            "point" : {
+              "x" : 5,
+              "face" : 0,
+              "y" : 2
+            },
+            "direction" : "down"
+          },
+          {
+            "point" : {
+              "y" : 3,
+              "x" : 5,
+              "face" : 0
+            },
+            "direction" : "down"
+          },
+          {
+            "point" : {
+              "x" : 5,
+              "y" : 4,
+              "face" : 0
+            },
+            "direction" : "down"
+          }
+        ],
+        "origin" : {
+          "point" : {
+            "y" : 1,
+            "x" : 5,
+            "face" : 0
+          },
+          "direction" : "down"
+        },
+        "destination" : {
+          "point" : {
+            "x" : 5,
+            "face" : 0,
+            "y" : 5
+          },
+          "direction" : "down"
+        }
+      },
+      {
+        "point" : {
+          "x" : 1,
+          "y" : 2,
+          "face" : 0
+        },
+        "direction" : "down"
+      },
+      {
+        "intermediates" : [
+          {
+            "point" : {
+              "x" : 1,
+              "face" : 0,
+              "y" : 3
+            },
+            "direction" : "down"
+          },
+          {
+            "point" : {
+              "face" : 0,
+              "y" : 4,
+              "x" : 1
+            },
+            "direction" : "down"
+          }
+        ],
+        "origin" : {
+          "point" : {
+            "face" : 0,
+            "y" : 2,
+            "x" : 1
+          },
+          "direction" : "down"
+        },
+        "destination" : {
+          "point" : {
+            "y" : 5,
+            "face" : 0,
+            "x" : 1
+          },
+          "direction" : "down"
+        }
+      },
+      {
+        "point" : {
+          "x" : 1,
+          "y" : 1,
+          "face" : 0
+        },
+        "direction" : "right"
+      },
+      {
+        "intermediates" : [
+
+        ],
+        "origin" : {
+          "point" : {
+            "x" : 1,
+            "face" : 0,
+            "y" : 1
+          },
+          "direction" : "right"
+        },
+        "destination" : {
+          "point" : {
+            "x" : 2,
+            "face" : 0,
+            "y" : 1
+          },
+          "direction" : "right"
+        }
+      },
+      {
+        "point" : {
+          "x" : 2,
+          "y" : 2,
+          "face" : 0
+        },
+        "direction" : "up"
+      },
+      {
+        "intermediates" : [
+
+        ],
+        "origin" : {
+          "point" : {
+            "x" : 2,
+            "face" : 0,
+            "y" : 2
+          },
+          "direction" : "up"
+        },
+        "destination" : {
+          "point" : {
+            "face" : 0,
+            "y" : 1,
+            "x" : 2
+          },
+          "direction" : "up"
+        }
+      },
+      {
+        "point" : {
+          "y" : 1,
+          "face" : 0,
+          "x" : 5
+        },
+        "direction" : "left"
+      },
+      {
+        "intermediates" : [
+
+        ],
+        "origin" : {
+          "direction" : "left",
+          "point" : {
+            "face" : 0,
+            "x" : 5,
+            "y" : 1
+          }
+        },
+        "destination" : {
+          "direction" : "left",
+          "point" : {
+            "x" : 4,
+            "y" : 1,
+            "face" : 0
+          }
+        }
+      },
+      {
+        "point" : {
+          "face" : 0,
+          "x" : 4,
+          "y" : 3
+        },
+        "direction" : "up"
+      },
+      {
+        "intermediates" : [
+          {
+            "point" : {
+              "y" : 2,
+              "face" : 0,
+              "x" : 4
+            },
+            "direction" : "up"
+          }
+        ],
+        "origin" : {
+          "point" : {
+            "x" : 4,
+            "y" : 3,
+            "face" : 0
+          },
+          "direction" : "up"
+        },
+        "destination" : {
+          "point" : {
+            "face" : 0,
+            "y" : 1,
+            "x" : 4
+          },
+          "direction" : "up"
+        }
+      },
+      {
+        "point" : {
+          "face" : 0,
+          "y" : 5,
+          "x" : 5
+        },
+        "direction" : "left"
+      },
+      {
+        "intermediates" : [
+          {
+            "direction" : "left",
+            "point" : {
+              "face" : 0,
+              "x" : 4,
+              "y" : 5
+            }
+          },
+          {
+            "direction" : "left",
+            "point" : {
+              "face" : 0,
+              "x" : 3,
+              "y" : 5
+            }
+          },
+          {
+            "direction" : "left",
+            "point" : {
+              "face" : 0,
+              "y" : 5,
+              "x" : 2
+            }
+          }
+        ],
+        "origin" : {
+          "direction" : "left",
+          "point" : {
+            "face" : 0,
+            "y" : 5,
+            "x" : 5
+          }
+        },
+        "destination" : {
+          "direction" : "left",
+          "point" : {
+            "face" : 0,
+            "x" : 1,
+            "y" : 5
+          }
+        }
+      },
+      {
+        "point" : {
+          "y" : 2,
+          "face" : 0,
+          "x" : 3
+        },
+        "direction" : "left"
+      },
+      {
+        "intermediates" : [
+          {
+            "point" : {
+              "y" : 2,
+              "face" : 0,
+              "x" : 2
+            },
+            "direction" : "left"
+          }
+        ],
+        "origin" : {
+          "point" : {
+            "face" : 0,
+            "y" : 2,
+            "x" : 3
+          },
+          "direction" : "left"
+        },
+        "destination" : {
+          "point" : {
+            "y" : 2,
+            "face" : 0,
+            "x" : 1
+          },
+          "direction" : "left"
+        }
+      },
+      {
+        "point" : {
+          "face" : 0,
+          "y" : 5,
+          "x" : 3
+        },
+        "direction" : "right"
+      },
+      {
+        "intermediates" : [
+          {
+            "point" : {
+              "face" : 0,
+              "x" : 4,
+              "y" : 5
+            },
+            "direction" : "right"
+          }
+        ],
+        "origin" : {
+          "point" : {
+            "face" : 0,
+            "x" : 3,
+            "y" : 5
+          },
+          "direction" : "right"
+        },
+        "destination" : {
+          "point" : {
+            "x" : 5,
+            "y" : 5,
+            "face" : 0
+          },
+          "direction" : "right"
+        }
+      },
+      {
+        "point" : {
+          "x" : 5,
+          "face" : 0,
+          "y" : 2
+        },
+        "direction" : "down"
+      },
+      {
+        "intermediates" : [
+          {
+            "point" : {
+              "face" : 0,
+              "y" : 3,
+              "x" : 5
+            },
+            "direction" : "down"
+          },
+          {
+            "point" : {
+              "face" : 0,
+              "y" : 4,
+              "x" : 5
+            },
+            "direction" : "down"
+          }
+        ],
+        "origin" : {
+          "point" : {
+            "x" : 5,
+            "y" : 2,
+            "face" : 0
+          },
+          "direction" : "down"
+        },
+        "destination" : {
+          "point" : {
+            "y" : 5,
+            "face" : 0,
+            "x" : 5
+          },
+          "direction" : "down"
+        }
+      },
+      {
+        "point" : {
+          "x" : 1,
+          "face" : 0,
+          "y" : 2
+        },
+        "direction" : "right"
+      },
+      {
+        "intermediates" : [
+          {
+            "point" : {
+              "x" : 2,
+              "face" : 0,
+              "y" : 2
+            },
+            "direction" : "right"
+          },
+          {
+            "point" : {
+              "x" : 3,
+              "y" : 2,
+              "face" : 0
+            },
+            "direction" : "right"
+          },
+          {
+            "point" : {
+              "face" : 0,
+              "x" : 4,
+              "y" : 2
+            },
+            "direction" : "right"
+          }
+        ],
+        "origin" : {
+          "point" : {
+            "x" : 1,
+            "face" : 0,
+            "y" : 2
+          },
+          "direction" : "right"
+        },
+        "destination" : {
+          "point" : {
+            "face" : 0,
+            "y" : 2,
+            "x" : 5
+          },
+          "direction" : "right"
+        }
+      },
+      {
+        "point" : {
+          "y" : 3,
+          "face" : 0,
+          "x" : 5
+        },
+        "direction" : "left"
+      },
+      {
+        "intermediates" : [
+          {
+            "direction" : "left",
+            "point" : {
+              "y" : 3,
+              "x" : 4,
+              "face" : 0
+            }
+          }
+        ],
+        "origin" : {
+          "direction" : "left",
+          "point" : {
+            "face" : 0,
+            "x" : 5,
+            "y" : 3
+          }
+        },
+        "destination" : {
+          "direction" : "left",
+          "point" : {
+            "x" : 3,
+            "face" : 0,
+            "y" : 3
+          }
+        }
+      },
+      {
+        "point" : {
+          "face" : 0,
+          "y" : 5,
+          "x" : 5
+        },
+        "direction" : "up"
+      },
+      {
+        "intermediates" : [
+          {
+            "direction" : "up",
+            "point" : {
+              "x" : 5,
+              "y" : 4,
+              "face" : 0
+            }
+          },
+          {
+            "point" : {
+              "x" : 5,
+              "face" : 0,
+              "y" : 3
+            },
+            "direction" : "up"
+          },
+          {
+            "point" : {
+              "face" : 0,
+              "y" : 2,
+              "x" : 5
+            },
+            "direction" : "up"
+          }
+        ],
+        "origin" : {
+          "direction" : "up",
+          "point" : {
+            "x" : 5,
+            "y" : 5,
+            "face" : 0
+          }
+        },
+        "destination" : {
+          "direction" : "up",
+          "point" : {
+            "x" : 5,
+            "y" : 1,
+            "face" : 0
+          }
+        }
+      },
+      {
+        "point" : {
+          "x" : 2,
+          "y" : 2,
+          "face" : 0
+        },
+        "direction" : "right"
+      },
+      {
+        "intermediates" : [
+          {
+            "point" : {
+              "face" : 0,
+              "y" : 2,
+              "x" : 3
+            },
+            "direction" : "right"
+          },
+          {
+            "point" : {
+              "y" : 2,
+              "x" : 4,
+              "face" : 0
+            },
+            "direction" : "right"
+          }
+        ],
+        "origin" : {
+          "point" : {
+            "x" : 2,
+            "y" : 2,
+            "face" : 0
+          },
+          "direction" : "right"
+        },
+        "destination" : {
+          "point" : {
+            "face" : 0,
+            "y" : 2,
+            "x" : 5
+          },
+          "direction" : "right"
+        }
+      },
+      {
+        "point" : {
+          "y" : 5,
+          "face" : 0,
+          "x" : 1
+        },
+        "direction" : "right"
+      },
+      {
+        "intermediates" : [
+          {
+            "direction" : "right",
+            "point" : {
+              "y" : 5,
+              "face" : 0,
+              "x" : 2
+            }
+          },
+          {
+            "direction" : "right",
+            "point" : {
+              "face" : 0,
+              "y" : 5,
+              "x" : 3
+            }
+          },
+          {
+            "direction" : "right",
+            "point" : {
+              "face" : 0,
+              "x" : 4,
+              "y" : 5
+            }
+          }
+        ],
+        "origin" : {
+          "direction" : "right",
+          "point" : {
+            "face" : 0,
+            "x" : 1,
+            "y" : 5
+          }
+        },
+        "destination" : {
+          "direction" : "right",
+          "point" : {
+            "face" : 0,
+            "y" : 5,
+            "x" : 5
+          }
+        }
+      },
+      {
+        "point" : {
+          "y" : 1,
+          "x" : 2,
+          "face" : 0
+        },
+        "direction" : "down"
+      },
+      {
+        "intermediates" : [
+
+        ],
+        "origin" : {
+          "direction" : "down",
+          "point" : {
+            "x" : 2,
+            "y" : 1,
+            "face" : 0
+          }
+        },
+        "destination" : {
+          "direction" : "down",
+          "point" : {
+            "x" : 2,
+            "y" : 2,
+            "face" : 0
+          }
+        }
+      }
+    ]
+  },
+  "direction_shift_tile_data" : [
+
+  ],
   "player_point" : {
     "x" : 1,
-    "y" : 1,
-    "face" : 0
+    "face" : 0,
+    "y" : 1
   },
+  "portal_tile_data" : [
+
+  ],
+  "version" : "3.0.0",
   "face_tiles" : [
     [
       [
@@ -21,15 +1412,6 @@
         0,
         0,
         0,
-        1,
-        1
-      ],
-      [
-        1,
-        0,
-        0,
-        0,
-        0,
         0,
         1
       ],
@@ -38,16 +1420,7 @@
         0,
         0,
         1,
-        0,
-        0,
-        1
-      ],
-      [
         1,
-        0,
-        0,
-        0,
-        0,
         0,
         1
       ],
@@ -57,7 +1430,25 @@
         0,
         0,
         0,
+        0,
+        1
+      ],
+      [
         1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
         1
       ],
       [
@@ -395,6 +1786,5 @@
         1
       ]
     ]
-  ],
-  "version" : "1.0.0"
+  ]
 }

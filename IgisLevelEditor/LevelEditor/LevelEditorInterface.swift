@@ -12,6 +12,7 @@ class LevelEditorInterface: RenderableEntity, MouseDownHandler {
     var directionWheel: DirectionWheel!
     var setStartingPositionRectButton: Rect!
     var playTestRectButton: Rect!
+    var playTestCampaignRectButton: Rect!
     
     init(boundingBox: Rect) {
         self.boundingBox = boundingBox
@@ -65,7 +66,7 @@ class LevelEditorInterface: RenderableEntity, MouseDownHandler {
                     levelEditor().errorConsole.throwError("Must select a tile before setting starting position.")
                     return
                 }
-                guard levelEditor().levelRenderer.level.faceLevels[selectedTilePoint.face.rawValue].tiles[selectedTilePoint.x][selectedTilePoint.y].tileState == .critical else {
+                guard levelEditor().levelRenderer.level.faceLevels[selectedTilePoint.face.rawValue].tiles[selectedTilePoint.x][selectedTilePoint.y].tileStatus == .critical else {
                     // Throw to Error Console
                     levelEditor().errorConsole.throwError("Selected tile must be critical to set starting position.")
                     return
@@ -75,11 +76,32 @@ class LevelEditorInterface: RenderableEntity, MouseDownHandler {
                 return
             }
             if playTestRectButton.containment(target: globalLocation).contains(.containedFully) {
+                guard let level = levelEditor().levelRenderer.level?.emptyLevel() else {
+                    levelEditor().errorConsole.throwError("Must select a Level before attempting to Play Test")
+                    return
+                }
                 var fileName: String? = nil
                 if let activeFileIndex = controlPanel().fileViewer.activeFileIndex {
                     fileName = controlPanel().fileViewer.fileNames[activeFileIndex] as String
                 }
-                shellDirector().play(fileName: fileName, level: levelEditor().levelRenderer.level.emptyLevel())
+                shellDirector().play(fileName: fileName, level: level)
+                director.transitionToNextScene()
+            }
+            if playTestCampaignRectButton.containment(target: globalLocation).contains(.containedFully) {
+                var campaignLevels = [(worldInt: Int, levelInt: Int, level: Level)]()
+                for (fileIndex, fileName) in controlPanel().fileViewer.fileNames.enumerated() {
+                    let campaignLevelIntegers = String(fileName.deletingPathExtension).split(separator: "-")
+                    guard campaignLevelIntegers.count == 2,
+                          let worldIntString = campaignLevelIntegers.first,
+                          let levelIntString = campaignLevelIntegers.last,
+                          let worldInt = Int(worldIntString),
+                          let levelInt = Int(levelIntString) else {
+                        continue
+                    }
+                    campaignLevels.append((worldInt: worldInt, levelInt: levelInt, level: controlPanel().fileViewer.levels[fileIndex]))
+                }
+                campaignLevels.sort(by: { ($0.worldInt, $0.levelInt) < ($1.worldInt, $1.levelInt) })
+                shellDirector().play(levelList: campaignLevels.map { $0.level.emptyLevel() })
                 director.transitionToNextScene()
             }
         }
@@ -109,6 +131,9 @@ class LevelEditorInterface: RenderableEntity, MouseDownHandler {
 
         // Setup Play Test Rect Button
         playTestRectButton = Rect(topLeft: setStartingPositionRectButton.bottomLeft + Point(x: 0, y: 5), size: setStartingPositionRectButton.size)
+
+        // Setup Play Test Campaign Button
+        playTestCampaignRectButton = Rect(topLeft: playTestRectButton.bottomLeft + Point(x: 0, y: 5), size: setStartingPositionRectButton.size)
 
         // Layer
         layer.insert(entity: directionWheel, at: .front)
@@ -157,6 +182,15 @@ class LevelEditorInterface: RenderableEntity, MouseDownHandler {
             playTestText.baseline = .middle
             canvas.render(StrokeStyle(color: Color(.black)), LineWidth(width: 1), Rectangle(rect: playTestRectButton, fillMode: .stroke),
                           FillStyle(color: Color(.black)), playTestText)
+
+            let playTestCampaignText = Text(location: playTestCampaignRectButton.center,
+                                            text: "Play Test Campaign",
+                                            fillMode: .fill)
+            playTestCampaignText.font = "12pt Arial"
+            playTestCampaignText.alignment = .center
+            playTestText.baseline = .middle
+            canvas.render(StrokeStyle(color: Color(.black)), LineWidth(width: 1), Rectangle(rect: playTestCampaignRectButton, fillMode: .stroke),
+                          FillStyle(color: Color(.black)), playTestCampaignText)
 
             updateRender = false
         }

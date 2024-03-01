@@ -13,6 +13,7 @@ class PlayInteractionLayer: Layer, KeyDownHandler {
         let doneButton = Button(labelString: "Done")
         doneButton.clickHandler = onDoneButtonClickHandler
         insert(entity: doneButton, at: .front)
+
     }
 
     func onDoneButtonClickHandler(control: Control, localLocation: Point) {
@@ -20,7 +21,7 @@ class PlayInteractionLayer: Layer, KeyDownHandler {
         shellDirector().edit(fileName: playScene().fileName, level: playScene().level)
         director.transitionToNextScene()
     }
-
+    
     func playScene() -> PlayScene {
         guard let playScene = scene as? PlayScene else {
             fatalError("scene is required to be of type PlayScene for PlayInteractionLayer.")

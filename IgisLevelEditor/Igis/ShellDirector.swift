@@ -15,6 +15,9 @@ class ShellDirector: Director {
     func play(fileName: String? = nil, level: Level) {
         enqueueScene(scene:PlayScene(fileName: fileName, level: level))
     }
+    func play(levelList: [Level]) {
+        enqueueScene(scene: PlayScene(levelList: levelList))
+    }
 
     override func framesPerSecond() -> Int {
         return 30

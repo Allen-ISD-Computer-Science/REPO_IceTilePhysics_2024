@@ -745,16 +745,8 @@
       "x" : 4
     },
     {
-      "exit_one" : {
-        "up" : {
-
-        }
-      },
-      "exit_two" : {
-        "left" : {
-
-        }
-      }
+      "exit_one" : "up",
+      "exit_two" : "left"
     },
     {
       "y" : 4,
@@ -762,16 +754,8 @@
       "x" : 3
     },
     {
-      "exit_one" : {
-        "up" : {
-
-        }
-      },
-      "exit_two" : {
-        "left" : {
-
-        }
-      }
+      "exit_one" :  "up",
+      "exit_two" :  "left"
     },
     {
       "y" : 6,
@@ -779,16 +763,8 @@
       "x" : 5
     },
     {
-      "exit_one" : {
-        "up" : {
-
-        }
-      },
-      "exit_two" : {
-        "left" : {
-
-        }
-      }
+      "exit_one" : "up",
+      "exit_two" : "left"
     },
     {
       "y" : 2,
@@ -796,16 +772,8 @@
       "x" : 1
     },
     {
-      "exit_one" : {
-        "up" : {
-
-        }
-      },
-      "exit_two" : {
-        "left" : {
-
-        }
-      }
+      "exit_one" : "up",
+      "exit_two" : "left"
     },
     {
       "y" : 6,
@@ -813,16 +781,8 @@
       "x" : 1
     },
     {
-      "exit_one" : {
-        "up" : {
-
-        }
-      },
-      "exit_two" : {
-        "left" : {
-
-        }
-      }
+      "exit_one" : "up",
+      "exit_two" : "left"
     },
     {
       "y" : 1,
@@ -830,16 +790,8 @@
       "x" : 6
     },
     {
-      "exit_one" : {
-        "up" : {
-
-        }
-      },
-      "exit_two" : {
-        "left" : {
-
-        }
-      }
+      "exit_one" : "up",
+      "exit_two" : "left"
     },
     {
       "y" : 3,
@@ -847,16 +799,8 @@
       "x" : 6
     },
     {
-      "exit_one" : {
-        "up" : {
-
-        }
-      },
-      "exit_two" : {
-        "left" : {
-
-        }
-      }
+      "exit_one" : "up",
+      "exit_two" : "left"
     },
     {
       "y" : 2,
@@ -864,16 +808,8 @@
       "x" : 2
     },
     {
-      "exit_one" : {
-        "up" : {
-
-        }
-      },
-      "exit_two" : {
-        "left" : {
-
-        }
-      }
+      "exit_one" : "up",
+      "exit_two" : "left"
     },
     {
       "y" : 1,
@@ -881,16 +817,8 @@
       "x" : 8
     },
     {
-      "exit_one" : {
-        "up" : {
-
-        }
-      },
-      "exit_two" : {
-        "left" : {
-
-        }
-      }
+      "exit_one" : "up",
+      "exit_two" : "left"
     },
     {
       "y" : 8,
@@ -898,16 +826,8 @@
       "face" : 2
     },
     {
-      "exit_one" : {
-        "up" : {
-
-        }
-      },
-      "exit_two" : {
-        "left" : {
-
-        }
-      }
+      "exit_one" : "up",
+      "exit_two" : "left"
     },
     {
       "y" : 7,
@@ -915,16 +835,8 @@
       "face" : 2
     },
     {
-      "exit_two" : {
-        "left" : {
-
-        }
-      },
-      "exit_one" : {
-        "up" : {
-
-        }
-      }
+      "exit_two" : "left",
+      "exit_one" : "up"
     },
     {
       "y" : 8,
@@ -932,16 +844,8 @@
       "x" : 7
     },
     {
-      "exit_one" : {
-        "up" : {
-
-        }
-      },
-      "exit_two" : {
-        "left" : {
-
-        }
-      }
+      "exit_one" : "up",
+      "exit_two" : "left"
     },
     {
       "y" : 8,
@@ -949,16 +853,8 @@
       "x" : 6
     },
     {
-      "exit_two" : {
-        "left" : {
-
-        }
-      },
-      "exit_one" : {
-        "up" : {
-
-        }
-      }
+      "exit_two" : "left",
+      "exit_one" : "up"
     },
     {
       "face" : 2,
@@ -966,16 +862,8 @@
       "y" : 5
     },
     {
-      "exit_one" : {
-        "up" : {
-
-        }
-      },
-      "exit_two" : {
-        "left" : {
-
-        }
-      }
+      "exit_one" : "up",
+      "exit_two" : "left"
     },
     {
       "y" : 3,
@@ -983,16 +871,8 @@
       "face" : 2
     },
     {
-      "exit_two" : {
-        "left" : {
-
-        }
-      },
-      "exit_one" : {
-        "up" : {
-
-        }
-      }
+      "exit_two" : "left",
+      "exit_one" : "up"
     },
     {
       "face" : 2,
@@ -1000,16 +880,8 @@
       "x" : 4
     },
     {
-      "exit_one" : {
-        "up" : {
-
-        }
-      },
-      "exit_two" : {
-        "left" : {
-
-        }
-      }
+      "exit_one" : "up",
+      "exit_two" : "left"
     },
     {
       "face" : 2,
@@ -1017,16 +889,8 @@
       "x" : 5
     },
     {
-      "exit_one" : {
-        "up" : {
-
-        }
-      },
-      "exit_two" : {
-        "left" : {
-
-        }
-      }
+      "exit_one" : "up",
+      "exit_two" : "left"
     }
   ],
   "version" : "1.1.0",

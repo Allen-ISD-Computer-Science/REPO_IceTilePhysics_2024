@@ -20,9 +20,13 @@ class PlayBackground: RenderableEntity {
     }
 
     func slide(slide: Slide) {
-        levelRenderer.level.changeTileStateIfCurrent(levelPoints: slide.intermediatePlayerStates.map { $0.point }, current: .inactive, new: .active)
-        levelRenderer.level.setTileState(levelPoint: slide.destinationPlayerState.point, tileState: .critical)
+        levelRenderer.level.changeTileStatusIfCurrent(levelPoints: slide.intermediates.map { $0.point }, current: .nonPaintable, new: .paintable)
+        levelRenderer.level.setTileStatus(levelPoint: slide.destination.point, tileStatus: .critical)
         levelRenderer.update()
+    }
+
+    func calculateTotalInactive(level: Level) -> Double {
+        return Double(level.tilePointsOfStatusAndType(tileStatus: .nonPaintable, specialTileType: nil).count)
     }
 
     override func setup(canvasSize: Size, canvas: Canvas) {
@@ -30,7 +34,7 @@ class PlayBackground: RenderableEntity {
         canvas.render(FillStyle(color: Color(.lightblue)), Rectangle(rect: Rect(size: canvasSize), fillMode: .fill))
 
         // Setup Total Inactive Tilestate
-        totalInactive = Double(playScene().level.tilePointsOfStateAndType(tileState: .inactive, specialTileType: nil).count)
+        totalInactive = calculateTotalInactive(level: playScene().level)
 
         // Setup Level Renderer
         let center = Point(x: canvasSize.width / 2, y: canvasSize.height / 2)
@@ -51,8 +55,11 @@ class PlayBackground: RenderableEntity {
     }
 
     override func render(canvas: Canvas) {
-        let currentInactive = Double(levelRenderer.level.tilePointsOfStateAndType(tileState: .inactive, specialTileType: nil).count)
+        let currentInactive = Double(levelRenderer.level.tilePointsOfStatusAndType(tileStatus: .nonPaintable, specialTileType: nil).count)
         let percentage = Int(((totalInactive - currentInactive) / totalInactive) * 100.0)
+        if percentage == 100, playScene().levelList != nil,  playScene().interactionLayer.player.currentSlide == nil {
+            playScene().enqueueNextLevel()
+        }
         let percentageRect = Rect(topLeft: Point(x: 5, y: 50), size: Size(width: 300, height: 50))
         let percentageText = Text(location: Point(x: percentageRect.left, y: percentageRect.centerY),
                                   text: String(percentage) + "% Completed",
