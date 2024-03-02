@@ -6,7 +6,8 @@ class PlayBackground: RenderableEntity {
 
     var totalInactive: Double!
     var levelRenderer: LevelRenderer!
-    
+
+    var updateRender: Bool = false
 
     init() {
         super.init(name: "Background")
@@ -17,6 +18,11 @@ class PlayBackground: RenderableEntity {
             fatalError("scene is required to be of type PlayScene for PlayBackground.")
         }
         return playScene
+    }
+
+    func update() {
+        updateRender = true
+        levelRenderer.update()
     }
 
     func slide(slide: Slide) {
@@ -55,12 +61,17 @@ class PlayBackground: RenderableEntity {
     }
 
     override func render(canvas: Canvas) {
+        if updateRender, let canvasSize = canvas.canvasSize {
+            canvas.render(FillStyle(color: Color(.lightblue)), Rectangle(rect: Rect(size: canvasSize), fillMode: .fill))
+            updateRender = false
+        }
+        
         let currentInactive = Double(levelRenderer.level.tilePointsOfStatusAndType(tileStatus: .nonPaintable, specialTileType: nil).count)
         let percentage = Int(((totalInactive - currentInactive) / totalInactive) * 100.0)
         if percentage == 100, playScene().levelList != nil,  playScene().interactionLayer.player.currentSlide == nil {
             playScene().enqueueNextLevel()
         }
-        let percentageRect = Rect(topLeft: Point(x: 5, y: 50), size: Size(width: 300, height: 50))
+        let percentageRect = Rect(topLeft: Point(x: 5, y: 140), size: Size(width: 300, height: 50))
         let percentageText = Text(location: Point(x: percentageRect.left, y: percentageRect.centerY),
                                   text: String(percentage) + "% Completed",
                                   fillMode: .fill)
@@ -69,6 +80,18 @@ class PlayBackground: RenderableEntity {
         percentageText.baseline = .middle
         canvas.render(FillStyle(color: Color(.lightblue)), Rectangle(rect: percentageRect, fillMode: .fill),
                       FillStyle(color: Color(.black)), percentageText)
+
+        if let fileName = playScene().fileName {
+            let fileNameRect = Rect(topLeft: Point(x: 5, y: 200), size: Size(width: 400, height: 50))
+            let fileNameText = Text(location: Point(x: fileNameRect.left, y: fileNameRect.centerY),
+                                    text: fileName,
+                                    fillMode: .fill)
+            fileNameText.font = "20pt Arial"
+            fileNameText.alignment = .left
+            fileNameText.baseline = .middle
+            canvas.render(FillStyle(color: Color(.lightblue)), Rectangle(rect: fileNameRect, fillMode: .fill),
+                          FillStyle(color: Color(.black)), fileNameText)
+        }
     }
     
 }

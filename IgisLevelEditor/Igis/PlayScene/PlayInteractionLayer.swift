@@ -10,16 +10,39 @@ class PlayInteractionLayer: Layer, KeyDownHandler {
     init() {
         super.init(name: "PlayInteraction")
 
-        let doneButton = Button(labelString: "Done")
+        let doneButton = Button(labelString: "Done", topLeft: Point(x: 5, y: 5))
         doneButton.clickHandler = onDoneButtonClickHandler
         insert(entity: doneButton, at: .front)
 
+        let setSingleFaceRenderModeButton = Button(labelString: "Set Single Face Mode", topLeft: Point(x: 5, y: 35))
+        setSingleFaceRenderModeButton.clickHandler = onSetSingleFaceRenderModeButtonClickHandler
+        insert(entity: setSingleFaceRenderModeButton, at: .front)
+
+        let setFullLevelRenderModeButton = Button(labelString: "Set Full Level Mode", topLeft: Point(x: 5, y: 70))
+        setFullLevelRenderModeButton.clickHandler = onSetFullLevelRenderModeButtonClickHandler
+        insert(entity: setFullLevelRenderModeButton, at: .front)
+
+        let skipLevelButton = Button(labelString: "Skip Level", topLeft: Point(x: 5, y: 105))
+        skipLevelButton.clickHandler = onSkipLevelButtonClickHandler
+        insert(entity: skipLevelButton, at: .front)
     }
 
     func onDoneButtonClickHandler(control: Control, localLocation: Point) {
         playScene().level.resetLevel()
         shellDirector().edit(fileName: playScene().fileName, level: playScene().level)
         director.transitionToNextScene()
+    }
+
+    func onSetSingleFaceRenderModeButtonClickHandler(control: Control, localLocation: Point) {
+        playScene().backgroundLayer.background.levelRenderer.setSingleFaceRenderMode(face: player.location.face)
+        playScene().backgroundLayer.background.update()
+    }
+    func onSetFullLevelRenderModeButtonClickHandler(control: Control, localLocation: Point) {
+        playScene().backgroundLayer.background.levelRenderer.setFullLevelRenderMode()
+        playScene().backgroundLayer.background.update()
+    }
+    func onSkipLevelButtonClickHandler(control: Control, localLocation: Point) {
+        playScene().enqueueNextLevel()
     }
     
     func playScene() -> PlayScene {

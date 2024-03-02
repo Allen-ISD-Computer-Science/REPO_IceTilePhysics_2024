@@ -41,7 +41,10 @@ class Player: RenderableEntity {
            currentFrame != nil {
             let animationPoints = currentSlide!.intermediates.map { $0.point } + [currentSlide!.destination.point]
             if currentFrame! < animationPoints.count {
-                location = animationPoints[currentFrame!]
+                if case .singleFace = levelRenderer().renderMode, location.face != animationPoints[currentFrame!].face {
+                    levelRenderer().setSingleFaceRenderMode(face: animationPoints[currentFrame!].face)
+                }
+                location = animationPoints[currentFrame!]                
             } else {
                 self.currentSlide = nil
                 self.currentFrame = nil
