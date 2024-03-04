@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>Babylon.js sample code</title>
+
+    <!-- Babylon.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
+    <script src="https://assets.babylonjs.com/generated/Assets.js"></script>
+    <script src="https://cdn.babylonjs.com/recast.js"></script>
+    <script src="https://cdn.babylonjs.com/ammo.js"></script>
+    <script src="https://cdn.babylonjs.com/havok/HavokPhysics_umd.js"></script>
+    <script src="https://cdn.babylonjs.com/cannon.js"></script>
+    <script src="https://cdn.babylonjs.com/Oimo.js"></script>
+    <script src="https://cdn.babylonjs.com/earcut.min.js"></script>
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+    <script src="https://cdn.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+    <script src="https://cdn.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.js"></script>
+    <script src="https://cdn.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
+    <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
+    <script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+
+    <style>
+        html,
+        body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+
+        #canvasZone {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="canvasZone"><canvas id="renderCanvas"></canvas></div>
+    <script>
+        var canvas = document.getElementById("renderCanvas");
+
+        var startRenderLoop = function (engine, canvas) {
+            engine.runRenderLoop(function () {
+                if (sceneToRender && sceneToRender.activeCamera) {
+                    sceneToRender.render();
+                }
+            });
+        }
+
+        var engine = null;
+        var scene = null;
+        var sceneToRender = null;
+        var createDefaultEngine = function () { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true, disableWebGL2Support: false }); };
+        var createScene = function () {
+
+            // Scene Setup
+
+            var scene = new BABYLON.Scene(engine);
+            var camera = new BABYLON.ArcRotateCamera("camera", BABYLON.Tools.ToRadians(50), BABYLON.Tools.ToRadians(65), 20, BABYLON.Vector3.Zero(), scene);
+            camera.setTarget(BABYLON.Vector3.Zero());
+            camera.attachControl(canvas, true);
+
+            var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 5, 0), scene);
+            var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, -5, 0), scene);
+            light.intensity = 0.7;
+
+            var grass = new BABYLON.StandardMaterial("greenMaterial", scene);
+            grass.diffuseColor = new BABYLON.Color3(0, 1, 0); // RGB for green
+
+            var red = new BABYLON.StandardMaterial("redMaterial", scene);
+            red.diffuseColor = new BABYLON.Color3(1, 0, 0); // RGB for green
+
+            var blue = new BABYLON.StandardMaterial("blueMaterial", scene);
+            blue.diffuseColor = new BABYLON.Color3(0, 0, 1);
+
+            var yellow = new BABYLON.StandardMaterial("yellowMaterial", scene);
+            yellow.diffuseColor = new BABYLON.Color3(1, 1, 0);
+
+            var purple = new BABYLON.StandardMaterial("purpleMaterial", scene);
+            purple.diffuseColor = new BABYLON.Color3(1, 0, 1);
+
+            var teal = new BABYLON.StandardMaterial("tealMaterial", scene);
+            teal.diffuseColor = new BABYLON.Color3(0, 1, 1);
+
+            var black = new BABYLON.StandardMaterial("blackMaterial", scene);
+            black.diffuseColor = new BABYLON.Color3(0, 0, 0);
+            // Cube Generation Function
+
+
+            var traversableTiles = [];
+
+            function createCube(back, left, top, right, front, bottom) {
+                for (i = 0; i < top.length; i++) {
+                    for (j = 0; j < top[i].length; j++) {
+                        var tileValue = top[i][j]
+                        var cube = BABYLON.MeshBuilder.CreateBox("topTile", { height: 1, width: 1, depth: 1 }, scene);
+                        cube.updatable = true;
+                        cube.position.x = i;
+                        cube.position.y = 0;
+                        cube.position.z = -j + top[i].length - 1;
+                        cube.test = true
+
+                        if (tileValue == 0) {
+                            cube.position.y = cube.position.y + .4
+
+                            cube.name = "traversableTop";
+                            traversableTiles.push(cube);
+                        }
+                    }
+                }
+                for (i = 0; i < left.length; i++) {
+                    for (j = 0; j < left[i].length; j++) {
+                        var tileValue = left[i][j]
+                        var cube = BABYLON.MeshBuilder.CreateBox("leftTile")
+                        cube.updatable = true;
+
+                        cube.position.x = 0;
+                        cube.position.y = -(left.length - 1 - i);
+                        cube.position.z = left[i].length - 1 - j;
+                        cube.test = true
+
+                        if (tileValue == 0) {
+                            cube.position.x = cube.position.x - .4
+
+                            cube.name = "traversableLeft";
+                            traversableTiles.push(cube);
+                        }
+                    }
+                }
+                for (i = 0; i < back.length; i++) {
+                    for (j = 0; j < back[i].length; j++) {
+                        var tileValue = back[i][j]
+                        var cube = BABYLON.MeshBuilder.CreateBox("backTile")
+                        cube.updatable = true;
+
+                        cube.position.x = i;
+                        cube.position.y = j - back[i].length + 1;
+                        cube.position.z = back[i].length - 1;
+                        cube.test = true
+                        if (tileValue == 0) {
+                            cube.position.z = cube.position.z + .4
+
+                            cube.name = "traversableBack"
+                            traversableTiles.push(cube);
+                        }
+                    }
+                }
+                for (i = 0; i < right.length; i++) {
+                    for (j = 0; j < right[i].length; j++) {
+                        var tileValue = right[i][j]
+                        var cube = BABYLON.MeshBuilder.CreateBox("rightTile") //right
+                        cube.updatable = true;
+
+                        cube.position.x = right[i].length - 1;
+                        cube.position.y = -i;
+                        cube.position.z = right[i].length - 1 - j;
+                        cube.test = true
+                        if (tileValue == 0) {
+                            cube.position.x = cube.position.x + .4
+                            cube.name = "traversableRight"
+                            traversableTiles.push(cube);
+                        }
+                    }
+                }
+                for (i = 0; i < front.length; i++) {
+                    for (j = 0; j < front[i].length; j++) {
+                        var tileValue = front[i][j]
+                        var cube = BABYLON.MeshBuilder.CreateBox("frontTile")
+                        cube.updatable = true;
+
+                        cube.position.x = i;
+                        cube.position.y = -j;
+                        cube.position.z = 0;
+                        cube.test = true
+                        if (tileValue == 0) {
+                            cube.position.z = cube.position.z - .4
+
+                            cube.name = "traversableFront";
+                            traversableTiles.push(cube);
+                        }
+                    }
+                }
+                for (i = 0; i < bottom.length; i++) {
+                    for (j = 0; j < bottom[i].length; j++) {
+                        var tileValue = bottom[i][j]
+                        var cube = BABYLON.MeshBuilder.CreateBox("bottomTile")
+                        cube.updatable = true;
+
+                        cube.position.x = i;
+                        cube.position.y = -bottom[i].length + 1;
+                        cube.position.z = j;
+                        cube.test = true
+                        if (tileValue == 0) {
+                            cube.position.y = cube.position.y - .4
+
+                            cube.name = "traversableBottom";
+                            traversableTiles.push(cube);
+                        }
+                    }
+                }
+                // for (z = 0; z < traversableTiles.length; z++) {
+                //     for (y = z + 1; y < traversableTiles.length; y++) {
+                //         if (traversableTiles[z].intersectsMesh(traversableTiles[y], false)) {
+                //             if (traversableTiles[z].name == "traversableRight") {
+                //                 traversableTiles[z].material = red;
+                //                 traversableTiles[y].material = red;
+                //             } else {
+
+                //             }
+                //         }
+                //     }
+                // }
+
+                for (c = 0; c < traversableTiles.length; c++) {
+                    if (traversableTiles[c].name == "traversableTop") {
+                        traversableTiles[c].material = grass;
+                    } else if (traversableTiles[c].name == "traversableLeft") {
+                        traversableTiles[c].material = blue;
+                    } else if (traversableTiles[c].name == "traversableBack") {
+                        traversableTiles[c].material = yellow;
+                    } else if (traversableTiles[c].name == "traversableRight") {
+                        traversableTiles[c].material = purple;
+                    } else if (traversableTiles[c].name == "traversableFront") {
+                        traversableTiles[c].material = teal;
+                    } else if (traversableTiles[c].name == "traversableBottom") {
+                        traversableTiles[c].material = black
+                    }
+                }
+
+
+
+
+
+                loop: for (z = 0; z < traversableTiles.length; z++) {
+                    for (y = 0; y < traversableTiles.length; y++) {
+                        if (BABYLON.Vector3.DistanceSquared(traversableTiles[y].position, traversableTiles[z].position) < 1.0) {
+                            if (traversableTiles[y].name == traversableTiles[z].name) continue;
+                            traversableTiles[y].material = red
+                            traversableTiles[z].material = red
+                        }
+                    }
+                }
+            }
+
+            // Variable Initialization
+
+            var importedLevel;
+            var importedBack;
+            var importedLeft;
+            var importedTop;
+            var importedRight;
+            var importedFront;
+            var importedBottom;
+
+            // Load level from file
+
+            fetch('2-9.lvl')
+                .then(response => response.json())
+                .then(data => {
+                    importedLevel = data.face_tiles;
+
+                    importedBack = importedLevel[0];
+                    importedLeft = importedLevel[1];
+                    importedTop = importedLevel[2];
+                    importedRight = importedLevel[3];
+                    importedFront = importedLevel[4];
+                    importedBottom = importedLevel[5];
+
+                    createCube(importedBack, importedLeft, importedTop, importedRight, importedFront, importedBottom)
+
+                })
+                .catch(error => console.error('Error loading the JSON file:', error));
+
+
+            return scene;
+
+        };
+        window.initFunction = async function () {
+
+
+
+            var asyncEngineCreation = async function () {
+                try {
+                    return createDefaultEngine();
+                } catch (e) {
+                    console.log("the available createEngine function failed. Creating the default engine instead");
+                    return createDefaultEngine();
+                }
+            }
+
+            window.engine = await asyncEngineCreation();
+            if (!engine) throw 'engine should not be null.';
+            startRenderLoop(engine, canvas);
+            window.scene = createScene();
+        };
+        initFunction().then(() => {
+            sceneToRender = scene
+        });
+
+        // Resize
+        window.addEventListener("resize", function () {
+            engine.resize();
+        });
+    </script>
+</body>
+
+</html>

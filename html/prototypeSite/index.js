@@ -38,10 +38,19 @@ function createScene(level){
     grid.height = 0.8;
     grid.width = 0.8;
 // initilizing the grid with its first row
-    grid.addRowDefinition(100, true)
+	grid.addRowDefinition(100, true)
+
+	fetch("campaign.json")
+	    .then(response => response.json())
+	    .then(data => {
+		currentWorld = data.worldOne;
+	    })
+	    .catch(error => console.error('Error loading the JSON file:', error));
+
+	console.log(currentWorld)
 
 // lc = level count, will hold the number of levels needing to be displayed
-    var lc = 20;
+    var lc = currentWorld.length;
     var column = 0;
     let columnLimit = 6
     var row = 0;
