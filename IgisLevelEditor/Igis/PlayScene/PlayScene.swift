@@ -47,7 +47,7 @@ class PlayScene: Scene {
         }
         if levelList!.isEmpty {
             level.resetLevel()
-            shellDirector().edit(fileName: fileName, level: Level(faceLevels: level.faceLevels, startingPosition: level.startingPosition))
+            shellDirector().edit(fileName: fileName, level: level)
             director.transitionToNextScene()
         } else {
             level = levelList!.removeFirst()
