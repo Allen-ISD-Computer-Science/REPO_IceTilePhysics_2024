@@ -14,7 +14,7 @@ class LevelRenderer: RenderableEntity {
 
     // Player
     var playerLocation: LevelPoint? = nil
-    var paintColor: Color? = nil
+    var paintColor: Color = Color(.red)
 
     // Igis
     public enum RenderMode {
@@ -270,23 +270,16 @@ class LevelRenderer: RenderableEntity {
         if let specialTileType = tile.specialTileType {
             switch specialTileType {
             case .wall: return Color(.black)
-            case .directionShift: return Color(.orange)
             case .portal: return Color(.lightblue)
             case .sticky: return Color(.lightgreen)
+            default: break // Special Tile Types that have no color to indicate their type
             }
         }
         switch tile.tileStatus {
-        case .paintable:
-            if let color = paintColor {
-                return color
-            }
-            return Color(.yellow)
-        case .nonPaintable: return Color(.gray)
-        case .critical:
-            if let color = paintColor {
-                return color
-            }
-            return Color(.purple)
+        case .paintable: return Color(.yellow)
+        case .nonPaintable, .unpainted: return Color(.gray)
+        case .critical: return Color(.purple)
+        case .painted: return paintColor
         }
     }
 

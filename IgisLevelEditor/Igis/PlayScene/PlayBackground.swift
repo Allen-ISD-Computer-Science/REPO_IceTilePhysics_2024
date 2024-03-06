@@ -4,7 +4,7 @@ import LevelGeneration
 
 class PlayBackground: RenderableEntity {
 
-    var totalInactive: Double!
+    var totalUnpainted: Double!
     var levelRenderer: LevelRenderer!
 
     var updateRender: Bool = false
@@ -25,22 +25,16 @@ class PlayBackground: RenderableEntity {
         levelRenderer.update()
     }
 
-    func slide(slide: Slide) {
-        levelRenderer.level.changeTileStatusIfCurrent(levelPoints: slide.intermediates.map { $0.point }, current: .nonPaintable, new: .paintable)
-        levelRenderer.level.setTileStatus(levelPoint: slide.destination.point, tileStatus: .critical)
-        levelRenderer.update()
-    }
-
-    func calculateTotalInactive(level: Level) -> Double {
-        return Double(level.tilePointsOfStatusAndType(tileStatus: .nonPaintable, specialTileType: nil).count)
+    func calculateTotalUnpainted(level: Level) -> Double {
+        return Double(level.tilePointsOfStatus(tileStatus: .unpainted).count)
     }
 
     override func setup(canvasSize: Size, canvas: Canvas) {
         // Render Background Color
         canvas.render(FillStyle(color: Color(.lightblue)), Rectangle(rect: Rect(size: canvasSize), fillMode: .fill))
 
-        // Setup Total Inactive Tilestate
-        totalInactive = calculateTotalInactive(level: playScene().level)
+        // Setup Total Unpainted Tilestate
+        totalUnpainted = calculateTotalUnpainted(level: playScene().level)
 
         // Setup Level Renderer
         let center = Point(x: canvasSize.width / 2, y: canvasSize.height / 2)
@@ -52,12 +46,17 @@ class PlayBackground: RenderableEntity {
         levelRendererBoundingBox.center = center
         levelRenderer = LevelRenderer(boundingBox: levelRendererBoundingBox, faceSize: levelRendererFaceSize)
         levelRenderer.stageLevel(level: playScene().level)
+        randomizePaintColor()
+        
+        // Layer
+        layer.insert(entity: levelRenderer, at: .front)                
+    }
+
+    func randomizePaintColor() {
         levelRenderer.paintColor = Color(red: UInt8.random(in: 0...UInt8.max),
                                          green: UInt8.random(in: 0...UInt8.max),
                                          blue: UInt8.random(in: 0...UInt8.max))
         
-        // Layer
-        layer.insert(entity: levelRenderer, at: .front)                
     }
 
     override func render(canvas: Canvas) {
@@ -66,12 +65,12 @@ class PlayBackground: RenderableEntity {
             updateRender = false
         }
         
-        let currentInactive = Double(levelRenderer.level.tilePointsOfStatusAndType(tileStatus: .nonPaintable, specialTileType: nil).count)
-        let percentage = Int(((totalInactive - currentInactive) / totalInactive) * 100.0)
+        let currentUnpainted = Double(levelRenderer.level.tilePointsOfStatus(tileStatus: .unpainted).count)
+        let percentage = Int(((totalUnpainted - currentUnpainted) / totalUnpainted) * 100.0)
         if percentage == 100, playScene().levelList != nil,  playScene().interactionLayer.player.currentSlide == nil {
             playScene().enqueueNextLevel()
         }
-        let percentageRect = Rect(topLeft: Point(x: 5, y: 140), size: Size(width: 300, height: 50))
+        let percentageRect = Rect(topLeft: Point(x: 5, y: 175), size: Size(width: 300, height: 50))
         let percentageText = Text(location: Point(x: percentageRect.left, y: percentageRect.centerY),
                                   text: String(percentage) + "% Completed",
                                   fillMode: .fill)
@@ -82,7 +81,7 @@ class PlayBackground: RenderableEntity {
                       FillStyle(color: Color(.black)), percentageText)
 
         if let fileName = playScene().fileName {
-            let fileNameRect = Rect(topLeft: Point(x: 5, y: 200), size: Size(width: 400, height: 50))
+            let fileNameRect = Rect(topLeft: Point(x: 5, y: 225), size: Size(width: 400, height: 50))
             let fileNameText = Text(location: Point(x: fileNameRect.left, y: fileNameRect.centerY),
                                     text: fileName,
                                     fillMode: .fill)

@@ -2,7 +2,7 @@ import Scenes
 import Igis
 import LevelGeneration
 
-class LevelEditor: RenderableEntity, MouseDownHandler {
+class LevelEditor: RenderableEntity, EntityMouseDownHandler, EntityMouseDragHandler, EntityMouseUpHandler {
 
     public enum LevelEditorMode: String, CaseIterable {
         case edit, select, erase
@@ -18,6 +18,8 @@ class LevelEditor: RenderableEntity, MouseDownHandler {
     var levelEditorInformation: LevelEditorInformation!
     var levelEditorInterface: LevelEditorInterface!
     var errorConsole: ErrorConsole!
+
+    var currentDrag: Set<LevelPoint> = []
 
     private var updateRender = true
 
@@ -50,45 +52,58 @@ class LevelEditor: RenderableEntity, MouseDownHandler {
         errorConsole.update()
     }
 
-    func onMouseDown(globalLocation: Point) {        
-        if levelEditorBoundingBox.containment(target: globalLocation).contains(.containedFully) {
-
-            func tileClicked() -> Tile? {
-                for faceIndex in 0 ..< Face.allCases.count {
-                    if levelRenderer.faceBoundingBoxs[faceIndex].containment(target: globalLocation).contains(.containedFully) {
-                        let relativePoint = globalLocation - levelRenderer.faceBoundingBoxs[faceIndex].topLeft
-                        let xIndex = relativePoint.x / levelRenderer.tileSize.width
-                        let yIndex = relativePoint.y / levelRenderer.tileSize.height
-                        return levelRenderer.level.faceLevels[faceIndex].tiles[xIndex][yIndex]
-                    }
-                }
-                return nil
+    func findTileClicked(globalLocation: Point) -> Tile? {
+        for faceIndex in 0 ..< Face.allCases.count {
+            if levelRenderer.faceBoundingBoxs[faceIndex].containment(target: globalLocation).contains(.containedFully) {
+                let relativePoint = globalLocation - levelRenderer.faceBoundingBoxs[faceIndex].topLeft
+                let xIndex = relativePoint.x / levelRenderer.tileSize.width
+                let yIndex = relativePoint.y / levelRenderer.tileSize.height
+                return levelRenderer.level.faceLevels[faceIndex].tiles[xIndex][yIndex]
             }
-
-            if levelRenderer.levelStaged, let clickedTile = tileClicked() {
-                switch mode {
-                case .edit:
-                    guard clickedTile.point != levelRenderer.level.startingPosition else {
-                        // Throw to Error Console
-                        errorConsole.throwError("Cannot change the state of the level's starting position.")
-                        return                          
-                    }
-                    if clickedTile.specialTileType == selectedSpecialTileType {
-                        levelRenderer.setSpecialTileType(levelPoint: clickedTile.point, specialTileType: nil)                
-                    } else {
-                        levelRenderer.setSpecialTileType(levelPoint: clickedTile.point, specialTileType: selectedSpecialTileType)
-                    }
-                case .select:
-                    selectedTile = clickedTile
-                    levelRenderer.update()
-                case .erase:
-                    levelRenderer.setSpecialTileType(levelPoint: clickedTile.point, specialTileType: nil)
-                }
-                levelEditorInformation.update()                    
-            }
-            
-            
         }
+        return nil
+    }
+
+    func clickTile(tile: Tile) {
+        switch mode {
+        case .edit:
+            guard tile.point != levelRenderer.level.startingPosition else {
+                // Throw to Error Console
+                errorConsole.throwError("Cannot change the state of the level's starting position.")
+                return                          
+            }
+            if tile.specialTileType == selectedSpecialTileType {
+                levelRenderer.setSpecialTileType(levelPoint: tile.point, specialTileType: nil)                
+            } else {
+                levelRenderer.setSpecialTileType(levelPoint: tile.point, specialTileType: selectedSpecialTileType)
+            }
+        case .select:
+            selectedTile = tile
+            levelRenderer.update()
+        case .erase:
+            levelRenderer.setSpecialTileType(levelPoint: tile.point, specialTileType: nil)
+        }
+        levelEditorInformation.update()
+    }    
+    
+    func onEntityMouseDown(globalLocation: Point) {        
+        if levelRenderer.levelStaged, let tile = findTileClicked(globalLocation: globalLocation) {            
+            clickTile(tile: tile)
+            currentDrag.insert(tile.point)
+        }        
+    }
+
+    func onEntityMouseDrag(globalLocation: Point, movement: Point) {
+        // Only perform a click if there is a level staged, a tile was found, and it wasn't already clicked on the current drag
+        if levelRenderer.levelStaged, let tile = findTileClicked(globalLocation: globalLocation),
+           !currentDrag.contains(tile.point) {
+            currentDrag.insert(tile.point)
+            clickTile(tile: tile)
+        }        
+    }
+
+    func onEntityMouseUp(globalLocation: Point) {
+        currentDrag = []
     }
 
     func selectSpecialTileType(_ specialTileType: SpecialTileType) {
@@ -97,6 +112,10 @@ class LevelEditor: RenderableEntity, MouseDownHandler {
     func setMode(_ mode: LevelEditorMode) {
         self.mode = mode
         levelEditorInformation.update()
+    }
+
+    override func boundingRect() -> Rect {
+        return levelEditorBoundingBox
     }
     
     override func setup(canvasSize: Size, canvas: Canvas) {
@@ -142,15 +161,19 @@ class LevelEditor: RenderableEntity, MouseDownHandler {
         errorConsole = ErrorConsole(boundingBox: errorConsoleBoundingBox)
         
         // Layer
-        layer.insert(entity: levelRenderer, at: .front)
-        layer.insert(entity: specialTileSelector, at: .front)
-        layer.insert(entity: levelEditorInformation, at: .front)
-        layer.insert(entity: levelEditorInterface, at: .front)
-        layer.insert(entity: errorConsole, at: .front)
+        layer.insert(entity: levelRenderer, at: .behind(object: self))
+        layer.insert(entity: specialTileSelector, at: .behind(object: self))
+        layer.insert(entity: levelEditorInformation, at: .behind(object: self))
+        layer.insert(entity: levelEditorInterface, at: .behind(object: self))
+        layer.insert(entity: errorConsole, at: .behind(object: self))
+        
+        
         // Scene
 
         // Dispatcher
-        dispatcher.registerMouseDownHandler(handler: self)        
+        dispatcher.registerEntityMouseDownHandler(handler: self)        
+        dispatcher.registerEntityMouseDragHandler(handler: self)
+        dispatcher.registerEntityMouseUpHandler(handler: self)
     }
         
 
@@ -172,7 +195,9 @@ class LevelEditor: RenderableEntity, MouseDownHandler {
     }    
 
     override func teardown() {
-        dispatcher.unregisterMouseDownHandler(handler: self)
+        dispatcher.unregisterEntityMouseDownHandler(handler: self)
+        dispatcher.unregisterEntityMouseDragHandler(handler: self)
+        dispatcher.unregisterEntityMouseUpHandler(handler: self)
     }
 }
 

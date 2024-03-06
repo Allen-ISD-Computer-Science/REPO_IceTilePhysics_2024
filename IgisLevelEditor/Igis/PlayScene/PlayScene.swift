@@ -47,12 +47,12 @@ class PlayScene: Scene {
         }
         if levelList!.isEmpty {
             level.resetLevel()
-            shellDirector().edit(fileName: fileName, level: level)
+            shellDirector().edit(fileName: fileName, level: Level(faceLevels: level.faceLevels, startingPosition: level.startingPosition))
             director.transitionToNextScene()
         } else {
             level = levelList!.removeFirst()
             fileName = fileNameList?.removeFirst()
-            backgroundLayer.background.totalInactive = backgroundLayer.background.calculateTotalInactive(level: level)
+            backgroundLayer.background.totalUnpainted = backgroundLayer.background.calculateTotalUnpainted(level: level)
             interactionLayer.player.levelGraph = level.levelGraph
             interactionLayer.player.location = level.startingPosition
             backgroundLayer.background.levelRenderer.stageLevel(level: level)

@@ -173,10 +173,10 @@ class ControlPanel: RenderableEntity, MouseDownHandler {
         levelViewer = LevelRenderer(boundingBox: levelBoundingBox, faceSize: levelViewerFaceSize)
         
         // Layer
-        layer.insert(entity: setLevelSize, at: .front)
-        layer.insert(entity: saveFile, at: .front)
-        layer.insert(entity: fileViewer, at: .front)
-        layer.insert(entity: levelViewer, at: .front)
+        layer.insert(entity: setLevelSize, at: .behind(object: self))
+        layer.insert(entity: saveFile, at: .behind(object: self))
+        layer.insert(entity: fileViewer, at: .behind(object: self))
+        layer.insert(entity: levelViewer, at: .behind(object: self))
         // Scene
 
         // Dispatcher        
@@ -185,6 +185,7 @@ class ControlPanel: RenderableEntity, MouseDownHandler {
 
     override func render(canvas: Canvas) {
         if updateRender {
+            
             let setLevelSizeUILabel = Text(location: Point(x: controlPanelBoundingBox.centerX, y: 20), text: "Set Level Size (Basic Seed, 6 - 15)", fillMode: .fill)
             setLevelSizeUILabel.font = "15pt Arial"
             setLevelSizeUILabel.alignment = .center

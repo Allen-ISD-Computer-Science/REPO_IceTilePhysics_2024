@@ -15,7 +15,7 @@ class EditInteractionLayer: Layer {
 
         super.init(name: "EditInteraction")
 
-        insert(entity: controlPanel, at: .front)
-        insert(entity: levelEditor, at: .back)
+        insert(entity: levelEditor, at: .front)
+        insert(entity: controlPanel, at: .behind(object: levelEditor))
     }
 }

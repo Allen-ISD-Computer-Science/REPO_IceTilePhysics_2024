@@ -76,7 +76,7 @@ class LevelEditorInterface: RenderableEntity, MouseDownHandler {
                 return
             }
             if playTestRectButton.containment(target: globalLocation).contains(.containedFully) {
-                guard let level = levelEditor().levelRenderer.level?.emptyLevel() else {
+                guard let level = levelEditor().levelRenderer.level?.playLevel() else {
                     levelEditor().errorConsole.throwError("Must select a Level before attempting to Play Test")
                     return
                 }
@@ -105,7 +105,7 @@ class LevelEditorInterface: RenderableEntity, MouseDownHandler {
                 let combined = zip(campaignLevels, fileNames).sorted(by: { ($0.0.worldInt, $0.0.levelInt) < ($1.0.worldInt, $1.0.levelInt) })
                 
                 
-                shellDirector().play(fileNameList: combined.map { $0.1 }, levelList: combined.map { $0.0.level.emptyLevel() })
+                shellDirector().play(fileNameList: combined.map { $0.1 }, levelList: combined.map { $0.0.level.playLevel() })
                 director.transitionToNextScene()
             }
         }
@@ -140,7 +140,7 @@ class LevelEditorInterface: RenderableEntity, MouseDownHandler {
         playTestCampaignRectButton = Rect(topLeft: playTestRectButton.bottomLeft + Point(x: 0, y: 5), size: setStartingPositionRectButton.size)
 
         // Layer
-        layer.insert(entity: directionWheel, at: .front)
+        layer.insert(entity: directionWheel, at: .behind(object: self))
         
         // Dispatcher
         dispatcher.registerMouseDownHandler(handler: self)

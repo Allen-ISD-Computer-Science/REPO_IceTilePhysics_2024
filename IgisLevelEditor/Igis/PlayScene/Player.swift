@@ -33,7 +33,6 @@ class Player: RenderableEntity {
         }
         currentSlide = slide
         currentFrame = 0
-        playScene().backgroundLayer.background.slide(slide: slide)
     }
 
     override func render(canvas: Canvas) {
@@ -49,11 +48,13 @@ class Player: RenderableEntity {
                         return (previousDirection.clockwiseDistance(from: currentDirection) + rotations) % 4
                     }()
                     levelRenderer().setSingleFaceRenderMode(face: animationPoints[currentFrame!].face, rotations: rotations)
-                }
-                location = animationPoints[currentFrame!]                
+                }                
+                location = animationPoints[currentFrame!]
+                levelRenderer().level.changeTileStatusIfCurrent(levelPoint: location, current: .unpainted, new: .painted)
             } else {
                 self.currentSlide = nil
                 self.currentFrame = nil
+                // levelRenderer().level.setTileStatus(levelPoint: location, tileStatus: .painted)
                 return
             }
             levelRenderer().playerLocation = location

@@ -26,17 +26,18 @@ class PlayInteractionLayer: Layer, KeyDownHandler {
         skipLevelButton.clickHandler = onSkipLevelButtonClickHandler
         insert(entity: skipLevelButton, at: .front)
 
-        let incrementRotationCount = Button(labelString: "Rotate", topLeft: Point(x: 100, y: 5))
-        incrementRotationCount.clickHandler = onIncrementRotationCountClickHandler
-        insert(entity: incrementRotationCount, at: .front)
+        let randomizeColorButton = Button(labelString: "Randomize Color", topLeft: Point(x: 5, y: 140))
+        randomizeColorButton.clickHandler = onRandomizeColorButtonClickHandler
+        insert(entity: randomizeColorButton, at: .front)
     }
 
     func onDoneButtonClickHandler(control: Control, localLocation: Point) {
         playScene().level.resetLevel()
+        // print(playScene().level.faceLevels)
         shellDirector().edit(fileName: playScene().fileName, level: playScene().level)
+        
         director.transitionToNextScene()
     }
-
     func onSetSingleFaceRenderModeButtonClickHandler(control: Control, localLocation: Point) {
         playScene().backgroundLayer.background.levelRenderer.setSingleFaceRenderMode(face: player.location.face, rotations: 0)
         playScene().backgroundLayer.background.update()
@@ -48,12 +49,11 @@ class PlayInteractionLayer: Layer, KeyDownHandler {
     func onSkipLevelButtonClickHandler(control: Control, localLocation: Point) {
         playScene().enqueueNextLevel()
     }
-    func onIncrementRotationCountClickHandler(control: Control, localLocation: Point) {
-        let levelRenderer = playScene().backgroundLayer.background.levelRenderer!
-        if case .singleFace(let currentFace, let rotations) = levelRenderer.renderMode {
-            levelRenderer.setSingleFaceRenderMode(face: currentFace, rotations: (rotations + 1) % 4)
-        }
+    func onRandomizeColorButtonClickHandler(control: Control, localLocation: Point) {
+        playScene().backgroundLayer.background.randomizePaintColor()
+        playScene().backgroundLayer.background.update()
     }
+
     
     func playScene() -> PlayScene {
         guard let playScene = scene as? PlayScene else {
