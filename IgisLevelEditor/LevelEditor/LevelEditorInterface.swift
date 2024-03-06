@@ -140,7 +140,7 @@ class LevelEditorInterface: RenderableEntity, MouseDownHandler {
         playTestCampaignRectButton = Rect(topLeft: playTestRectButton.bottomLeft + Point(x: 0, y: 5), size: setStartingPositionRectButton.size)
 
         // Layer
-        layer.insert(entity: directionWheel, at: .behind(object: self))
+        layer.insert(entity: directionWheel, at: .inFrontOf(object: self))
         
         // Dispatcher
         dispatcher.registerMouseDownHandler(handler: self)
