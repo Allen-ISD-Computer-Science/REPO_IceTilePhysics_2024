@@ -58,7 +58,7 @@ class PlayScene: Scene {
             backgroundLayer.background.levelRenderer.stageLevel(level: level)
             backgroundLayer.background.levelRenderer.playerLocation = level.startingPosition
             if case .singleFace = backgroundLayer.background.levelRenderer.renderMode {
-                backgroundLayer.background.levelRenderer.setSingleFaceRenderMode(face: level.startingPosition.face)
+                backgroundLayer.background.levelRenderer.setSingleFaceRenderMode(face: level.startingPosition.face, rotations: 0)
             }
         }
     }

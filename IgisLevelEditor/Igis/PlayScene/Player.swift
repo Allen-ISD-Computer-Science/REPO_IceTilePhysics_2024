@@ -39,10 +39,16 @@ class Player: RenderableEntity {
     override func render(canvas: Canvas) {
         if currentSlide != nil,
            currentFrame != nil {
-            let animationPoints = currentSlide!.intermediates.map { $0.point } + [currentSlide!.destination.point]
+            let animationPoints = currentSlide!.full.map { $0.point }
             if currentFrame! < animationPoints.count {
-                if case .singleFace = levelRenderer().renderMode, location.face != animationPoints[currentFrame!].face {
-                    levelRenderer().setSingleFaceRenderMode(face: animationPoints[currentFrame!].face)
+                if case .singleFace(_, let rotations) = levelRenderer().renderMode, location.face != animationPoints[currentFrame!].face {
+                    let rotations: Int = {
+                        // Current Frame will always be greater than 0 because the location == animationPoints[currentFrame] at frame 0
+                        let previousDirection = currentSlide!.full[currentFrame! - 1].direction
+                        let currentDirection = currentSlide!.full[currentFrame!].direction
+                        return (previousDirection.clockwiseDistance(from: currentDirection) + rotations) % 4
+                    }()
+                    levelRenderer().setSingleFaceRenderMode(face: animationPoints[currentFrame!].face, rotations: rotations)
                 }
                 location = animationPoints[currentFrame!]                
             } else {

@@ -6,16 +6,8 @@
       "y" : 5
     },
     {
-      "exit_one" : {
-        "down" : {
-
-        }
-      },
-      "exit_two" : {
-        "right" : {
-
-        }
-      }
+      "exit_one" : "down",
+      "exit_two" : "right"
     },
     {
       "y" : 1,
@@ -23,16 +15,8 @@
       "x" : 4
     },
     {
-      "exit_two" : {
-        "left" : {
-
-        }
-      },
-      "exit_one" : {
-        "down" : {
-
-        }
-      }
+      "exit_two" : "left",
+      "exit_one" : "down"
     }
   ],
   "portal_tile_data" : [

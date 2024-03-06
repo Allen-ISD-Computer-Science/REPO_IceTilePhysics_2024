@@ -19,7 +19,7 @@ class LevelRenderer: RenderableEntity {
     // Igis
     public enum RenderMode {
         case fullLevel
-        case singleFace(face: Face)
+        case singleFace(face: Face, rotations: Int)
     }
     public var renderMode: RenderMode = .fullLevel
     let boundingBox: Rect // Full Bounding Box accreditted to LevelRenderer
@@ -31,7 +31,8 @@ class LevelRenderer: RenderableEntity {
 
     // Igis - SingleFace
     var singleFaceBoundingBox: Rect!
-
+    var updatedFace = false
+    var currentFacePoints = [[LevelPoint?]]()
 
     public private(set) var levelStaged = false    
     private var updateRender = true
@@ -75,7 +76,7 @@ class LevelRenderer: RenderableEntity {
                 faceBoundingBoxs[faceIndex] = Rect(topLeft: initialFaceBoundingBoxs[faceIndex].topLeft,
                                                    size: Size(width: tileSize.width * faceSize.maxX, height: tileSize.height * faceSize.maxY))
             }
-        case .singleFace(let face):            
+        case .singleFace(let face, _):            
             let singleFaceBoundingBoxSize = boundingBox.size.width < boundingBox.size.height ? Size(width: boundingBox.size.width * 2 / 3, height: boundingBox.size.width * 2 / 3) : Size(width: boundingBox.size.height * 2 / 3, height: boundingBox.size.height * 2 / 3)
             singleFaceBoundingBox = Rect(size: singleFaceBoundingBoxSize)
             singleFaceBoundingBox.center = boundingBox.center
@@ -94,11 +95,12 @@ class LevelRenderer: RenderableEntity {
         updateRender = true
     }
 
-    func setSingleFaceRenderMode(face: Face) {
+    func setSingleFaceRenderMode(face: Face, rotations: Int) {
         guard levelStaged else {
             fatalError("Cannot change render mode prior to loading a level")
         }
-        renderMode = .singleFace(face: face)
+        renderMode = .singleFace(face: face, rotations: rotations)
+        updatedFace = true
         setupToRender(level: level)
         updateRender = true
     }
@@ -107,7 +109,7 @@ class LevelRenderer: RenderableEntity {
             fatalError("Cannot change render mode prior to loading a level")
         }
         renderMode = .fullLevel
-        setupToRender(level: level)
+        setupToRender(level: level)        
         updateRender = true
     }
 
@@ -182,96 +184,85 @@ class LevelRenderer: RenderableEntity {
                               FillStyle(color: Color(.yellow)), playerPath)
             
 
-            case .singleFace(let currentFace): 
-                let currentFaceSize = level.levelSize.faceSize(face: currentFace)
-                let currentFaceTopLeft = singleFaceBoundingBox.topLeft + Point(x: tileSize.width / 2, y: tileSize.height / 2)
-                for x in 0 ..< currentFaceSize.maxX {
-                    for y in 0 ..< currentFaceSize.maxY {
-                        let tile = level.faceLevels[currentFace.rawValue].tiles[x][y]
-                        let tileRect = Rect(topLeft: currentFaceTopLeft +
-                                              Point(x: x * tileSize.width, y: y * tileSize.height),
-                                            size: tileSize)                        
-                        let tileRectangle = Rectangle(rect: tileRect,
-                                                      fillMode: .fillAndStroke)
-                        // Styles
-                        canvas.render(FillStyle(color: tileToColor(tile: tile)),
-                                      StrokeStyle(color: Color(.black)),
-                                      LineWidth(width: 1))
-                        // Rectangle
-                        canvas.render(tileRectangle)                        
-                    }
-                }
-                // Now Render the tiles on the border surrounding the current face
-                let (upFace, upNewDirection, _) = Level.crossEdgeMap(Edge(currentFace, .up))
-                let upBorderPoints = level.faceLevels[upFace.rawValue].borderPointsByDirection(upNewDirection.toggle(), reversed: isReversed(.up, upNewDirection))
-                let (downFace, downNewDirection, _) = Level.crossEdgeMap(Edge(currentFace, .down))
-                let downBorderPoints = level.faceLevels[downFace.rawValue].borderPointsByDirection(downNewDirection.toggle(), reversed: isReversed(.down, downNewDirection))
-                let (leftFace, leftNewDirection, _) = Level.crossEdgeMap(Edge(currentFace, .left))
-                let leftBorderPoints = level.faceLevels[leftFace.rawValue].borderPointsByDirection(leftNewDirection.toggle(), reversed: isReversed(.left, leftNewDirection))
-                let (rightFace, rightNewDirection, _) = Level.crossEdgeMap(Edge(currentFace, .right))
-                let rightBorderPoints = level.faceLevels[rightFace.rawValue].borderPointsByDirection(rightNewDirection.toggle(), reversed: isReversed(.right, rightNewDirection))
+            case .singleFace(let currentFace, let rotationCount):
 
-                // Determines whether the border points should be reversed based on arbitrary coordinate system
-                func isReversed(_ directionOne: Direction, _ directionTwo: Direction) -> Bool {
-                    switch (directionOne, directionTwo) {
-                    case (.down, .right): return true
-                    case (.left, .up): return true
-                    case (.up, .left): return true
-                    case (.right, .down): return true
-                    case (.left, .right): return true
-                    case (.right, .left): return true
-                    default: return false                    
-                    }
-                }
+                if updatedFace {
+                    var levelPoints: [[LevelPoint?]] = level.faceLevels[currentFace.rawValue].tiles.map { $0.map { $0.point } }
+                    let (upFace, upNewDirection, _) = Level.crossEdgeMap(Edge(currentFace, .up))
+                    let upBorderPoints = level.faceLevels[upFace.rawValue].borderPointsByDirection(upNewDirection.toggle(), reversed: isReversed(.up, upNewDirection))
+                    let (downFace, downNewDirection, _) = Level.crossEdgeMap(Edge(currentFace, .down))
+                    let downBorderPoints = level.faceLevels[downFace.rawValue].borderPointsByDirection(downNewDirection.toggle(), reversed: isReversed(.down, downNewDirection))
+                    let (leftFace, leftNewDirection, _) = Level.crossEdgeMap(Edge(currentFace, .left))
+                    let leftBorderPoints = level.faceLevels[leftFace.rawValue].borderPointsByDirection(leftNewDirection.toggle(), reversed: isReversed(.left, leftNewDirection))
+                    let (rightFace, rightNewDirection, _) = Level.crossEdgeMap(Edge(currentFace, .right))
+                    let rightBorderPoints = level.faceLevels[rightFace.rawValue].borderPointsByDirection(rightNewDirection.toggle(), reversed: isReversed(.right, rightNewDirection))
 
-                func renderBorders(borderPoints: [LevelPoint], topLeft: Point, direction: Direction) {
-                    var rects: [Rect] = []
-                    for pointIndex in 0 ..< borderPoints.count {
-                        switch direction {
-                        case .up, .down:
-                            rects.append(Rect(topLeft: topLeft + Point(x: pointIndex * tileSize.width, y: 0),
-                                              size: Size(width: tileSize.width, height: tileSize.height / 2)))
-                        case .left, .right:
-                            rects.append(Rect(topLeft: topLeft + Point(x: 0, y: pointIndex * tileSize.height),
-                                              size: Size(width: tileSize.width / 2, height: tileSize.height)))
+                    // Determines whether the border points should be reversed based on arbitrary coordinate system
+                    func isReversed(_ directionOne: Direction, _ directionTwo: Direction) -> Bool {
+                        switch (directionOne, directionTwo) {
+                        case (.down, .right): return true
+                        case (.left, .up): return true
+                        case (.up, .left): return true
+                        case (.right, .down): return true
+                        case (.left, .right): return true
+                        case (.right, .left): return true
+                        default: return false                    
                         }
                     }
-                    for (pointIndex, rect) in rects.enumerated() {
-                        let borderPoint = borderPoints[pointIndex]
-                        let tile = level.faceLevels[borderPoint.face.rawValue].tiles[borderPoint.x][borderPoint.y]
-                        let tileRectangle = Rectangle(rect: rect,
-                                                      fillMode: .fillAndStroke)
-                        // Styles
-                        canvas.render(FillStyle(color: tileToColor(tile: tile)),
-                                      StrokeStyle(color: Color(.black)),
-                                      LineWidth(width: 1))
-                        // Rectangle
-                        canvas.render(tileRectangle)
+                    
+                    for x in 0 ..< levelPoints.count {
+                        guard upBorderPoints.count == downBorderPoints.count,
+                              upBorderPoints.count == levelPoints.count else {
+                            fatalError("Border Points count must be equal.")
+                        }
+                        levelPoints[x].insert(upBorderPoints[x], at: 0)
+                        levelPoints[x].append(downBorderPoints[x])                        
                     }
+                    
+                    // Prepend/append leftBorderPoints and rightborderpoints respectively, add nil values as placeholders at the start and end of the array for the purpose of iteration
+                    levelPoints.insert([nil] + leftBorderPoints + [nil], at: 0)
+                    levelPoints.append([nil] + rightBorderPoints + [nil])
+                    updatedFace = false
+                    self.currentFacePoints = levelPoints.rotateClockwise(times: rotationCount)
                 }
 
-                renderBorders(borderPoints: upBorderPoints, topLeft: singleFaceBoundingBox.topLeft + Point(x: tileSize.width / 2, y: 0),
-                              direction: .up)
-                renderBorders(borderPoints: downBorderPoints, topLeft: singleFaceBoundingBox.bottomLeft + Point(x: tileSize.width / 2, y: -1 * tileSize.height / 2),
-                              direction: .down)
-                renderBorders(borderPoints: leftBorderPoints, topLeft: singleFaceBoundingBox.topLeft + Point(x: 0, y: tileSize.height / 2),
-                              direction: .left)
-                renderBorders(borderPoints: rightBorderPoints, topLeft: singleFaceBoundingBox.topRight + Point(x: -1 * tileSize.width / 2, y: tileSize.height / 2),
-                              direction: .right)
+                // Add 2 to maxX and maxY to account for borderPoints
+                var currentPoint: Point = singleFaceBoundingBox.topLeft
                 
-                
-                let playerPath = Path(fillMode: .fillAndStroke)
-                let playerLocation: LevelPoint = self.playerLocation ?? level.startingPosition
-                drawStar(path: playerPath, center: currentFaceTopLeft + Point(x: (playerLocation.x + 1) * tileSize.width - tileSize.width / 2,
-                                                                              y: (playerLocation.y + 1) * tileSize.height - tileSize.height / 2),
-                         spikes: 5,
-                         innerRadius: tileSize.height / 2 - 7, outerRadius: tileSize.height / 2 - 2)
-                canvas.render(StrokeStyle(color: Color(.black)), LineWidth(width: 1),
-                              FillStyle(color: Color(.yellow)), playerPath)
-            
-            }
+                for x in 0 ..< currentFacePoints.count {
+                    
+                    let isXBorder: Bool = (x == 0) || (x == currentFacePoints.count - 1)
+                    
+                    for y in 0 ..< currentFacePoints[x].count {
                         
-            updateRender = false            
+                        let isYBorder: Bool = (y == 0) || (y == currentFacePoints[x].count - 1)
+
+                        if let levelPoint = currentFacePoints[x][y] {
+                            let tile = level.faceLevels[levelPoint.face.rawValue].tiles[levelPoint.x][levelPoint.y]
+                            let tileRect = Rect(topLeft: currentPoint,
+                                                size: Size(width: isXBorder ? tileSize.width / 2 : tileSize.width,
+                                                           height: isYBorder ? tileSize.height / 2 : tileSize.height))
+                            let tileRectangle = Rectangle(rect: tileRect, fillMode: .fillAndStroke)
+                            let tileColor = tileToColor(tile: tile)
+                            canvas.render(FillStyle(color: tileColor), StrokeStyle(color: Color(.black)),
+                                          LineWidth(width: 1), tileRectangle)
+
+                            if (playerLocation ?? level.startingPosition) == levelPoint {
+                                let playerPath = Path(fillMode: .fillAndStroke)
+                                drawStar(path: playerPath, center: tileRect.center,
+                                         spikes: 5,
+                                         innerRadius: tileSize.height / 2 - 7, outerRadius: tileSize.height / 2 - 2)
+                                canvas.render(FillStyle(color: Color(.yellow)), StrokeStyle(color: Color(.black)),
+                                              LineWidth(width: 1), playerPath)
+                            }
+                        }
+                        currentPoint += Point(x: 0, y: isYBorder ? tileSize.height / 2 : tileSize.height)
+                    }
+                    currentPoint.y = singleFaceBoundingBox.topLeft.y
+                    currentPoint += Point(x: isXBorder ? tileSize.width / 2 : tileSize.width, y: 0)
+                }
+                updateRender = false
+            }
         }        
     }
 

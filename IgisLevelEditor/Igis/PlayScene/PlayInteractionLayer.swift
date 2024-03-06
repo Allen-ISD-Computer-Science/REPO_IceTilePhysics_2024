@@ -25,6 +25,10 @@ class PlayInteractionLayer: Layer, KeyDownHandler {
         let skipLevelButton = Button(labelString: "Skip Level", topLeft: Point(x: 5, y: 105))
         skipLevelButton.clickHandler = onSkipLevelButtonClickHandler
         insert(entity: skipLevelButton, at: .front)
+
+        let incrementRotationCount = Button(labelString: "Rotate", topLeft: Point(x: 100, y: 5))
+        incrementRotationCount.clickHandler = onIncrementRotationCountClickHandler
+        insert(entity: incrementRotationCount, at: .front)
     }
 
     func onDoneButtonClickHandler(control: Control, localLocation: Point) {
@@ -34,7 +38,7 @@ class PlayInteractionLayer: Layer, KeyDownHandler {
     }
 
     func onSetSingleFaceRenderModeButtonClickHandler(control: Control, localLocation: Point) {
-        playScene().backgroundLayer.background.levelRenderer.setSingleFaceRenderMode(face: player.location.face)
+        playScene().backgroundLayer.background.levelRenderer.setSingleFaceRenderMode(face: player.location.face, rotations: 0)
         playScene().backgroundLayer.background.update()
     }
     func onSetFullLevelRenderModeButtonClickHandler(control: Control, localLocation: Point) {
@@ -43,6 +47,12 @@ class PlayInteractionLayer: Layer, KeyDownHandler {
     }
     func onSkipLevelButtonClickHandler(control: Control, localLocation: Point) {
         playScene().enqueueNextLevel()
+    }
+    func onIncrementRotationCountClickHandler(control: Control, localLocation: Point) {
+        let levelRenderer = playScene().backgroundLayer.background.levelRenderer!
+        if case .singleFace(let currentFace, let rotations) = levelRenderer.renderMode {
+            levelRenderer.setSingleFaceRenderMode(face: currentFace, rotations: (rotations + 1) % 4)
+        }
     }
     
     func playScene() -> PlayScene {
@@ -67,7 +77,11 @@ class PlayInteractionLayer: Layer, KeyDownHandler {
           "ArrowRight":.right
         ]
         if let direction = arrowKeyToDirection[key], player.currentSlide == nil {
-            player.slide(direction)
+            if case .singleFace(_, let rotations) = playScene().backgroundLayer.background.levelRenderer.renderMode {
+                player.slide(direction.rotatedClockwise(times: 4 - (rotations % 4)))
+            } else {
+                player.slide(direction)
+            }            
         }
     }
 
