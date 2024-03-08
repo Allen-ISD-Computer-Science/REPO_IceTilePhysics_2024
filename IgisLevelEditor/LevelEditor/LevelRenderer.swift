@@ -247,6 +247,18 @@ class LevelRenderer: RenderableEntity {
                             canvas.render(FillStyle(color: tileColor), StrokeStyle(color: Color(.black)),
                                           LineWidth(width: 1), tileRectangle)
 
+                            if let associatedSpecialTileData = level.associatedSpecialData[levelPoint] {
+                                if let directionPair = associatedSpecialTileData as? DirectionPair {
+                                    renderSpecialTileDataPath(to: canvas,
+                                                              specialTileType: .directionShift(pair: DirectionPair(directionPair.exitOne.rotatedClockwise(times: rotationCount),
+                                                                                                                   directionPair.exitTwo.rotatedClockwise(times: rotationCount))!),
+                                                              tileRect: tileRect)
+                                }
+                                if let portalDestination = associatedSpecialTileData as? LevelPoint {
+                                    renderSpecialTileDataPath(to: canvas, specialTileType: .portal(to: portalDestination), tileRect: tileRect)
+                                }
+                            }
+
                             if (playerLocation ?? level.startingPosition) == levelPoint {
                                 let playerPath = Path(fillMode: .fillAndStroke)
                                 drawStar(path: playerPath, center: tileRect.center,

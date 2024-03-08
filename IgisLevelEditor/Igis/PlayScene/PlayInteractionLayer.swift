@@ -14,6 +14,10 @@ class PlayInteractionLayer: Layer, KeyDownHandler {
         doneButton.clickHandler = onDoneButtonClickHandler
         insert(entity: doneButton, at: .front)
 
+        let incrementRotationCount = Button(labelString: "Rotate", topLeft: Point(x: 100, y: 5))
+        incrementRotationCount.clickHandler = onIncrementRotationCountClickHandler
+        insert(entity: incrementRotationCount, at: .front)
+
         let setSingleFaceRenderModeButton = Button(labelString: "Set Single Face Mode", topLeft: Point(x: 5, y: 35))
         setSingleFaceRenderModeButton.clickHandler = onSetSingleFaceRenderModeButtonClickHandler
         insert(entity: setSingleFaceRenderModeButton, at: .front)
@@ -52,6 +56,12 @@ class PlayInteractionLayer: Layer, KeyDownHandler {
     func onRandomizeColorButtonClickHandler(control: Control, localLocation: Point) {
         playScene().backgroundLayer.background.randomizePaintColor()
         playScene().backgroundLayer.background.update()
+    }
+    func onIncrementRotationCountClickHandler(control: Control, localLocation: Point) {
+        let levelRenderer = playScene().backgroundLayer.background.levelRenderer!
+        if case .singleFace(let currentFace, let rotations) = levelRenderer.renderMode {
+            levelRenderer.setSingleFaceRenderMode(face: currentFace, rotations: (rotations + 1) % 4)
+        }
     }
 
     
