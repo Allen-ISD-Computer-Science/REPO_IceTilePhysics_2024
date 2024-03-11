@@ -1,34 +1,35 @@
 import { Tile } from "./Tile.js";
 import { WallBehavior } from "./TileBehavior.js";
+import { BehaviorContextFactory, BehaviorContext, SlideContext, ActivationContext } from "./BehaviorContext.js";
 
 // Defines a Ice Tile Physics Level
 export class Level {
     constructor(levelSize, startingPosition){
-        this.levelPointFactory = new LevelPointFactory(); // A factory is a way to ensure that only one LevelPoint is generated with the same data
+        // A factory is a way to ensure that only one LevelPoint is generated with the same data
+        this.levelPointFactory = new LevelPointFactory(); 
+        this.behaviorContextFactory = new BehaviorContextFactory();
+
         this.levelSize = levelSize;
         this.startingPosition = this.levelPointFactory.getWithProperties(startingPosition.x, startingPosition.y, startingPosition.z, startingPosition.face);
         this.tiles = new Map();        
+        this.entities = [];
         
         function isBorder(x, y, z) {
             // Check the X-axis Border
             if (x !== null && (x === 0 || x === levelSize.x - 1)) {
                 return true;
             }
-        
             // Check the Y-axis Border
             if (y !== null && (y === 0 || y === levelSize.y - 1)) {
                 return true;
             }
-        
             // Check the Z-axis Border
             if (z !== null && (z === 0 || z === levelSize.z - 1)) {
                 return true;
             }
-            
             return false; // The Point is not on a Border
         }
         
-
         // Initialize Top and Bottom faces which have x and z values for LevelPoints
         for (let x = 0; x < levelSize.x; x += 1) {
             for (let z = 0; z < levelSize.z; z += 1) {    
@@ -41,7 +42,6 @@ export class Level {
                 this.tiles.set(bottomPoint, bottomTile);
             }
         }
-
         // Initialize Front and Back faces which have x and y values for LevelPoints
         for (let x = 0; x < levelSize.x; x += 1) {
             for (let y = 0; y < levelSize.y; y += 1) {
@@ -54,7 +54,6 @@ export class Level {
                 this.tiles.set(backPoint, backTile);
             }
         }
-
         // Initialize Left and Right faces which have y and z values for LevelPoints
         for (let y = 0; y < levelSize.y; y += 1) {
             for (let z = 0; z < levelSize.z; z += 1) {
@@ -69,6 +68,10 @@ export class Level {
         }
     }
 
+    insertEntity(entity) {
+        this.entities.push(entity);
+    }
+
     adjacentLevelPoint(levelPoint, direction) {
         if (levelPoint.x === null && (direction === Direction.left || direction === Direction.right)) {
             console.error("Cannot slide width-wise when on the Left or Right Face.");
@@ -80,12 +83,11 @@ export class Level {
             console.error("Cannot slide depth-wise when on the Front or Back Face.");
         }
 
-        // Function that returns the new value of the previously undefined coordinate after crossing an edge
-        const newPointOverEdge = function(oldPoint, originFace, destinationFace) {
-            let x = oldPoint.x;
-            let y = oldPoint.y;
-            let z = oldPoint.z;
-
+        // Function that alters the value of the old Level Point when crossing a face
+        const newPointOverEdge = function(oldLevelPoint, originFace, destinationFace) {
+            let x = oldLevelPoint.x;
+            let y = oldLevelPoint.y;
+            let z = oldLevelPoint.z;
             // Origin Face dictates the new value of the previous null property
             switch (originFace) {
                 case Face.left:
@@ -109,7 +111,6 @@ export class Level {
                 default:
                     console.error("Invalid Face.");
             }
-
             // Destination Face determines which value is now null
             switch (destinationFace) {
                 case Face.left:
@@ -127,7 +128,6 @@ export class Level {
                 default:
                     console.error("Invalid Face.");
             }
-
             return {x: x, y: y, z: z, face: destinationFace};
         };
 
@@ -144,11 +144,46 @@ export class Level {
                 return this.levelPointFactory.getWithLiteral((levelPoint.z - 1 < 0) ? newPointOverEdge(levelPoint, levelPoint.face, Face.front) : {x: levelPoint.x, y: levelPoint.y, z: levelPoint.z - 1, face: levelPoint.face});
             case Direction.backward: // Increment Z, towards Back Face
                 return this.levelPointFactory.getWithLiteral((levelPoint.z + 1 >= this.levelSize.z) ? newPointOverEdge(levelPoint, levelPoint.face, Face.back) : {x: levelPoint.x, y: levelPoint.y, z: levelPoint.z + 1, face: levelPoint.face});
+            case null:
+                console.error("Unexpectedly found null when expecting a Direction.");
+                break;
             default:
-                console.error("Invalid Direction.")
+                console.error("Invalid Direction.");
                 return null;
         }
     }   
+
+    _activateBehavior(slidingEntities, slideContext) {
+        const slideContextOn = this.behaviorContextFactory.getWithProperties(slideContext, ActivationContext.on);
+        const slideContextInto = this.behaviorContextFactory.getWithProperties(slideContext, ActivationContext.into);
+
+        slidingEntities.forEach((entity) => { 
+            const position = this.levelPointFactory.getWithLiteral(entity.position);
+            this.tiles.get(position).behavior.activateBehavior(entity, slideContextOn);
+            if (entity.slideDirection !== null) {
+                entity.nextPosition = this.adjacentLevelPoint(position, entity.slideDirection);
+                this.tiles.get(entity.nextPosition).behavior.activateBehavior(entity, slideContextInto);
+            }
+        });       
+        return slidingEntities.filter(entity => entity.slideDirection !== null);
+    }
+
+    calculateSlide(direction) {
+        let slidingEntities = this.entities;
+        slidingEntities.forEach((entity) => { entity.slideDirection = direction });
+
+        // Start Slide by setting Direction and performing Start Activation
+        slidingEntities = this._activateBehavior(slidingEntities, SlideContext.start);        
+        
+        while (slidingEntities.length > 0) {
+            slidingEntities.forEach ((entity) => {
+                entity.position = entity.nextPosition;
+                entity.nextPosition = null;
+            });
+            slidingEntities = this._activateBehavior(slidingEntities, SlideContext.slide);
+        }
+        
+    }
 }
 
 // Defines a Location within a Level
@@ -161,7 +196,7 @@ export class LevelPoint {
     }    
 }
 
-// Factory to access a LevelPoint, saves memory by returning references to already initializes LevelPoints
+// Factory to access a LevelPoint, saves memory by returning references to already initialized LevelPoints
 class LevelPointFactory {
     constructor(){
         this.levelPoints = new Map()
@@ -171,7 +206,7 @@ class LevelPointFactory {
         const key = `${x},${y},${z},${face}`;
         if (!this.levelPoints.has(key)) {
             const levelPoint = new LevelPoint(x, y, z, face);
-            this.levelPoints.set(key, levelPoint);                
+            this.levelPoints.set(key, levelPoint);
         }
         return this.levelPoints.get(key);
     }
