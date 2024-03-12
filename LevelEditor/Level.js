@@ -1,3 +1,4 @@
+import { Direction } from "./Direction.js";
 import { Tile } from "./Tile.js";
 import { WallBehavior } from "./TileBehavior.js";
 import { BehaviorContextFactory, BehaviorContext, SlideContext, ActivationContext } from "./BehaviorContext.js";
@@ -70,6 +71,11 @@ export class Level {
 
     insertEntity(entity) {
         this.entities.push(entity);
+    }
+
+    setTileBehavior(behavior, levelPoint) {
+        const tile = this.tiles.get(this.levelPointFactory.getWithLiteral(levelPoint));
+        tile.behavior = behavior;
     }
 
     adjacentLevelPoint(levelPoint, direction) {
@@ -235,12 +241,3 @@ export const Face = Object.freeze({
     back: "back",
 });
 
-// Defines the 6 Directions in which an Enitity can move
-export const Direction = Object.freeze({
-    left: "left", // Decrement X, towards Left Face
-    right: "right", // Icrement X, towards Right Face
-    up: "up", // Decrement Y, towards Top Face
-    down: "down", // Increment Y, towards Bottom Face
-    forward: "forward", // Decrement Z, towards Front Face
-    backward: "backward" // Increment Z, towards Back Face
-});
