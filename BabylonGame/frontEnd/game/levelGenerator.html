@@ -267,7 +267,7 @@
 
             // Load level from file
 
-            fetch('levels/2-9.lvl')
+            fetch('./levels/2-9.lvl')
                 .then(response => response.json())
                 .then(data => {
                     importedLevel = data.face_tiles;
