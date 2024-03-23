@@ -8,8 +8,80 @@ const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engi
 
 var scene;
 
-console.log(textures.concat('.bg_1.png'))
-console.log(assets)
+function fetchWorld(index){
+    return new Promise((resolve, reject) => {
+        fetch("campaign.json")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch campaign.json');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data.worlds[index].world);
+                resolve(data.worlds[index].world);
+            })
+            .catch(error => {
+                console.error('Error loading the JSON file:', error);
+                reject(error);
+            });
+    });
+}
+
+function generateLevels(worldData){
+        //defining the grid
+        const grid = new BABYLON.GUI.Grid();
+
+        grid.height = 0.8;
+        grid.width = 0.8;
+    // initilizing the grid with its first row
+        grid.addRowDefinition(100, true)
+    
+    
+    // lc = level count, will hold the number of levels needing to be displayed
+    console.log(worldData)
+        var lc = worldData.length;
+        var column = 0;
+        let columnLimit = 6
+        var row = 0;
+        var rects = {}
+    
+        //loops through each level, makes a new rectangle for each
+        for (i = 0; i < lc; i++) {
+            var rect = new BABYLON.GUI.Button();
+            //defines textblock that holds level name, this will be used to detect level user is trying to load
+            var lvlName = worldData[i].slice(0, -4)
+            var textBlock = new BABYLON.GUI.TextBlock("text_button", lvlName)
+            rect.addControl(textBlock)
+    
+            var color = "blue"
+            
+    
+            rect.background = color;
+            rect.thickness = 0;
+            rect.paddingBottom = '15px';
+            rect.paddingRight = '15px';
+            rect.paddingTop = '15px';
+            rect.paddingLeft = '15px';
+            rect.width = '100px'
+            rect.height = '100px'
+    
+            
+    
+            if (column < columnLimit) {
+                grid.addColumnDefinition(100, true);
+            } else {
+                grid.addRowDefinition(100, true)
+                row++;
+                column = 0;
+            }
+    
+            grid.addControl(rect, row, column);
+            column++;
+        }
+        return grid
+}
+
 
 function createScene(level){
     // Creates a basic Babylon Scene object
@@ -26,6 +98,13 @@ function createScene(level){
 
     // if level is levels, display level select screen
     if (level == "levels") {
+
+    // VARIABLES
+    var selectedWorld = 0
+    var levelGrid
+    const worldLabelPrefix = "WORLD "
+    //
+
 	var bg = new BABYLON.GUI.Image(textures.concat('.bg_1.png'))
 	bg.width = canvas.width
 	bg.height = canvas.height
@@ -33,82 +112,91 @@ function createScene(level){
 	tex.addControl(bg);	
 
     //defining world select buttons
-    const prevButton = new BABYLON.GUI.Button() 
-    const nextButton = new BABYLON.GUI.Button()
 
-    nextButton.width = "40px";
-    nextButton.height = "40px";
-    prevButton.width = "40px";
-    prevButton.height = "40px";
+    var worldLabelContainer = new BABYLON.GUI.Rectangle("worldLabelContainer");
+    var worldLabel = new BABYLON.GUI.TextBlock("world_label", "WORLD 1");
+
+    //container
+
+    
+    worldLabelContainer.verticalAlignment = 1;
+    worldLabelContainer.width = 0.5;
+    worldLabelContainer.thickness = 0;
+
+    //buttons
+    const prevButton = BABYLON.GUI.Button.CreateSimpleButton("prev_button", "<") 
+    const nextButton = BABYLON.GUI.Button.CreateSimpleButton("next_button", ">")
+
+    nextButton.width = .2;
+    nextButton.height = 1;
+    prevButton.width = .2;
+    prevButton.height = 1;
     prevButton.thickness = 0;
     nextButton.thickness = 0;
-    
-    const nextTxt = new BABYLON.GUI.TextBlock("nexttxt_button", ">")
-    const prevTxt = new BABYLON.GUI.TextBlock("prevtxt_button", "<")
+    prevButton.textBlock.outlineColor = "white";
+    prevButton.textBlock.outlineWidth = 2;
+    nextButton.textBlock.outlineColor = "white";
+    nextButton.textBlock.outlineWidth = 2;
 
-    tex.addControl(nextButton)
-    tex.addControl(prevButton)
-    prevButton.addControl(prevTxt)
-    nextButton.addControl(nextTxt)
+    prevButton.fontSize = 55
+    nextButton.fontSize = 55
 
-    //defining the grid
-    const grid = new BABYLON.GUI.Grid();
+    prevButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+    nextButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
 
-    grid.height = 0.8;
-    grid.width = 0.8;
-// initilizing the grid with its first row
-	grid.addRowDefinition(100, true)
+    //world label
+    worldLabelContainer.height = 0.2;
+    worldLabel.outlineColor = "white";
+    worldLabel.outlineWidth = 2;
+    worldLabel.fontSize = 44
 
-	fetch("campaign.json")
-	    .then(response => response.json())
-	    .then(data => {
-		currentWorld = data.worldOne;
-	    })
-	    .catch(error => console.error('Error loading the JSON file:', error));
+    tex.addControl(worldLabelContainer)
+    worldLabelContainer.addControl(worldLabel)
+    worldLabelContainer.addControl(nextButton)
+    worldLabelContainer.addControl(prevButton)
 
-	console.log(currentWorld)
-
-// lc = level count, will hold the number of levels needing to be displayed
-    var lc = currentWorld.length;
-    var column = 0;
-    let columnLimit = 6
-    var row = 0;
-    var rects = {}
-
-    //loops through each level, makes a new rectangle for each
-    for (i = 0; i < lc; i++) {
-        var rect = new BABYLON.GUI.Button();
-        //defines textblock that holds level name, this will be used to detect level user is trying to load
-        var lvlName = currentWorld[i].slice(0, -4)
-        var textBlock = new BABYLON.GUI.TextBlock("text_button", lvlName)
-        rect.addControl(textBlock)
-
-        var color = "blue"
-        
-
-        rect.background = color;
-        rect.thickness = 0;
-        rect.paddingBottom = '15px';
-        rect.paddingRight = '15px';
-        rect.paddingTop = '15px';
-        rect.paddingLeft = '15px';
-        rect.width = '100px'
-        rect.height = '100px'
-
-        
-
-        if (column < columnLimit) {
-            grid.addColumnDefinition(100, true);
-        } else {
-            grid.addRowDefinition(100, true)
-            row++;
-            column = 0;
+    //button controls
+    nextButton.onPointerUpObservable.add(function(){
+        selectedWorld += 1
+        if (selectedWorld > 2) {
+            selectedWorld = 0
         }
 
-        grid.addControl(rect, row, column);
-        column++;
-    }
-    tex.addControl(grid);
+        fetchWorld(selectedWorld)
+            .then(
+                worldData => {
+                var levelGrid = generateLevels(worldData)
+                tex.addControl(levelGrid);
+            }
+        )
+        
+        worldLabel.text = worldLabelPrefix.concat((selectedWorld+1).toString())
+    });
+
+    prevButton.onPointerUpObservable.add(function(){
+        selectedWorld -= 1
+        if (selectedWorld < 0) {
+            selectedWorld = 2
+        }
+
+        fetchWorld(selectedWorld)
+            .then(
+                worldData => {
+                var levelGrid = generateLevels(worldData)
+                tex.addControl(levelGrid);
+            }
+        )
+
+        worldLabel.text = worldLabelPrefix.concat((selectedWorld+1).toString())
+    });
+
+    fetchWorld(selectedWorld)
+    .then(
+        worldData => {
+            var levelGrid = generateLevels(worldData)
+            tex.addControl(levelGrid);
+        }
+    )
     }
 
     return scene;
