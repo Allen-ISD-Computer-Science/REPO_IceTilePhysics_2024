@@ -1,3 +1,5 @@
+import { Face } from "./Face.js";
+
 // Defines the 6 Directions in which an Enitity can move
 export const Direction = Object.freeze({
     left: "left", // Decrement X, towards Left Face
@@ -9,20 +11,20 @@ export const Direction = Object.freeze({
 });
 
 export function getOppositeDirection(direction) {
-    switch (direction) {
-        case Direction.left:
-            return Direction.right;
-        case Direction.right:
-            return Direction.left;
-        case Direction.up:
-            return Direction.down;
-        case Direction.down:
-            return Direction.up;
+    switch (direction) {      
         case Direction.forward:
             return Direction.backward;
         case Direction.backward:
             return Direction.forward;
+        case Direction.right:
+            return Direction.left;
+        case Direction.left:
+            return Direction.right;
+        case Direction.up:
+            return Direction.down;
+        case Direction.down:
+            return Direction.up;
         default:
-            console.error("InvalidDirection");
+            console.error("Invalid Direction");
     }
 }
