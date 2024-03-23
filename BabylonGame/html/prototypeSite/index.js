@@ -16,12 +16,12 @@ function createScene(level){
     const scene = new BABYLON.Scene(engine);  // Creates and positions an Arc Rotating camera
     const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 3, new BABYLON.Vector3(0, 0, 10), scene);  // Targets the camera to scene origin
     camera.setTarget(BABYLON.Vector3.Zero());  // This attaches the camera to the canvas
-    camera.attachControl(canvas, true);  // Creates a light, aiming 0,1,0 - to the sky
+      // Creates a light, aiming 0,1,0 - to the sky
     const light = new BABYLON.HemisphericLight("light",                                            new BABYLON.Vector3(0, 1, 0), scene);       // Dim the light a small amount - 0 to 1
-    light.intensity = 0.7;       // Built-in 'sphere' shape.
+    light.intensity = 0.7;     
     const box = BABYLON.MeshBuilder.CreateBox("box", { size: 2}, scene);       // Move the sphere upward 1/2 its height
-    box.position.y = 1;       // Built-in 'ground' shape.
-    const ground = BABYLON.MeshBuilder.CreateGround("ground",     { width: 6, height: 6 }, scene);
+    box.position.y = 1;    
+    
     const tex = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("myUI");
 
     // if level is levels, display level select screen
@@ -31,6 +31,25 @@ function createScene(level){
 	bg.height = canvas.height
 	
 	tex.addControl(bg);	
+
+    //defining world select buttons
+    const prevButton = new BABYLON.GUI.Button() 
+    const nextButton = new BABYLON.GUI.Button()
+
+    nextButton.width = "40px";
+    nextButton.height = "40px";
+    prevButton.width = "40px";
+    prevButton.height = "40px";
+    prevButton.thickness = 0;
+    nextButton.thickness = 0;
+    
+    const nextTxt = new BABYLON.GUI.TextBlock("nexttxt_button", ">")
+    const prevTxt = new BABYLON.GUI.TextBlock("prevtxt_button", "<")
+
+    tex.addControl(nextButton)
+    tex.addControl(prevButton)
+    prevButton.addControl(prevTxt)
+    nextButton.addControl(nextTxt)
 
     //defining the grid
     const grid = new BABYLON.GUI.Grid();
@@ -58,11 +77,14 @@ function createScene(level){
 
     //loops through each level, makes a new rectangle for each
     for (i = 0; i < lc; i++) {
-        var rect = new BABYLON.GUI.Rectangle();
+        var rect = new BABYLON.GUI.Button();
+        //defines textblock that holds level name, this will be used to detect level user is trying to load
+        var lvlName = currentWorld[i].slice(0, -4)
+        var textBlock = new BABYLON.GUI.TextBlock("text_button", lvlName)
+        rect.addControl(textBlock)
+
         var color = "blue"
-        if (i % 2 == 0) {
-            color = "red";
-        }
+        
 
         rect.background = color;
         rect.thickness = 0;
@@ -72,7 +94,7 @@ function createScene(level){
         rect.paddingLeft = '15px';
         rect.width = '100px'
         rect.height = '100px'
-        
+
         
 
         if (column < columnLimit) {
